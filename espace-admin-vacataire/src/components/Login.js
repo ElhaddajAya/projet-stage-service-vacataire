@@ -10,6 +10,15 @@ const Login = () => {
         // TODO: Ajouter la logique d'authentification
     };
 
+    // Simulation de la vérification des identifiants
+    // if (username === 'vacataire') {
+    //     navigate('/dashboard-vacataire');
+    // } else if (username === 'admin' || username === 'comptable' || username === 'chef') {
+    //     navigate('/vacataire-list');
+    // } else {
+    //     alert('Identifiants incorrects');
+    // }
+
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="bg-white p-8 rounded shadow-md w-80">
