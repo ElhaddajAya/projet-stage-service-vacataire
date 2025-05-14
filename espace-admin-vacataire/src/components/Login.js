@@ -13,7 +13,7 @@ const Login = () => {
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="bg-white p-8 rounded shadow-md w-80">
-                <h2 className="text-xl font-bold mb-4 text-center">Espace Enseignant Vacataire</h2>
+                <h2 className="text-xl font-bold mb-4 text-center">Espace Enseignant Vacataire - Administrateur</h2>
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
                         <label className="block mb-2">Username</label>
