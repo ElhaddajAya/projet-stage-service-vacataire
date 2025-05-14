@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.content {
+  padding: 20px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 600px;
+}
+
+.form input[type="file"] {
+  grid-column: span 2;
+}
+
+.buttons {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 15px;
+  cursor: pointer;
+}
