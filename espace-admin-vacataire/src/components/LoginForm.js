@@ -11,35 +11,37 @@ const LoginForm = () => {
     console.log({ username, password });
   };
 
-    return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Mot de Passe</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <br />
-        <button type="submit">Connexion</button>
-        <br />
-        <br />
-        <div>
-          <a href="#">Mot de passe oublié?</a>
-        </div>
-      </form>
+  return (
+    <div className="center-container">
+      <div className="login-box">
+        <h1>Espace Enseignant Vacataire</h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="input-field"
+              required
+            />
+          </div>
+          <div>
+            <label>Mot de Passe</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input-field"
+              required
+            />
+          </div>
+          <button type="submit" className="btn-primary">Connexion</button>
+          <div className="forgot-password">
+            <a href="#">Mot de passe oublié?</a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
