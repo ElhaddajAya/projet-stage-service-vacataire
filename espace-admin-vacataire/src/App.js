@@ -7,9 +7,8 @@ import Phase1 from './espace-vacataire/pages/Phase1';
 function App() {
     return (
     <div>
-        {/* <Header /> */}
-        {/* <LoginForm /> */}
-        <VacataireList />
+          <VacataireList /> 
+          {/* <Phase1 /> */}
     </div>
   );
 }
