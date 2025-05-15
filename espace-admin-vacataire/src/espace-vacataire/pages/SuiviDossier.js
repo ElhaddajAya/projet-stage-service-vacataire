@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import ProgressBar from '../components/ProgressBar';
-//import '../../styles/global.css';
+import '../../styles/global.css';
 import '../../style/phase1.css';
 import '../../style/phase2.css';
-import '../../style/phase3.css'; // Ensure this is included
+import '../../style/phase3.css';
 import Phase1 from './Phase1';
 import Phase2 from './Phase2';
 import Phase3 from './Phase3';
@@ -42,12 +42,10 @@ const SuiviDossier = () => {
   return (
     <div>
       <Header />
-      <Sidebar />
       <div className="main">
+        <Sidebar />
         <div className="content">
-          <ProgressBar step={currentPhase} />
-          {renderPhase()}
-          <div className="buttons">
+          <div className="navigation-buttons">
             <button type="button" onClick={handlePreviousPhase} disabled={currentPhase === 1}>
               Précédent
             </button>
@@ -55,6 +53,8 @@ const SuiviDossier = () => {
               Suivant
             </button>
           </div>
+          <ProgressBar step={currentPhase} />
+          {renderPhase()}
         </div>
       </div>
     </div>
