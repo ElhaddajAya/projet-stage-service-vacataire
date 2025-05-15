@@ -10,8 +10,8 @@ const Sidebar = () => {
         <p>Utilisateur</p>
       </div>
       <ul className="menu">
-        <li>Phase 1 - Informations</li>
-        <li>Phase 2 - Documents</li>
+        <li>Informations</li>
+        <li>Documents</li>
         <li>Compte</li>
       </ul>
       <button className="logout">Déconnexion</button>

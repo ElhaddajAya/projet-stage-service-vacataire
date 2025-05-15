@@ -1,15 +1,15 @@
 // src/espace-vacataire/pages/Phase1.js
 import React from 'react';
-import HeaderVacataire from '../components/HeaderVacataire';
 import Sidebar from '../components/Sidebar';
 import '../../style/phase1.css';
+import Header from '../components/Header';
 
 const Phase1 = () => {
   return (
-    <div className="container">
+    <div>
+      <Header />
       <Sidebar />
       <div className="main">
-        <HeaderVacataire />
         <div className="content">
           <h2>Phase 1 - Informations Personnelles</h2>
           <form className="form">

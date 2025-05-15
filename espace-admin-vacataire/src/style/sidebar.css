@@ -7,8 +7,9 @@
 }
 
 .profile {
+  margin-top: 15px;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 4rem;
 }
 
 .profile img {
@@ -27,17 +28,25 @@
 }
 
 .menu li {
-  margin: 15px 0;
+  margin-top: 20px;
   cursor: pointer;
+  text-align: center;
   font-size: 14px;
 }
 
 .logout {
-  margin-top: 50px;
-  background: black;
-  color: white;
-  border: none;
-  padding: 10px;
   width: 100%;
+  background-color: #222; /* Updated from #1f2937 to #222 to match second CSS btn-primary */
+  color: white;
+  padding: 12px; /* Updated from 0.5rem to 12px to match second CSS */
+  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
+  border: none;
   cursor: pointer;
+  margin-top: 2.5rem;
+  font-size: 1rem; /* Added from second CSS */
+  font-weight: 500; /* Added from second CSS */
+}
+
+.logout:hover {
+  background-color: #444; /* Updated from #374151 to #444 to match second CSS */
 }

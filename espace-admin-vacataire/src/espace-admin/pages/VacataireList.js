@@ -8,9 +8,9 @@ const VacataireList = () => {
       <Header />
       {/* Contenu */}
       <main className="page-container">
-        <h2 className="page-title">Liste des Vacataires</h2>
-
         <div className="table-container">
+          <h1 className="page-title">Liste des Vacataires</h1>
+
           <table className="table-vacataires">
             <thead>
               <tr>
@@ -35,12 +35,12 @@ const VacataireList = () => {
               </tr>
             </tbody>
           </table>
-        </div>
 
-        <div className="pagination">
-          <button className="pagination-btn">&lt;</button>
-          <span className="pagination-count">10</span>
-          <button className="pagination-btn">&gt;</button>
+          <div className="pagination">
+            <button className="pagination-btn">&lt;</button>
+            <span className="pagination-count">10</span>
+            <button className="pagination-btn">&gt;</button>
+          </div>
         </div>
       </main>
     </div>

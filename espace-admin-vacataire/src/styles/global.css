@@ -1,87 +1,166 @@
-/* styles/global.css */
+/* global.css */
 
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-  background-color: #f9fafb; /* équivalent Tailwind: bg-gray-50 */
+  font-family: 'Helvetica Neue', sans-serif; /* Updated from sans-serif to match second CSS */
+  background-color: #fff; /* Light gray background from second CSS, overriding #f9fafb */
+  color: #333; /* From second CSS for consistency */
 }
 
+/* Apply consistent sizing model across elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* From second CSS */
+}
+
+/* Header section with logo */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #ccc;
+  padding: 15px 30px; /* Adjusted from 1rem 2rem to 15px 30px for better spacing */
+  border-bottom: 1px solid #ddd; /* Updated from #ccc to #ddd for consistency */
   background-color: white;
 }
 
 header img {
-    margin-left: 50px;
-    width: 240px;
+  margin-left: 50px; /* Retained from first CSS */
+  width: 240px; /* Retained from first CSS */
 }
 
 header h1 {
-  font-size: 1.25rem;
+  font-size: 1.5rem; /* Updated from 1.25rem to match second CSS h1 */
   font-weight: 600;
-  color: #1f2937; /* équivalent Tailwind: text-gray-800 */
-  margin-right: 50px;
+  color: #333; /* Updated from #1f2937 to #333 for consistency */
+  margin-right: 50px; /* Retained from first CSS */
+  text-align: center; /* Added from second CSS for title alignment */
 }
 
+/* Centrer verticalement et horizontalement */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
+  min-height: 90vh; /* Retained from first CSS */
+  height: 100vh; /* Added from second CSS for full height centering */
 }
 
+/* Boîte de formulaire */
 .login-form {
   background-color: white;
   padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
+  border-radius: 8px; /* Updated from 0.5rem to 8px to match second CSS */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Updated from 0 2px 4px rgba(0, 0, 0, 0.1) for softer shadow */
+  border: none; /* Removed 1px solid #ccc to match second CSS login-box */
   width: 100%;
-  max-width: 400px;
+  max-width: 450px; /* Updated from 400px to 350px to match second CSS */
 }
 
+/* Inputs and form fields */
 .login-form label {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #4b5563;
+  margin-bottom: 5px; /* Updated from 0.5rem to 5px to match second CSS */
+  color: #333; /* Updated from #4b5563 to #333 for consistency */
+  font-weight: 500; /* Added from second CSS for label styling */
 }
 
 .login-form input {
   width: 100%;
-  border: 1px solid #4b5563;
-  border-radius: 0.25rem;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+  border: 1px solid #333;
+  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
+  padding: 10px; /* Updated from 0.5rem to 10px to match second CSS */
+  margin-bottom: 15px; /* Updated from 1rem to 15px to match second CSS */
+  background-color: #fff; /* Added from second CSS for consistency */
+  font-size: 1rem; /* Added from second CSS */
+  box-sizing: border-box; /* Added from second CSS */
 }
 
+/* Bouton principal */
 .login-form button {
   width: 100%;
-  background-color: #1f2937;
+  background-color: #222; /* Updated from #1f2937 to #222 to match second CSS btn-primary */
   color: white;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+  padding: 12px; /* Updated from 0.5rem to 12px to match second CSS */
+  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
   border: none;
   cursor: pointer;
+  font-size: 1rem; /* Added from second CSS */
+  font-weight: 500; /* Added from second CSS */
 }
-
 .login-form button:hover {
-  background-color: #374151;
+  background-color: #444; /* Updated from #374151 to #444 to match second CSS */
 }
 
+/* Lien mot de passe */
 .login-form a {
-  color: #4b5563;
-  font-size: 0.875rem;
+  color: #333; /* Updated from #4b5563 to #333 for consistency */
+  font-size: 0.9rem; /* Updated from 0.875rem to 0.9rem to match second CSS */
   text-decoration: underline;
+}
+
+/* Reusable containers (for future use with other pages) */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings (for future use with other pages) */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+h2 {
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+/* Utility classes (for future use with other pages) */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rounded {
+  border-radius: 5px;
 }
 
 .page-container {
   padding: 2rem 3rem;
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 .page-title {
@@ -92,7 +171,9 @@ header h1 {
 }
 
 .table-container {
+    width: 90%;
   overflow-x: auto;
+  margin: 0 auto;
   background-color: transparent; /* plus de fond ici */
 }
 
@@ -136,12 +217,14 @@ header h1 {
 
 .btn-valider {
   width: 80%;
-  background-color: #1f2937;
+  background-color: #222; /* Updated from #1f2937 to #222 to match second CSS btn-primary */
   color: white;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+  padding: 12px; /* Updated from 0.5rem to 12px to match second CSS */
+  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
   border: none;
   cursor: pointer;
+  font-size: 1rem; /* Added from second CSS */
+  font-weight: 500; /* Added from second CSS */
 }
 
 .btn-valider:hover {
