@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
+import ProgressBar from '../components/ProgressBar';
 import '../../styles/global.css';
 import '../../style/phase1.css';
 
@@ -23,6 +24,7 @@ const Phase1 = () => {
       <div className="main">
         <div className="content">
           <h2>Phase 1 - Informations Personnelles</h2>
+          <ProgressBar step={1} />
           <form className="form">
             <div className="form-group">
               <label>Nom</label>
