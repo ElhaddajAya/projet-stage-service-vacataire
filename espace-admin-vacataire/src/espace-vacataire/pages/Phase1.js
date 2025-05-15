@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import '../../style/phase1.css';
 
 const Phase1 = () => {
     const [fileName, setFileName] = useState('');

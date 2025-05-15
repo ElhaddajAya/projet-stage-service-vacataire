@@ -1,5 +1,6 @@
 // src/espace-vacataire/pages/Phase2.js
 import React, { useState } from 'react';
+import '../../style/phase2.css';
 
 const Phase2 = () => {
     const [fileNames, setFileNames] = useState({});
