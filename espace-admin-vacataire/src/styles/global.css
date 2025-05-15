@@ -368,3 +368,38 @@ form input[type="password"]:focus {
     background-color: #d1d5db;
 }
 
+/* src/espace-vacataire/styles/global.css */
+
+/* ... existing styles ... */
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  gap: 1rem; /* Space between buttons */
+  padding: 1rem 0; /* Add some vertical padding */
+  border-bottom: 1px solid #e5e7eb; /* Optional: subtle divider */
+}
+
+/* Ensure buttons inherit the desired style */
+.navigation-buttons button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #252525;
+}
+
+.navigation-buttons button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.navigation-buttons button[type="button"]:not(:disabled) {
+  background-color: #ffffff;
+  color: #4b5563;
+}
+
+.navigation-buttons button[type="button"]:hover:not(:disabled) {
+  background-color: #d1d5db;
+}

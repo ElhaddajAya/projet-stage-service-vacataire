@@ -1,26 +1,60 @@
-// src/espace-vacataire/pages/Phase1.js
+// src/espace-vacataire/pages/SuiviDossier.js
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import ProgressBar from '../components/ProgressBar';
 import '../../styles/global.css';
+import '../../style/phase1.css';
+import '../../style/phase2.css';
+import '../../style/phase3.css';
 import Phase1 from './Phase1';
 import Phase2 from './Phase2';
-import '../../style/phase3.css';
 import Phase3 from './Phase3';
+
 const SuiviDossier = () => {
+  const [currentPhase, setCurrentPhase] = useState(2);
+
+  const handleNextPhase = () => {
+    if (currentPhase < 3) {
+      setCurrentPhase(currentPhase + 1);
+    }
+  };
+
+  const handlePreviousPhase = () => {
+    if (currentPhase > 1) {
+      setCurrentPhase(currentPhase - 1);
+    }
+  };
+
+  const renderPhase = () => {
+    switch (currentPhase) {
+      case 1:
+        return <Phase1 />;
+      case 2:
+        return <Phase2 />;
+      case 3:
+        return <Phase3 />;
+      default:
+        return <Phase1 />;
+    }
+  };
+
   return (
     <div>
       <Header />
-      <Sidebar />
       <div className="main">
+        <Sidebar />
         <div className="content">
-          {/* <ProgressBar step={1} />  */}
-          {/* <Phase1 />  */}
-          {/* <ProgressBar step={2} />
-          <Phase2 /> */}
-          <ProgressBar step={3} />
-          <Phase3 />
+          <div className="navigation-buttons">
+            <button type="button" onClick={handlePreviousPhase} disabled={currentPhase === 1}>
+              Précédent
+            </button>
+            <button type="button" onClick={handleNextPhase} disabled={currentPhase === 3}>
+              Suivant
+            </button>
+          </div>
+          <ProgressBar step={currentPhase} />
+          {renderPhase()}
         </div>
       </div>
     </div>
