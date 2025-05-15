@@ -1,11 +1,9 @@
 // src/espace-vacataire/pages/Phase3.js
 import React, { useState } from 'react';
-import '../../style/phase3.css'; // Add this line
+
 const Phase3 = () => {
-  // State to simulate the current sub-step (1: En attente, 2: En cours, 3: Effectué)
   const [subStep, setSubStep] = useState(1);
 
-  // Function to simulate next sub-step (for demo purposes)
   const handleNextSubStep = () => {
     if (subStep < 3) {
       setSubStep(subStep + 1);
@@ -15,7 +13,7 @@ const Phase3 = () => {
   return (
     <>
       <h2>Phase 3 - Virement</h2>
-      <form className="form">
+      <form className="form phase3-form"> {/* Add phase3-form class */}
         <div className="status-container">
           <div className={`status-card ${subStep === 1 ? 'active' : ''}`}>
             <h3>En attente</h3>
