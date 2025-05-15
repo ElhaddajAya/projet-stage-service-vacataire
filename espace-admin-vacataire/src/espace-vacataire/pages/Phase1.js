@@ -1,24 +1,64 @@
 // src/espace-vacataire/pages/Phase1.js
-import React from 'react';
-import HeaderVacataire from '../components/Header';
+import React, { useState } from 'react';
+import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
+import '../../styles/global.css';
 import '../../style/phase1.css';
 
 const Phase1 = () => {
+  const [fileName, setFileName] = useState('');
+
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setFileName(e.target.files[0].name);
+    } else {
+      setFileName('');
+    }
+  };
+
   return (
-    <div className="container">
+    <div>
+      <Header />
       <Sidebar />
       <div className="main">
-        <HeaderVacataire />
         <div className="content">
           <h2>Phase 1 - Informations Personnelles</h2>
           <form className="form">
-            <input type="text" placeholder="Nom" />
-            <input type="text" placeholder="Prénom" />
-            <input type="email" placeholder="Email" />
-            <input type="text" placeholder="Téléphone" />
-            <input type="text" placeholder="CIN" />
-            <input type="file" />
+            <div className="form-group">
+              <label>Nom</label>
+              <input type="text" placeholder="Entrez votre nom" />
+            </div>
+            
+            <div className="form-group">
+              <label>Prénom</label>
+              <input type="text" placeholder="Entrez votre prénom" />
+            </div>
+            
+            <div className="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="exemple@domaine.com"/>
+            </div>
+            
+            <div className="form-group">
+              <label>Téléphone</label>
+              <input type="text" placeholder="06 00 00 00 00"/>
+            </div>
+            
+            <div className="form-group">
+              <label>CIN</label>
+              <input type="text"  placeholder="AB123456"/>
+            </div>
+            
+            <div className="form-group file-upload">
+              <label>Photo</label>
+              <input 
+                type="file" 
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+              {fileName && <div className="file-name">{fileName}</div>}
+            </div>
+            
             <div className="buttons">
               <button type="button">Modifier</button>
               <button type="submit">Soumettre</button>
