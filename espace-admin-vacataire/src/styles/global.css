@@ -58,10 +58,21 @@ header h1 {
   max-width: 450px; /* Updated from 400px to 350px to match second CSS */
 }
 
+.form-group {
+  gap: 1rem; /* Updated from 0.5rem to 1rem to match second CSS */
+  display: flex;
+  margin-bottom: 1rem; /* Updated from 1rem to 1.5rem to match second CSS */
+}
+
+/* first form-group */
+.login-form .form-group:first-child {
+  margin-bottom: 1.6rem; /* Added from second CSS to remove top margin */
+}
+
 /* Inputs and form fields */
 .login-form label {
   display: block;
-  margin-bottom: 5px; /* Updated from 0.5rem to 5px to match second CSS */
+  margin-bottom: 6px; /* Updated from 0.5rem to 5px to match second CSS */
   color: #333; /* Updated from #4b5563 to #333 for consistency */
   font-weight: 500; /* Added from second CSS for label styling */
 }
@@ -71,7 +82,6 @@ header h1 {
   border: 1.5px solid #333;
   border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
   padding: 10px; /* Updated from 0.5rem to 10px to match second CSS */
-  margin-bottom: 15px; /* Updated from 1rem to 15px to match second CSS */
   background-color: #fff; /* Added from second CSS for consistency */
   font-size: 1rem; /* Added from second CSS */
   box-sizing: border-box; /* Added from second CSS */
@@ -257,16 +267,19 @@ h2 {
 }
 
 .search-bar {
-  width: 300px;
+  width: 500px;
   margin-top: 1rem;
   margin-bottom: 2rem;
-  border: 1.5px solid #333;
+  border: 1.6px solid #333;
+  height: 46px; /* même hauteur que les autres champs */
   border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
   padding: 10px; /* Updated from 0.5rem to 10px to match second CSS */
+  /* margin-bottom: 15px; Updated from 1rem to 15px to match second CSS */
   background-color: #fff; /* Added from second CSS for consistency */
   font-size: 1rem; /* Added from second CSS */
   box-sizing: border-box; /* Added from second CSS */
 }
+
 
 /* Remove input type text or email or number focus border */
 input[type="text"]:focus,
@@ -320,12 +333,14 @@ form input[type="password"]:focus {
 
 /* Bouton Confirmer */
 .btn-valider {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s;
     width: auto;
     background-color: #222;
     color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-    border: none;
+    border: 1px solid #222;
     cursor: pointer;
     font-size: 1rem;
 }
@@ -336,12 +351,15 @@ form input[type="password"]:focus {
 
 /* Bouton Annuler */
 .btn-annuler {
-    width: auto;
-    background-color: #e5e7eb;
-    color: #333;
-    padding: 8px 16px;
+    padding: 0.75rem 1.5rem;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    font-weight: 500;
+    transition: all 0.2s;
+    width: auto;
+    background-color: #ffffff;
+    border: 1px solid #252525;    
+    color: #222;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
 }

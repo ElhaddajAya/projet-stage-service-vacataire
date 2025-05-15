@@ -1,0 +1,85 @@
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.radio-options {
+    display: flex;
+    gap: 2rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+input[type="radio"] {
+    accent-color: #0066ff;
+    transform: scale(1.2);
+    margin-right: 0.4rem;
+}
+
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.file-upload input[type="file"] {
+    padding: 10px;
+    border: 1.5px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.file-name {
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.file-upload small {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.buttons button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.buttons button[type="button"] {
+    background-color: #ffffff;
+    color: #4b5563;
+    border: 1px solid #252525;
+}
+
+.buttons button[type="submit"] {
+    background-color: #1f2937;
+    color: white;
+    border: 1px solid #252525;
+}
+
+.buttons button:hover {
+    opacity: 0.9;
+}

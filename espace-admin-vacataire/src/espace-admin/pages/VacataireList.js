@@ -21,7 +21,7 @@ const VacataireList = () => {
                 <div className="table-container">
                   <h1 className="page-title">Liste des Vacataires</h1>
 
-                  {/* Barre de recherche */}
+                  {/* Barre de recherche avec icone */}
                   <input 
                       type="text" 
                       placeholder="Rechercher un vacataire..." 

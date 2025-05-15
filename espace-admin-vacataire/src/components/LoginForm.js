@@ -18,22 +18,24 @@ const LoginForm = () => {
     
       <div className="login-container">
         <form onSubmit={handleSubmit} className="login-form">
-          <div>
+          <div className='form-group'>
             <label>Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              placeholder='Entrez votre username'
             />
           </div>
-          <div>
+          <div className='form-group'>
             <label>Mot de Passe</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder='Entrez votre mot de passe'
             />
           </div>
           <br />

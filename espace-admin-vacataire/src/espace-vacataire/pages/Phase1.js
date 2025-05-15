@@ -1,30 +1,20 @@
-// src/espace-vacataire/pages/Phase1.js
-import React, { useState } from 'react';
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
-import ProgressBar from '../components/ProgressBar';
-import '../../styles/global.css';
-import '../../style/phase1.css';
+import React from "react";
+import { useState } from "react";
 
 const Phase1 = () => {
-  const [fileName, setFileName] = useState('');
+    const [fileName, setFileName] = useState('');
 
-  const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      setFileName(e.target.files[0].name);
-    } else {
-      setFileName('');
-    }
-  };
+    const handleFileChange = (e) => {
+        if (e.target.files.length > 0) {
+        setFileName(e.target.files[0].name);
+        } else {
+        setFileName('');
+        }
+    };
 
-  return (
-    <div>
-      <Header />
-      <Sidebar />
-      <div className="main">
-        <div className="content">
-          <h2>Phase 1 - Informations Personnelles</h2>
-          <ProgressBar step={1} />
+    return (
+        <>
+            <h2>Phase 1 - Informations Personnelles</h2>
           <form className="form">
             <div className="form-group">
               <label>Nom</label>
@@ -66,10 +56,8 @@ const Phase1 = () => {
               <button type="submit">Soumettre</button>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
-  );
-};
+        </>
+    );
+}
 
 export default Phase1;
