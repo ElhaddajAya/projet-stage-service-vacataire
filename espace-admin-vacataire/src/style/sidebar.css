@@ -9,7 +9,7 @@ body {
 }
 .sidebar {
   position: fixed;
-  top: 93px; /* <-- ajoute cette ligne */
+  top: 108px; /* <-- ajoute cette ligne */
   left: -290px;
   width:290px;
   height: calc(100% - 80px); /* hauteur ajustée à partir du top */
@@ -79,7 +79,7 @@ label #btn,label #cancel{
 /* Décaler le bouton hamburger (menu ouvert) plus bas */
 label #btn {
   left: 40px;
-  top: 100px; /* ancien : 25px */
+  top: 120px; /* ancien : 25px */
   font-size: 25px;
   color: black;
   padding: 6px 12px;
@@ -88,7 +88,7 @@ label #btn {
 label #cancel {
   z-index: 1111;
   left: -225px; /* -290px + 65px d'apparition */
-  top: 100px;
+  top: 120px;
   font-size: 30px;
   color: black;
   padding: 4px 9px;
