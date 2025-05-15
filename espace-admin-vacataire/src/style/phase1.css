@@ -1,7 +1,7 @@
 /* src/style/phase1.css */
 
 .main {
-  margin-left: 220px; /* Largeur de la sidebar */
+  /* margin-left: 220px; Largeur de la sidebar */
   padding: 4rem;
   /* margin-top: 0px; */
 }
@@ -41,15 +41,18 @@
 }
 
 .form input {
-  padding: 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  font-size: 1rem;
+  border: 1.5px solid #333;
+  height: 46px; /* même hauteur que les autres champs */
+  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
+  padding: 10px; /* Updated from 0.5rem to 10px to match second CSS */
+  /* margin-bottom: 15px; Updated from 1rem to 15px to match second CSS */
+  background-color: #fff; /* Added from second CSS for consistency */
+  font-size: 1rem; /* Added from second CSS */
+  box-sizing: border-box; /* Added from second CSS */
 }
 
 .form input:focus {
   outline: none;
-  border-color: #3b82f6;
 }
 
 .buttons {
@@ -99,11 +102,13 @@
 
 /* Harmoniser avec les autres inputs */
 .file-upload input[type="file"] {
-  padding: 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  font-size: 1rem;
-  background: white;
+  /* padding: 0.5rem; */
+  border: 1.5px solid #333;
+  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
+  /* padding: 10px; Updated from 0.5rem to 10px to match second CSS */
+  /* margin-bottom: 15px; Updated from 1rem to 15px to match second CSS */
+  background-color: #fff; /* Added from second CSS for consistency */
+  font-size: 1rem; /* Added from second CSS */
   height: 46px; /* même hauteur que les autres champs */
   width: 100%;  /* même largeur */
   box-sizing: border-box;
@@ -112,8 +117,14 @@
 
 .file-upload input[type="file"]:focus {
   outline: none;
-  border-color: #3b82f6;
+  /* border-color: #3b82f6; */
 }
+
+/* Hide the default file input button */
+.file-upload input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+
 
 /* Affichage du nom de fichier sélectionné */
 .file-upload .file-name {
