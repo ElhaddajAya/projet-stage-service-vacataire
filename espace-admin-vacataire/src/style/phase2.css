@@ -57,7 +57,7 @@ input[type="radio"] {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 0.3rem;
 }
 
 .buttons button {
