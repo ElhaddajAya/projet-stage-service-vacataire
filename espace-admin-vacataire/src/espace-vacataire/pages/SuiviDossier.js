@@ -8,7 +8,8 @@ import '../../style/phase1.css';
 import '../../style/phase2.css';
 import Phase1 from './Phase1';
 import Phase2 from './Phase2';
-
+import '../../style/phase3.css';
+import Phase3 from './Phase3';
 const SuiviDossier = () => {
   return (
     <div>
@@ -18,9 +19,10 @@ const SuiviDossier = () => {
         <div className="content">
           {/* <ProgressBar step={1} /> */}
           {/* <Phase1 />  */}
-
-          <ProgressBar step={2} />
-          <Phase2 />
+          {/* <ProgressBar step={2} />
+          <Phase2 /> */}
+          <ProgressBar step={3} />
+          <Phase3 />
         </div>
       </div>
     </div>

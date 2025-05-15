@@ -1,0 +1,73 @@
+/* src/espace-vacataire/style/phase3.css */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the form content */
+  gap: 1.5rem;
+}
+
+.status-container {
+  display: flex;
+  justify-content: center; /* Center the blocks horizontally */
+  gap: 1.5rem; /* Match the gap from phase2.css */
+  margin-top: 1.5rem; /* Consistent spacing */
+  width: 100%; /* Ensure it takes full width for centering */
+  max-width: 800px; /* Match content width from global.css */
+}
+
+.status-card {
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  flex: 1; /* Ensure blocks grow equally */
+  min-width: 200px;
+  color: #666;
+  opacity: 0.6; /* Default opacity for non-selected blocks */
+  transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.status-card.active {
+  background-color: #fff;
+  border: 2px solid #007bff;
+  color: #333;
+  opacity: 1; /* Full opacity for active block */
+}
+
+.status-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.status-card p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  gap: 1rem; /* Match phase2.css */
+  margin-top: 1.5rem; /* Consistent spacing */
+}
+
+button {
+  background-color: #1f2937; /* Match phase2.css submit button */
+  color: #fff;
+  padding: 0.75rem 1.5rem; /* Match phase2.css */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500; /* Match phase2.css */
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #374151; /* Slightly lighter than #1f2937 */
+}
