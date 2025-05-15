@@ -1,6 +1,6 @@
 // src/espace-vacataire/pages/Phase1.js
 import React from 'react';
-import HeaderVacataire from '../components/HeaderVacataire';
+import HeaderVacataire from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import '../../style/phase1.css';
 

@@ -1,11 +1,16 @@
+/* src/style/sidebar.css */
 .sidebar {
   width: 220px;
-  height: 100vh;
+  height: calc(100vh - 95px); /* Ajustez cette valeur */
   background-color: #f5f5f5;
   padding: 20px;
   box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 95px; /* Même valeur que ci-dessus */
+  left: 0;
 }
 
+/* Le reste de votre CSS existant peut rester inchangé */
 .profile {
   text-align: center;
   margin-bottom: 30px;
