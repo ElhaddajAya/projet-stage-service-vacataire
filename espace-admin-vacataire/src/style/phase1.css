@@ -4,6 +4,7 @@
   /* margin-left: 220px; Largeur de la sidebar */
   padding: 1.5rem;
   /* margin-top: 0px; */
+  
 }
 
 .content {
@@ -146,5 +147,5 @@
 /* Affichage du nom de fichier sélectionné */
 .file-upload .file-name {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #134099;
 }
