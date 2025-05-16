@@ -1,31 +1,33 @@
-*{
+* {
   padding: 0;
   margin: 0;
   list-style: none;
   text-decoration: none;
 }
+
 body {
   font-family: 'Roboto', sans-serif;
 }
+
 .sidebar {
   position: fixed;
-  top: 108px; /* <-- ajoute cette ligne */
+  top: 108px; /* Aligns with the header height */
   left: -290px;
-  width:290px;
-  height: calc(100% - 80px); /* hauteur ajustée à partir du top */
-  background: #d5d5d5;
+  width: 290px;
+  height: calc(100vh - 108px); /* Full viewport height minus header */
+  background: #e3e3e3;
   transition: all .5s ease;
 }
- .sidebar header {
-  background-color: transparent; 
+
+.sidebar header {
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
   margin-bottom: 30px;
-   border: none;
+  border: none;
   box-shadow: none;
-  background-color: transparent;
 }
 
 .sidebar header img {
@@ -33,12 +35,11 @@ body {
   border: black 5px solid;
   width: 100px;
   height: 100px;
-  border-radius: 50%; /* rend l'image circulaire */
+  border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px;  
+  margin-bottom: 10px;
   margin-top: 30px;
   margin-right: 40px;
-
 }
 
 .sidebar header p {
@@ -48,7 +49,7 @@ body {
   margin: 0;
 }
 
-.sidebar ul a{
+.sidebar ul a {
   display: block;
   height: 100%;
   width: 100%;
@@ -60,56 +61,65 @@ body {
   border-bottom: 1px solid gray;
   transition: .4s;
 }
-ul li:hover a{
+
+ul li:hover a {
   padding-left: 50px;
 }
-.sidebar ul a i{
+
+.sidebar ul a i {
   margin-right: 16px;
 }
-#check{
+
+#check {
   display: none;
 }
-label #btn,label #cancel{
-  position: absolute;
+
+label #btn, label #cancel {
+  position: fixed; /* Changed to fixed to prevent scrolling movement */
   background: #d5d5d5;
   border-radius: 3px;
   cursor: pointer;
 }
-/* icon */
-/* Décaler le bouton hamburger (menu ouvert) plus bas */
+
 label #btn {
   left: 40px;
-  top: 120px; /* ancien : 25px */
+  top: 120px;
   font-size: 25px;
   color: black;
   padding: 6px 12px;
   transition: all .5s;
 }
+
 label #cancel {
   z-index: 1111;
-  left: -225px; /* -290px + 65px d'apparition */
+  left: -225px; /* Hidden initially */
   top: 120px;
   font-size: 30px;
   color: black;
   padding: 4px 9px;
   transition: all .5s ease;
+  display: block; /* Ensure visibility control */
 }
 
 #check:checked ~ label #cancel {
-  left: 228px; /* largeur de la sidebar */
-}   
-#check:checked ~ .sidebar{
+  left: 228px; /* Visible when sidebar is open */
+}
+
+#check:checked ~ .sidebar {
   left: 0;
 }
-#check:checked ~ label #btn{
+
+#check:checked ~ label #btn {
   left: 250px;
   opacity: 0;
   pointer-events: none;
 }
-#check:checked ~ section{
+
+#check:checked ~ section {
   margin-left: 250px;
 }
-section{
+
+section {
   background-position: center;
   background-size: cover;
   height: 100vh;

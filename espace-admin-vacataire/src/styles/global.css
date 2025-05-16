@@ -27,7 +27,7 @@ header {
 
 header img {
   margin-left: 50px; /* Retained from first CSS */
-  width: 240px; /* Retained from first CSS */
+  width: 260px; /* Retained from first CSS */
 }
 
 header h1 {
@@ -185,7 +185,7 @@ h2 {
 }
 
 .table-container {
-    width: 90%;
+    width: 80%;
   overflow-x: auto;
   margin: 0 auto;
   background-color: transparent; /* plus de fond ici */
@@ -194,7 +194,7 @@ h2 {
 .table-vacataires {
   width: 100%;
   border-spacing: 0; /* important pour l’alignement */
-  border: 0.4px solid #4b5563;
+  border: 0.4px solid #4b5563!important;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -218,7 +218,7 @@ h2 {
 .table-vacataires th,
 .table-vacataires td {
   padding: 1rem 1.25rem;
-  border: 0.4px solid #4b5563;
+  border: 0.4px solid #4b5563!important;
   font-size: 1rem;
   text-align: center;
   background-color: white;
@@ -259,27 +259,48 @@ h2 {
   padding: 0.4rem 0.75rem;
   border-radius: 6px;
   cursor: pointer;
+  color: #4b5563;
+  font-weight: 500;
   font-size: 1rem;
+}
+
+.pagination-btn:hover {
+  background-color: #d1d5db!important;
 }
 
 .pagination-count {
   font-size: 1rem;
 }
 
-.search-bar {
-  width: 500px;
+.search-container {
+  position: relative;
+  width: 350px;
   margin-top: 1rem;
   margin-bottom: 2rem;
-  border: 1.6px solid #333;
-  height: 46px; /* même hauteur que les autres champs */
-  border-radius: 4px; /* Updated from 0.25rem to 4px to match second CSS */
-  padding: 10px; /* Updated from 0.5rem to 10px to match second CSS */
-  /* margin-bottom: 15px; Updated from 1rem to 15px to match second CSS */
-  background-color: #fff; /* Added from second CSS for consistency */
-  font-size: 1rem; /* Added from second CSS */
-  box-sizing: border-box; /* Added from second CSS */
 }
 
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1rem;
+  z-index: 10;
+  cursor: pointer; /* Ajoute un curseur pointer pour suggérer la possibilité de cliquer */
+}
+
+.search-bar {
+  width: 100%;
+  padding-right: 40px !important; /* Espace pour l'icône à droite */
+  border: 1.6px solid #333;
+  height: 46px;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #fff;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
 
 /* Remove input type text or email or number focus border */
 input[type="text"]:focus,
@@ -365,7 +386,7 @@ form input[type="password"]:focus {
 }
 
 .btn-annuler:hover {
-    background-color: #d1d5db;
+    background-color: #d1d5db!important;
 }
 
 /* src/espace-vacataire/styles/global.css */
@@ -377,7 +398,7 @@ form input[type="password"]:focus {
   justify-content: center; /* Center the buttons horizontally */
   gap: 1rem; /* Space between buttons */
   padding: 1rem 0; /* Add some vertical padding */
-  border-bottom: 1px solid #e5e7eb; /* Optional: subtle divider */
+  margin-bottom: 1.6rem; /* Space below the buttons */
 }
 
 /* Ensure buttons inherit the desired style */
@@ -387,7 +408,7 @@ form input[type="password"]:focus {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  border: 1px solid #252525;
+  border: 1.5px solid #252525;
 }
 
 .navigation-buttons button:disabled {

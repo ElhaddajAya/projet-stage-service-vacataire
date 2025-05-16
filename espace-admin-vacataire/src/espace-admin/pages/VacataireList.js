@@ -1,5 +1,8 @@
 import Header from '../components/Header';
 import React, { useState } from 'react';
+// Import Font Awesome components
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const VacataireList = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -21,14 +24,17 @@ const VacataireList = () => {
                 <div className="table-container">
                   <h1 className="page-title">Liste des Vacataires</h1>
 
-                  {/* Barre de recherche avec icone */}
-                  <input 
-                      type="text" 
-                      placeholder="Rechercher un vacataire..." 
-                      value={searchTerm} 
-                      onChange={handleSearch} 
-                      className="search-bar"
-                  />
+                  {/* Barre de recherche avec icone à droite */}
+                  <div className="search-container">
+                      <input 
+                          type="text" 
+                          placeholder="Rechercher un vacataire..." 
+                          value={searchTerm} 
+                          onChange={handleSearch} 
+                          className="search-bar"
+                      />
+                      <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                  </div>
 
                     <table className="table-vacataires">
                       <thead>
