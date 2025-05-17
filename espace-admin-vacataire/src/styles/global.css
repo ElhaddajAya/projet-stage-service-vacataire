@@ -1,23 +1,31 @@
 /* global.css */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
-body {
-  font-family: "DM Sans", sans-serif!important; /* Updated from 'DM Sans' to 'Exo 2' */
+/* Ensure the root elements take only the viewport height */
+html, body {
+  height: 100vh; /* Full viewport height */
   margin: 0;
   padding: 0;
-  padding-top: 80px; /* Added from second CSS to avoid content being hidden behind fixed header */
-  font-family: 'Helvetica Neue', sans-serif; /* Updated from sans-serif to match second CSS */
-  background-color: #fff; /* Light gray background from second CSS, overriding #f9fafb */
-  color: #333; /* From second CSS for consistency */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: auto; /* Allow vertical scroll if needed */
+  font-family: "DM Sans", sans-serif !important;
+  background-color: #fff;
+  color: #333;
+}
+
+body {
+  padding-top: 80px; /* Space for the fixed header */
+  box-sizing: border-box;
 }
 
 /* Apply consistent sizing model across elements */
 *,
 *::before,
 *::after {
-  box-sizing: border-box; /* From second CSS */
+  box-sizing: border-box;
 }
 
+/* Fixed header */
 header {
   display: flex;
   justify-content: space-between;
@@ -25,51 +33,51 @@ header {
   padding: 15px 30px;
   border-bottom: 1px solid #ddd;
   background-color: white;
-  
-  /* Propriétés pour rendre le header fixe */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 1000; /* Pour s'assurer que le header reste au-dessus des autres éléments */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère pour distinguer le header */
-  height: 80px; /* Hauteur fixe du header - à ajuster selon votre design */
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 80px;
 }
 
 header img {
-  margin-left: 50px; /* Retained from first CSS */
-  width: 260px; /* Retained from first CSS */
+  margin-left: 50px;
+  width: 260px;
   margin-top: 10px;
 }
 
 header h1 {
-  font-size: 1.5rem; /* Updated from 1.25rem to match second CSS h1 */
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #333; /* Updated from #1f2937 to #333 for consistency */
-  margin-right: 50px; /* Retained from first CSS */
+  color: #333;
+  margin-right: 50px;
   margin-bottom: 30px;
-  text-align: center; /* Added from second CSS for title alignment */
+  text-align: center;
 }
 
-/* Centrer verticalement et horizontalement */
+/* Centering container for login page */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh; /* Retained from first CSS */
-  height: 80vh; /* Added from second CSS for full height centering */
+  min-height: calc(100vh - 80px); /* Adjust for fixed header */
+  height: auto; /* Allow content to dictate height */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* Boîte de formulaire */
 .login-form {
   background-color: white;
   padding: 2rem;
-  border-radius: 8px; /* Updated from 0.5rem to 8px to match second CSS */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Updated from 0 2px 4px rgba(0, 0, 0, 0.1) for softer shadow */
-  border: none; /* Removed 1px solid #ccc to match second CSS login-box */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
   width: 100%;
-  max-width: 450px; /* Updated from 400px to 350px to match second CSS */
+  max-width: 450px;
 }
 
 .form-group {
@@ -405,17 +413,35 @@ form input[type="password"]:focus {
 
 /* src/espace-vacataire/styles/global.css */
 
-/* ... existing styles ... */
-
-.navigation-buttons {
+/* Main content wrapper for pages like SuiviDossier */
+.main {
+  min-height: calc(100vh - 80px); /* Adjust for fixed header */
+  height: auto; /* Allow content to dictate height */
   display: flex;
-  justify-content: center; /* Center the buttons horizontally */
-  gap: 1rem; /* Space between buttons */
-  padding: 1rem 0; /* Add some vertical padding */
-  margin-bottom: 1.6rem; /* Space below the buttons */
+  position: relative; /* Ensure sidebar positioning works */
 }
 
-/* Ensure buttons inherit the desired style */
+/* Content container */
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Navigation buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  margin-bottom: 1.6rem;
+}
+
 .navigation-buttons button {
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
