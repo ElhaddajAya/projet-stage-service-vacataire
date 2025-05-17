@@ -2,11 +2,9 @@ const xlsx = require('xlsx');
 const path = require('path');
 const dotenv = require('dotenv');
 
-// Charger les variables d'environnement à partir de .env
-// Important: spécifier le chemin complet au fichier .env
+// Charger les variables d'environnement
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-// Créer une nouvelle connexion à la base de données
 const mysql = require('mysql2');
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -15,7 +13,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-// Se connecter à la base de données
+// Connexion à la base de données
 db.connect((err) => {
   if (err) {
     console.error("❌ Erreur de connexion à la base de données :", err.message);
@@ -24,91 +22,119 @@ db.connect((err) => {
   console.log("✅ Connecté à la base de données MySQL");
 });
 
-// Vérifier que les variables d'environnement sont correctement chargées
-console.log(`DB_HOST: ${process.env.DB_HOST}`);
-console.log(`DB_USER: ${process.env.DB_USER !== undefined ? "Défini" : "Non défini"}`);
-console.log(`DB_PASSWORD: ${process.env.DB_PASSWORD !== undefined ? "Défini" : "Non défini"}`);
-console.log(`DB_NAME: ${process.env.DB_NAME}`);
-
 // Lire le fichier Excel
 const workbook = xlsx.readFile('../../vacataires.xlsx');  
 const sheetName = workbook.SheetNames[0];
 const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-// Fonction d'insertion
-const insertVacataire = (nom, filiere, semestre, semaines, heures, matiere) => {
+// Récupérer l'ID de la filière à partir de son nom
+const getFiliereId = (filiereNom, callback) => {
+  const query = "SELECT ID_fil FROM filiere WHERE Nom_fil = ?";
+  db.query(query, [filiereNom], (err, results) => {
+    if (err) {
+      console.error(`❌ Erreur lors de la récupération de l'ID pour la filière ${filiereNom}:`, err);
+      callback(null);
+      return;
+    }
+
+    if (results.length === 0) {
+      console.error(`⚠️ Aucune filière trouvée avec le nom "${filiereNom}"`);
+      callback(null);
+      return;
+    }
+
+    callback(results[0].ID_fil);
+  });
+};
+
+// Fonction pour insérer les informations d'enseignement
+// Fonction d'insertion des informations d'enseignement
+const insertEnseignement = (vacataireId, filiereId, semestre, semaines, heures, matiere) => {
+  // Vérifier et nettoyer les valeurs
+  semaines = semaines || 0;  // Valeur par défaut si null ou undefined
+  heures = heures || 0;      // Valeur par défaut si null ou undefined
+  matiere = matiere || "Inconnue";  // Valeur par défaut pour la matière
+
+  console.log(`📝 Données enseignement :`, { vacataireId, filiereId, semestre, semaines, heures, matiere });
+
+  const queryEnseigner = `
+    INSERT INTO enseigner (ID_vacat, ID_fil, Semestre, Nbr_semaines, Nbr_heurs, Matiere)
+    VALUES (?, ?, ?, ?, ?, ?);
+  `;
+  
+  db.query(queryEnseigner, [vacataireId, filiereId, semestre, semaines, heures, matiere], (err) => {
+    if (err) {
+      console.error(`❌ Erreur lors de l'ajout des informations d'enseignement pour vacataire ID ${vacataireId} et filière ID ${filiereId}:`, err);
+    } else {
+      console.log(`✅ Enseignement enregistré avec succès pour vacataire ID ${vacataireId} dans filière ID ${filiereId}.`);
+    }
+  });
+};
+
+// Fonction d'insertion des vacataires
+const insertVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) => {
   const query = `
     INSERT INTO vacataire (Nom)
     VALUES (?) 
     ON DUPLICATE KEY UPDATE Nom = Nom;
   `;
-  
+
   db.query(query, [nom], (err, result) => {
     if (err) {
-      console.error(`Erreur d'insertion du vacataire ${nom}:`, err);
+      console.error(`❌ Erreur d'insertion du vacataire ${nom}:`, err);
       return;
     }
-    
-    console.log(`✅ Vacataire ${nom} enregistré avec succès.`);
 
-    // Obtenir l'ID du vacataire inséré ou existant
-    let vacataireId;
-    if (result.insertId) {
-      vacataireId = result.insertId;
-      insertEnseignement(vacataireId, filiere, semestre, semaines, heures);
-    } else {
-      // Si le vacataire existe déjà, récupérer son ID
+    const vacataireId = result.insertId;
+
+    // Si l'ID n'est pas retourné, récupérer l'ID du vacataire existant
+    if (!vacataireId) {
       const getIdQuery = "SELECT ID_vacat FROM vacataire WHERE Nom = ?";
       db.query(getIdQuery, [nom], (err, results) => {
         if (err || results.length === 0) {
-          console.error(`Erreur lors de la récupération de l'ID pour ${nom}:`, err || "Aucun résultat");
+          console.error(`❌ Erreur lors de la récupération de l'ID pour ${nom}:`, err || "Aucun résultat");
           return;
         }
-        
-        vacataireId = results[0].ID_vacat;
-        insertEnseignement(vacataireId, filiere, semestre, semaines, heures);
+
+        // Utiliser l'ID récupéré pour l'insertion dans enseigner
+        const vacataireIdFromDB = results[0].ID_vacat;
+        getFiliereId(filiereNom, (filiereId) => {
+          if (filiereId) {
+            insertEnseignement(vacataireIdFromDB, filiereId, semestre, semaines, heures, matiere);
+          }
+        });
+      });
+    } else {
+      // Récupérer l'ID de la filière et insérer les informations d'enseignement
+      getFiliereId(filiereNom, (filiereId) => {
+        if (filiereId) {
+          insertEnseignement(vacataireId, filiereId, semestre, semaines, heures, matiere);
+        }
       });
     }
   });
 };
 
-// Fonction pour insérer les informations d'enseignement
-const insertEnseignement = (vacataireId, filiere, semestre, semaines, heures) => {
-  // Vérifier que toutes les valeurs sont définies
-  if (!vacataireId || !filiere || !semestre || !semaines || !heures) {
-    console.error(`Données d'enseignement incomplètes: ID:${vacataireId}, Filière:${filiere}, Semestre:${semestre}, Semaines:${semaines}, Heures:${heures}`);
-    return;
-  }
-
-  const queryEnseigner = `
-    INSERT INTO enseigner (ID_vacat, ID_fil, Semestre, Nbr_semaines, Nbr_heurs)
-    VALUES (?, ?, ?, ?, ?);
-  `;
-  
-  db.query(queryEnseigner, [vacataireId, filiere, semestre, semaines, heures], (err) => {
-    if (err) {
-      console.error(`Erreur lors de l'ajout des informations d'enseignement pour ID ${vacataireId}:`, err);
-    } else {
-      console.log(`✅ Enseignement enregistré avec succès pour vacataire ID ${vacataireId}.`);
-    }
-  });
-};
-
-// Parcourir les données et les insérer dans la base de données
-console.log(`Importation de ${data.length} vacataires...`);
-
-let completedImports = 0;
+// Parcourir les données et les insérer
+console.log(`🚀 Importation de ${data.length} vacataires...`);
 data.forEach((row) => {
-  const { Nom, filiere, semestre, nbr_semaines, nbr_heures, Matiere } = row;
-  insertVacataire(Nom, filiere, semestre, nbr_semaines, nbr_heures, Matiere);
+  const nom = row.Nom;
+  const filiere = row.filiere;
+  const semestre = row.semestre;
+
+  // Correction pour les noms de colonnes
+  const semaines = parseInt(row['nbr semaines'] || row['Nbr semaines'] || row['Nbr Semaines'] || row['nbr_semaines']) || 0;
+  const heures = parseInt(row['nbr heures'] || row['Nbr heures'] || row['Nbr Heures'] || row['nbr_heures']) || 0;
+  const matiere = row.Matiere;
+
+  console.log(`📝 Données nettoyées :`, { nom, filiere, semestre, semaines, heures, matiere });
+
+  insertVacataire(nom, filiere, semestre, semaines, heures, matiere);
 });
 
-// Surveillez la fin de toutes les opérations asynchones avant de fermer
-process.on('beforeExit', () => {
-  console.log('Importation terminée.');
+// Fermer la connexion après les opérations
+setTimeout(() => {
   db.end(() => {
     console.log('🔗 Connexion fermée.');
   });
-});
-
-console.log('Traitement d\'importation en cours...');
+}, 3000);
