@@ -1,6 +1,8 @@
 /* global.css */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 body {
+  font-family: "DM Sans", sans-serif!important; /* Updated from 'DM Sans' to 'Exo 2' */
   margin: 0;
   padding: 0;
   font-family: 'Helvetica Neue', sans-serif; /* Updated from sans-serif to match second CSS */
