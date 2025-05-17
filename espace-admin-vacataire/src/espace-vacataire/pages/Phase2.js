@@ -31,7 +31,7 @@ const Phase2 = () => {
                         type="file" 
                         onChange={(e) => handleFileChange(e, 'cin')}
                     />
-                    {fileNames.cin && <div className="file-name">{fileNames.cin}</div>}
+                    {/* {fileNames.cin && <div className="file-name">{fileNames.cin}</div>} */}
                 </div>
 
                 <div className="form-group file-upload">
@@ -40,7 +40,7 @@ const Phase2 = () => {
                         type="file" 
                         onChange={(e) => handleFileChange(e, 'cv')}
                     />
-                    {fileNames.cv && <div className="file-name">{fileNames.cv}</div>}
+                    {/* {fileNames.cv && <div className="file-name">{fileNames.cv}</div>} */}
                 </div>
 
                 <div className="form-group file-upload">
@@ -49,7 +49,7 @@ const Phase2 = () => {
                         type="file" 
                         onChange={(e) => handleFileChange(e, 'diplome')}
                     />
-                    {fileNames.diplome && <div className="file-name">{fileNames.diplome}</div>}
+                    {/* {fileNames.diplome && <div className="file-name">{fileNames.diplome}</div>} */}
                     <small>Tous les diplômes obtenus dans un seul fichier .pdf</small>
                 </div>
 
@@ -84,7 +84,7 @@ const Phase2 = () => {
                         />
                         {fileNames[isFonctionnaire ? 'autorisation' : 'attestation'] && (
                             <div className="file-name">
-                                {fileNames[isFonctionnaire ? 'autorisation' : 'attestation']}
+                                {/* {fileNames[isFonctionnaire ? 'autorisation' : 'attestation']} */}
                             </div>
                         )}
                     </div>

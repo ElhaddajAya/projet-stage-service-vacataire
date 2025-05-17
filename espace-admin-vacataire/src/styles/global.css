@@ -5,6 +5,7 @@ body {
   font-family: "DM Sans", sans-serif!important; /* Updated from 'DM Sans' to 'Exo 2' */
   margin: 0;
   padding: 0;
+  padding-top: 80px; /* Added from second CSS to avoid content being hidden behind fixed header */
   font-family: 'Helvetica Neue', sans-serif; /* Updated from sans-serif to match second CSS */
   background-color: #fff; /* Light gray background from second CSS, overriding #f9fafb */
   color: #333; /* From second CSS for consistency */
@@ -17,19 +18,29 @@ body {
   box-sizing: border-box; /* From second CSS */
 }
 
-/* Header section with logo */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px; /* Adjusted from 1rem 2rem to 15px 30px for better spacing */
-  border-bottom: 1px solid #ddd; /* Updated from #ccc to #ddd for consistency */
+  padding: 15px 30px;
+  border-bottom: 1px solid #ddd;
   background-color: white;
+  
+  /* Propriétés pour rendre le header fixe */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000; /* Pour s'assurer que le header reste au-dessus des autres éléments */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère pour distinguer le header */
+  height: 80px; /* Hauteur fixe du header - à ajuster selon votre design */
 }
 
 header img {
   margin-left: 50px; /* Retained from first CSS */
   width: 260px; /* Retained from first CSS */
+  margin-top: 10px;
 }
 
 header h1 {
@@ -37,6 +48,7 @@ header h1 {
   font-weight: 600;
   color: #333; /* Updated from #1f2937 to #333 for consistency */
   margin-right: 50px; /* Retained from first CSS */
+  margin-bottom: 30px;
   text-align: center; /* Added from second CSS for title alignment */
 }
 

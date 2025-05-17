@@ -49,7 +49,7 @@ const Phase1 = () => {
                 onChange={handleFileChange}
                 accept="image/*"
               />
-              {fileName && <div className="file-name">{fileName}</div>}
+              {/* {fileName && <div className="file-name">{fileName}</div>} */}
             </div>
             
             <div className="buttons">

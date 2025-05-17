@@ -8,7 +8,7 @@ const Header = () => {
       <div>
         <img src={logo} alt="Logo" />
       </div>
-      {/* <h1>Service Vacation</h1> */}
+      <h1>Espace Enseignant Vacataire</h1>
     </header>
   );
 };
