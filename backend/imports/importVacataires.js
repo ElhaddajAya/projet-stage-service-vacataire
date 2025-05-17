@@ -54,6 +54,7 @@ const insertEnseignement = (vacataireId, filiereId, semestre, semaines, heures, 
   semaines = semaines || 0;  // Valeur par défaut si null ou undefined
   heures = heures || 0;      // Valeur par défaut si null ou undefined
   matiere = matiere || "Inconnue";  // Valeur par défaut pour la matière
+  semestre = semestre || "Inconnu"; // Valeur par défaut pour le semestres
 
   console.log(`📝 Données enseignement :`, { vacataireId, filiereId, semestre, semaines, heures, matiere });
 
