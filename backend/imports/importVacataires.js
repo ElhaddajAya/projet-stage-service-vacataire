@@ -1,17 +1,11 @@
 const xlsx = require('xlsx');
 const mysql = require('mysql2');
+
+// Connexion à la base de données depuis le fichier db.js
+const db = require('../config/db');
 const dotenv = require('dotenv');
-
+// Charge le fichier .env
 dotenv.config();
-
-// Connexion à la base de données
-const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'service_vacation',
-});
 
 db.connect((err) => {
   if (err) {
