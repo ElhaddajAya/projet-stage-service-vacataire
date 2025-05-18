@@ -1,3 +1,5 @@
+//backend/app.js
+
 const express = require('express');
 const db = require('./config/db');
 const dotenv = require('dotenv');
@@ -33,7 +35,64 @@ app.use(session({
 app.get('/', (req, res) => {
   res.send('Backend opérationnel 🚀');
 });
+// backend/app.js
 
+// ... existing imports and middleware ...
+
+// Route to fetch details of a specific vacataire
+app.get('/vacataire-details/:id', (req, res) => {
+  const vacataireId = req.params.id;
+
+  const query = `
+    SELECT ID_vacat, Nom, Prenom, Numero_tele AS Numero_tele, Email, CIN, Date_naiss, 
+           Photo, CV, Attest_non_emploi AS Attestation, Diplome AS Departement, 
+           Etat_dossier AS EtatDossier, Etat_virement AS EtatVirement
+    FROM vacataire 
+    WHERE ID_vacat = ?
+  `;
+  db.query(query, [vacataireId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des détails du vacataire:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Vacataire non trouvé' });
+    }
+
+    res.json(results[0]);
+  });
+});
+
+// backend/app.js
+
+// ... existing imports and middleware ...
+
+// Route to update the Etat_dossier of a vacataire
+app.put('/vacataire/:id/update-etat', (req, res) => {
+  const vacataireId = req.params.id;
+  const { Etat_dossier } = req.body;
+
+  if (!Etat_dossier) {
+    return res.status(400).json({ message: 'État du dossier est requis' });
+  }
+
+  const query = 'UPDATE vacataire SET Etat_dossier = ? WHERE ID_vacat = ?';
+  db.query(query, [Etat_dossier, vacataireId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la mise à jour de l\'état du dossier:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Vacataire non trouvé' });
+    }
+
+    res.json({ message: 'État du dossier mis à jour avec succès' });
+  });
+});
+
+// ... existing routes ...
 // Route pour récupérer tous les vacataires
 app.get('/vacataires', (req, res) => {
   const query = 'SELECT * FROM vacataire';
