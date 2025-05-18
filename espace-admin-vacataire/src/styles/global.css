@@ -52,8 +52,9 @@ header h1 {
   font-weight: 600;
   color: #333;
   margin-right: 50px;
-  margin-bottom: 30px;
+  margin-bottom: 0; /* Remove the bottom margin to prevent upward shift */
   text-align: center;
+  align-self: center; /* Ensure vertical centering within flex container */
 }
 
 /* Centering container for login page */
