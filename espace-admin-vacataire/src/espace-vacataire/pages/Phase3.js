@@ -1,16 +1,7 @@
 // src/espace-vacataire/pages/Phase3.js
-import React, { useState } from 'react';
+import React from 'react';
 
-const Phase3 = ({ onNextSubStep }) => {
-  const [subStep, setSubStep] = useState(1);
-
-  const handleNextSubStep = () => {
-    if (subStep < 3) {
-      setSubStep(subStep + 1);
-      if (onNextSubStep) onNextSubStep();
-    }
-  };
-
+const Phase3 = ({ onPhaseComplete, subStep, handleNextSubStep }) => {
   return (
     <>
       <h2>Phase 3 - Virement</h2>
