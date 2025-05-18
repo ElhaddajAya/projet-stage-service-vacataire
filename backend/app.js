@@ -1,15 +1,15 @@
-//backend/app.js
-
 const express = require('express');
 const db = require('./config/db');
 const dotenv = require('dotenv');
 const session = require('express-session');
+const fs = require('fs').promises; // Use promises version of fs for async operations
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 
 const cors = require('cors');
+const multer = require('multer');
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true // Important pour les cookies de session
@@ -35,9 +35,6 @@ app.use(session({
 app.get('/', (req, res) => {
   res.send('Backend opérationnel 🚀');
 });
-// backend/app.js
-
-// ... existing imports and middleware ...
 
 // Route to fetch details of a specific vacataire
 app.get('/vacataire-details/:id', (req, res) => {
@@ -64,10 +61,6 @@ app.get('/vacataire-details/:id', (req, res) => {
   });
 });
 
-// backend/app.js
-
-// ... existing imports and middleware ...
-
 // Route to update the Etat_dossier of a vacataire
 app.put('/vacataire/:id/update-etat', (req, res) => {
   const vacataireId = req.params.id;
@@ -92,7 +85,6 @@ app.put('/vacataire/:id/update-etat', (req, res) => {
   });
 });
 
-// ... existing routes ...
 // Route pour récupérer tous les vacataires
 app.get('/vacataires', (req, res) => {
   const query = 'SELECT * FROM vacataire';
@@ -204,6 +196,127 @@ app.get('/vacataire-info', (req, res) => {
     }
 
     res.json(results[0]); // Retourne les informations du vacataire
+  });
+});
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Ensure 'uploads' directory exists
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage: storage });
+
+// Route to upload documents and update vacataire table
+app.post('/upload-documents', upload.fields([
+  { name: 'photo', maxCount: 1 },
+  { name: 'cin', maxCount: 1 },
+  { name: 'cv', maxCount: 1 },
+  { name: 'diplome', maxCount: 1 },
+  { name: 'autorisation', maxCount: 1 },
+  { name: 'attestation', maxCount: 1 },
+]), async (req, res) => {
+  const vacataireId = req.session.userId;
+  if (!vacataireId) {
+    return res.status(401).json({ message: 'Utilisateur non connecté' });
+  }
+
+  const {
+    photo,
+    cin,
+    cv,
+    diplome,
+    autorisation,
+    attestation,
+  } = req.files || {};
+  const { isFonctionnaire } = req.body;
+
+  // Fetch existing vacataire data to preserve unchanged fields and get old file paths
+  const getQuery = 'SELECT * FROM vacataire WHERE ID_vacat = ?';
+  db.query(getQuery, [vacataireId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des données existantes:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Vacataire non trouvé' });
+    }
+
+    const existingData = results[0];
+
+    // Prepare update fields, preserving existing values unless a new file is provided
+    const updateFields = {
+      ...existingData,
+      Fonctionnaire: isFonctionnaire === 'true' ? 1 : 0,
+      Etat_dossier: 'En cours',
+    };
+
+    // Track old file paths to delete
+    const oldFilesToDelete = [];
+
+    // Update fields with new files and queue old files for deletion
+    if (photo) {
+      updateFields.Photo = photo[0].path;
+      if (existingData.Photo) oldFilesToDelete.push(existingData.Photo);
+    }
+    if (cin) {
+      updateFields.CIN_fichier = cin[0].path;
+      if (existingData.CIN_fichier) oldFilesToDelete.push(existingData.CIN_fichier);
+    }
+    if (cv) {
+      updateFields.CV = cv[0].path;
+      if (existingData.CV) oldFilesToDelete.push(existingData.CV);
+    }
+    if (diplome) {
+      updateFields.Diplome = diplome[0].path;
+      if (existingData.Diplome) oldFilesToDelete.push(existingData.Diplome);
+    }
+    if (isFonctionnaire === 'true' && autorisation) {
+      updateFields.Autorisation_fichier = autorisation[0].path;
+      if (existingData.Autorisation_fichier) oldFilesToDelete.push(existingData.Autorisation_fichier);
+    }
+    if (isFonctionnaire === 'false' && attestation) {
+      updateFields.Attest_non_emploi = attestation[0].path;
+      if (existingData.Attest_non_emploi) oldFilesToDelete.push(existingData.Attest_non_emploi);
+    }
+
+    // Remove ID_vacat from updateFields to avoid updating the primary key
+    delete updateFields.ID_vacat;
+
+    // Delete old files asynchronously
+    const deleteOldFiles = async () => {
+      for (const filePath of oldFilesToDelete) {
+        try {
+          await fs.unlink(filePath);
+          console.log(`Deleted old file: ${filePath}`);
+        } catch (deleteErr) {
+          console.error(`Error deleting old file ${filePath}:`, deleteErr);
+          // Continue even if deletion fails (non-critical error)
+        }
+      }
+    };
+
+    // Perform the database update
+    const updateQuery = 'UPDATE vacataire SET ? WHERE ID_vacat = ?';
+    db.query(updateQuery, [updateFields, vacataireId], (err, results) => {
+      if (err) {
+        console.error('Erreur lors de la mise à jour des documents:', err);
+        return res.status(500).json({ message: 'Erreur serveur' });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Vacataire non trouvé' });
+      }
+
+      // Delete old files after successful update
+      deleteOldFiles().catch(console.error);
+
+      res.json({ message: 'Documents téléchargés avec succès' });
+    });
   });
 });
 
