@@ -401,6 +401,10 @@ form input[type="password"]:focus {
   margin-left: 5px;
 }
 
+.button-group .btn-refuser:hover {
+  background-color: #c0392b !important; /* Specific override for Etude Dossier */
+}
+
 .btn-refuser:hover {
   background-color: #c0392b;
 }
@@ -415,7 +419,7 @@ form input[type="password"]:focus {
 .search-bar {
   width: 100%;
   padding-right: 40px;
-  border: 1.6px solid #333;
+  border: 1.1px solid #444;
   height: 46px;
   border-radius: 4px;
   padding: 10px;
@@ -595,7 +599,7 @@ form input[type="password"]:focus {
 }
 
 .btn-retour {
-  background-color: #333;
+  background-color: #666;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -607,7 +611,7 @@ form input[type="password"]:focus {
 }
 
 .btn-retour:hover {
-  background-color: #555;
+  background-color: #444;
 }
 
 .btn-refuser {
@@ -620,10 +624,11 @@ form input[type="password"]:focus {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  margin-left: 5px;
 }
 
-.btn-refuser:hover {
-  background-color: #c0392b;
+.button-group .btn-refuser:hover {
+  background-color: #c0392b !important; /* Specific override for Etude Dossier */
 }
 
 /* Responsive Design */
