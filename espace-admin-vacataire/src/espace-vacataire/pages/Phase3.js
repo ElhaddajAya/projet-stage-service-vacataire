@@ -22,6 +22,8 @@ const Phase3 = ({ onPhaseComplete, subStep, handleNextSubStep }) => {
           setActiveCard(2); // Card 2: "Dossier validé, attendez votre virement"
         } else if (Etat_dossier === 'Validé' && Etat_virement === 'Effectué') {
           setActiveCard(3); // Card 3: "Effectué"
+        } else {
+          setActiveCard(0);
         }
       } catch (err) {
         console.error('Erreur lors de la récupération des statuts:', err);
