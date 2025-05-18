@@ -40,13 +40,13 @@ const VacataireList = () => {
       const nom = vacataire.Nom || '';
       const prenom = vacataire.Prenom || '';
       const email = vacataire.Email || '';
-      const Etat_dossier = vacataire.Etat_dossier || '';
+      const cin = vacataire.CIN || '';
       const search = searchTerm.toLowerCase();
       return (
         nom.toLowerCase().includes(search) ||
         prenom.toLowerCase().includes(search) ||
         email.toLowerCase().includes(search) ||
-        Etat_dossier.toLowerCase().includes(search)
+        cin.toLowerCase().includes(search)
       );
     });
     setFilteredVacataires(filtered);
@@ -132,31 +132,32 @@ const VacataireList = () => {
               </tr>
             </thead>
             <tbody>
-            {currentVacataires.map((vacataire) => (
-              <tr key={vacataire.ID_vacat}>
-                <td>{vacataire.ID_vacat}</td>
-                <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
-                  {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
-                </td>
-                <td title={vacataire.Diplome || 'Informatique'}>{vacataire.Diplome || 'Informatique'}</td>
-                <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
-                <td>
-                  <button
-                    className="btn-valider"
-                    onClick={() => handleVirement(vacataire)}
-                  >
-                    Valider Virement
-                  </button>
-                  <button
-                    className="btn-etude"
-                    onClick={() => handleEtudeDossier(vacataire.ID_vacat)}
-                  >
-                    Étude Dossier
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+              {currentVacataires.map((vacataire) => (
+                <tr key={vacataire.ID_vacat}>
+                  <td>{vacataire.ID_vacat}</td>
+                  <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
+                    {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
+                  </td>
+                  <td title={vacataire.Diplome || 'Informatique'}>{vacataire.Diplome || 'Informatique'}</td>
+                  <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
+                  <td>
+                    <button
+                      className="btn-valider"
+                      onClick={() => handleVirement(vacataire)}
+                      disabled={vacataire.Etat_dossier !== 'Validé'}
+                    >
+                      Valider Virement
+                    </button>
+                    <button
+                      className="btn-etude"
+                      onClick={() => handleEtudeDossier(vacataire.ID_vacat)}
+                    >
+                      Étude Dossier
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
 
           {showModal && selectedVacataire && (
@@ -191,7 +192,7 @@ const VacataireList = () => {
               onClick={handlePrevPage}
               disabled={currentPage === 1}
             >
-              &lt;
+              
             </button>
             <span className="pagination-info">
               Page {currentPage} de {totalPages}
@@ -201,7 +202,7 @@ const VacataireList = () => {
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
             >
-              &gt;
+              
             </button>
           </div>
         </div>

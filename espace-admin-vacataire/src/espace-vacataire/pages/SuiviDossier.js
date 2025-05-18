@@ -50,7 +50,13 @@ const SuiviDossier = () => {
       case 2:
         return <Phase2 onPhaseComplete={handleNextPhase} />;
       case 3:
-        return <Phase3 onPhaseComplete={handleNextPhase} />;
+        return (
+          <Phase3
+            onPhaseComplete={handleNextPhase}
+            subStep={subStep}
+            handleNextSubStep={handleNextSubStep}
+          />
+        );
       default:
         return <Phase1 onPhaseComplete={handleNextPhase} />;
     }
