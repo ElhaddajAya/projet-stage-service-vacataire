@@ -33,6 +33,12 @@
   border-color: #5da9f5;
 }
 
+.circle:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  border-color: #3b82f6; /* Darker blue on hover */
+  background-color: #3b82f6;
+}
+
 .circle.checked {
   color: white;
 }

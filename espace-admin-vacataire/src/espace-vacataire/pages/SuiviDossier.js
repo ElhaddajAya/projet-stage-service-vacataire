@@ -11,28 +11,34 @@ import Phase1 from './Phase1';
 import Phase2 from './Phase2';
 import Phase3 from './Phase3';
 
-
 const SuiviDossier = () => {
-  const [currentPhase, setCurrentPhase] = useState(1);
-  const [subStep, setSubStep] = useState(1); // Lift subStep state to SuiviDossier
+  const [currentPhase, setCurrentPhase] = useState(2);
+  const [subStep, setSubStep] = useState(1);
 
   const handleNextPhase = () => {
     if (currentPhase < 3) {
       setCurrentPhase(currentPhase + 1);
-      if (currentPhase === 2) setSubStep(1); // Reset subStep when moving to Phase 3
+      if (currentPhase === 2) setSubStep(1);
     }
   };
 
   const handlePreviousPhase = () => {
     if (currentPhase > 1) {
       setCurrentPhase(currentPhase - 1);
-      if (currentPhase === 3) setSubStep(1); // Reset subStep when moving back from Phase 3
+      if (currentPhase === 3) setSubStep(1);
     }
   };
 
   const handleNextSubStep = () => {
     if (currentPhase === 3 && subStep < 3) {
       setSubStep(subStep + 1);
+    }
+  };
+
+  const handleCircleClick = (phase) => {
+    setCurrentPhase(phase); // Set the phase to the clicked circle
+    if (phase !== 3) {
+      setSubStep(1); // Reset subStep if not in Phase 3
     }
   };
 
@@ -55,15 +61,19 @@ const SuiviDossier = () => {
       <div className="main">
         <Sidebar />
         <div className="content">
-          <div className="navigation-buttons">
+          {/* <div className="navigation-buttons">
             <button type="button" onClick={handlePreviousPhase} disabled={currentPhase === 1}>
               Précédent
             </button>
             <button type="button" onClick={handleNextPhase} disabled={currentPhase === 3}>
               Suivant
             </button>
-          </div>
-          <ProgressBar step={currentPhase} subStep={currentPhase === 3 ? subStep : 0} />
+          </div> */}
+          <ProgressBar
+            step={currentPhase}
+            subStep={currentPhase === 3 ? subStep : 0}
+            onCircleClick={handleCircleClick} // Pass the callback
+          />
           {renderPhase()}
         </div>
       </div>
