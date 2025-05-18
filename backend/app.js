@@ -64,6 +64,34 @@ app.get('/vacataire-details/:id', (req, res) => {
   });
 });
 
+// backend/app.js
+
+// ... existing imports and middleware ...
+
+// Route to update the Etat_dossier of a vacataire
+app.put('/vacataire/:id/update-etat', (req, res) => {
+  const vacataireId = req.params.id;
+  const { Etat_dossier } = req.body;
+
+  if (!Etat_dossier) {
+    return res.status(400).json({ message: 'État du dossier est requis' });
+  }
+
+  const query = 'UPDATE vacataire SET Etat_dossier = ? WHERE ID_vacat = ?';
+  db.query(query, [Etat_dossier, vacataireId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la mise à jour de l\'état du dossier:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Vacataire non trouvé' });
+    }
+
+    res.json({ message: 'État du dossier mis à jour avec succès' });
+  });
+});
+
 // ... existing routes ...
 // Route pour récupérer tous les vacataires
 app.get('/vacataires', (req, res) => {

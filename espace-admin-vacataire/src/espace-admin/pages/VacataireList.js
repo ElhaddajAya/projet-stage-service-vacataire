@@ -96,7 +96,7 @@ style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY
                 <th>ID</th>
                 <th>Nom Complet</th>
                 <th>Département</th>
-                <th>Filière</th>
+                
                 <th>État de Dossier</th>
                 <th>Action</th>
               </tr>
@@ -107,8 +107,8 @@ style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY
                   <td>{vacataire.ID_vacat}</td>
                   <td>{`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}</td>
                   <td>{vacataire.Diplome || 'Informatique'}</td>
-                  <td>{vacataire.Filiere || 'MI'}</td>
-                  <td>{vacataire.Etat_dossier || 'Validé'}</td>
+                  
+                  <td>{vacataire.Etat_dossier || 'En attente'}</td>
                   <td>
                     <button
                       className="btn-valider"
