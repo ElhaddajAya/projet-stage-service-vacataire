@@ -102,7 +102,7 @@ const Phase2 = () => {
                 )}
 
                 <div className="buttons">
-                    <button type="button">Modifier</button>
+                    <button type="button">Annuler</button>
                     <button type="submit">Soumettre</button>
                 </div>
             </form>
