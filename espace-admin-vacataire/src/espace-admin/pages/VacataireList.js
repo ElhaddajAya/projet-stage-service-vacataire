@@ -40,13 +40,13 @@ const VacataireList = () => {
       const nom = vacataire.Nom || '';
       const prenom = vacataire.Prenom || '';
       const email = vacataire.Email || '';
-      const cin = vacataire.CIN || '';
+      const Etat_dossier = vacataire.Etat_dossier || '';
       const search = searchTerm.toLowerCase();
       return (
         nom.toLowerCase().includes(search) ||
         prenom.toLowerCase().includes(search) ||
         email.toLowerCase().includes(search) ||
-        cin.toLowerCase().includes(search)
+        Etat_dossier.toLowerCase().includes(search)
       );
     });
     setFilteredVacataires(filtered);
