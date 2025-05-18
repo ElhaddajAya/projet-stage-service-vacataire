@@ -10,7 +10,7 @@ const ProgressBar = ({ step, subStep = 0 }) => {
           <div className={`circle ${step >= item ? 'active' : ''} ${step > item || (step === 3 && subStep >= index + 1) ? 'checked' : ''}`}>
             {(step > item || (step === 3 && subStep >= index + 1)) && '✓'}
           </div>
-          {index < 2 && ( // affiche la ligne sauf après le dernier cercle
+          {index < 2 && (
             <div className={`line ${step > item ? 'active' : ''}`} />
           )}
         </div>
