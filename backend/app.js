@@ -9,22 +9,26 @@ app.use(express.json());
 
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:3000', // URL frontend
+  origin: 'http://localhost:3000',
   credentials: true // Important pour les cookies de session
 }));
 
-// Configuration de la session
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(express.json());
+
+// Configuration session
 app.use(session({
-  secret: 'vacataires_secret_key', 
+  secret: 'vacataires_secret_key',
   resave: false,
   saveUninitialized: false,
-  cookie: { 
-    httpOnly: true,           // Protège contre les attaques XSS
-    secure: false,            // Désactive pour le développement local (en production, mettre true)
-    sameSite: 'lax',          // Assure la transmission du cookie lors des requêtes de même site
-    maxAge: 1000 * 60 * 60 * 24 // Durée de vie de la session (1 jour)
-  } 
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24
+  }
 }));
+
 
 app.get('/', (req, res) => {
   res.send('Backend opérationnel 🚀');
