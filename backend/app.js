@@ -95,6 +95,31 @@ app.get('/check-auth', (req, res) => {
   }
 });
 
+// Route pour mettre à jour les informations du vacataire connecté
+app.put('/update-vacataire', (req, res) => {
+  const vacataireId = req.session.userId;
+  const { nom, prenom, email, telephone, cin, date_naiss } = req.body;
+
+  if (!vacataireId) {
+    return res.status(401).json({ message: 'Utilisateur non connecté' });
+  }
+
+  const query = `
+    UPDATE vacataire 
+    SET Nom = ?, Prenom = ?, Email = ?, Numero_tele = ?, CIN = ?, Date_naiss = ? 
+    WHERE ID_vacat = ?;
+  `;
+
+  db.query(query, [nom, prenom, email, telephone, cin, date_naiss, vacataireId], (err, results) => {
+    if (err) {
+      console.error('❌ Erreur lors de la mise à jour des informations du vacataire:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    res.json({ message: 'Informations mises à jour avec succès' });
+  });
+});
+
 // Route pour récupérer les informations du vacataire connecté
 app.get('/vacataire-info', (req, res) => {
   const vacataireId = req.session.userId;
@@ -128,37 +153,9 @@ app.post('/logout', (req, res) => {
   });
 });
 
+
+
 const PORT = process.env.PORT || 5000;
-
-// Route pour mettre à jour les informations du vacataire
-app.put('/update-vacataire', (req, res) => {
-  const { nom, prenom, email, telephone, cin, date_naiss } = req.body;
-
-  // Assure-toi que la session contient l'ID du vacataire connecté
-  const vacataireId = req.session.userId;
-
-  if (!vacataireId) {
-    return res.status(401).json({ message: 'Non autorisé. Veuillez vous connecter.' });
-  }
-
-  const query = `
-    UPDATE vacataire
-    SET Nom = ?, Prenom = ?, Email = ?, Telephone = ?, CIN = ?, Date_naiss = ?
-    WHERE id = ?
-  `;
-
-  const values = [nom, prenom, email, telephone, cin, date_naiss, vacataireId];
-
-  db.query(query, values, (err, result) => {
-    if (err) {
-      console.error("Erreur MySQL : ", err);
-      return res.status(500).json({ message: "Erreur serveur" });
-    }
-
-    return res.status(200).json({ message: "Informations mises à jour avec succès" });
-  });
-});
-
 
 // Démarre le serveur
 app.listen(PORT, () => {

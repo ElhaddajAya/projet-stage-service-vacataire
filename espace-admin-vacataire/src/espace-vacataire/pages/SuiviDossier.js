@@ -15,10 +15,11 @@ const SuiviDossier = () => {
   const [currentPhase, setCurrentPhase] = useState(1);
   const [subStep, setSubStep] = useState(1);
 
-  const handleNextPhase = () => {
-    if (currentPhase < 3) {
+  const handleNextPhase = (newPhase) => {
+    if (newPhase && newPhase > currentPhase) {
+      setCurrentPhase(newPhase); // Met à jour directement si la phase suivante est spécifiée
+    } else if (currentPhase < 3) {
       setCurrentPhase(currentPhase + 1);
-      if (currentPhase === 2) setSubStep(1);
     }
   };
 
@@ -45,13 +46,13 @@ const SuiviDossier = () => {
   const renderPhase = () => {
     switch (currentPhase) {
       case 1:
-        return <Phase1 />;
+        return <Phase1 onPhaseComplete={handleNextPhase} />;
       case 2:
-        return <Phase2  onPhaseComplete={handleNextPhase}/>;
+        return <Phase2 onPhaseComplete={handleNextPhase} />;
       case 3:
-        return <Phase3 onNextSubStep={handleNextSubStep} />;
+        return <Phase3 onPhaseComplete={handleNextPhase} />;
       default:
-        return <Phase1 />;
+        return <Phase1 onPhaseComplete={handleNextPhase} />;
     }
   };
 
@@ -61,14 +62,6 @@ const SuiviDossier = () => {
       <div className="main">
         <Sidebar />
         <div className="content">
-          {/* <div className="navigation-buttons">
-            <button type="button" onClick={handlePreviousPhase} disabled={currentPhase === 1}>
-              Précédent
-            </button>
-            <button type="button" onClick={handleNextPhase} disabled={currentPhase === 3}>
-              Suivant
-            </button>
-          </div> */}
           <ProgressBar
             step={currentPhase}
             subStep={currentPhase === 3 ? subStep : 0}

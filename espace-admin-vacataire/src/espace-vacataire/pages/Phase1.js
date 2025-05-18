@@ -4,8 +4,6 @@ import '../../style/phase1.css';
 import { useNavigate } from "react-router-dom";
 const Phase1 = ({ onPhaseComplete }) => {
 
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -14,6 +12,8 @@ const Phase1 = ({ onPhaseComplete }) => {
     cin: '',
     date_naiss: '',
   });
+
+  const [message, setMessage] = useState('');
 
   // Récupération des données du vacataire connecté
   useEffect(() => {
@@ -50,27 +50,25 @@ const Phase1 = ({ onPhaseComplete }) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-   const handleSubmit = async (e) => {
+   // Gestion de la soumission du formulaire
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/update-vacataire', {
-        method: 'PUT',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const response = await axios.put('http://localhost:5000/update-vacataire', formData, {
+        withCredentials: true,
       });
 
-      if (response.ok) {
-        // navigate('/phase2'); // Redirige vers Phase 2
-        onPhaseComplete();
+      if (response.status === 200) {
+        setMessage('✅ Informations mises à jour avec succès');
+        onPhaseComplete(2); // Passer à la phase suivante
       } else {
-        console.error('Erreur lors de la mise à jour');
+        setMessage('❌ Erreur lors de la mise à jour');
       }
     } catch (err) {
-      console.error('Erreur réseau', err);
+      setMessage('❌ Erreur lors de la mise à jour');
+      console.error(err);
     }
   };
 
@@ -143,6 +141,8 @@ const Phase1 = ({ onPhaseComplete }) => {
                 onChange={handleInputChange}
               />
             </div>
+
+            {message && <div className="error-global">{message}</div>}
             
             <div className="buttons">
               <button type="button">Annuler</button>
