@@ -1,19 +1,20 @@
 // src/espace-vacataire/pages/Phase3.js
 import React, { useState } from 'react';
 
-const Phase3 = () => {
-  const [subStep, setSubStep] = useState(1);
+const Phase3 = ({ onNextSubStep }) => {
+  const [subStep, setSubStep] = useState(1); // Local state for demo, but controlled by SuiviDossier
 
   const handleNextSubStep = () => {
     if (subStep < 3) {
       setSubStep(subStep + 1);
+      if (onNextSubStep) onNextSubStep(); // Call the parent handler
     }
   };
 
   return (
     <>
       <h2>Phase 3 - Virement</h2>
-      <form className="form phase3-form"> {/* Add phase3-form class */}
+      <form className="form phase3-form">
         <div className="status-container">
           <div className={`status-card ${subStep === 1 ? 'active' : ''}`}>
             <h3>En attente</h3>

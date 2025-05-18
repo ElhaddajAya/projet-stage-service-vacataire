@@ -13,16 +13,25 @@ import Phase3 from './Phase3';
 
 const SuiviDossier = () => {
   const [currentPhase, setCurrentPhase] = useState(2);
+  const [subStep, setSubStep] = useState(1); // Lift subStep state to SuiviDossier
 
   const handleNextPhase = () => {
     if (currentPhase < 3) {
       setCurrentPhase(currentPhase + 1);
+      if (currentPhase === 2) setSubStep(1); // Reset subStep when moving to Phase 3
     }
   };
 
   const handlePreviousPhase = () => {
     if (currentPhase > 1) {
       setCurrentPhase(currentPhase - 1);
+      if (currentPhase === 3) setSubStep(1); // Reset subStep when moving back from Phase 3
+    }
+  };
+
+  const handleNextSubStep = () => {
+    if (currentPhase === 3 && subStep < 3) {
+      setSubStep(subStep + 1);
     }
   };
 
@@ -33,7 +42,7 @@ const SuiviDossier = () => {
       case 2:
         return <Phase2 />;
       case 3:
-        return <Phase3 />;
+        return <Phase3 onNextSubStep={handleNextSubStep} />;
       default:
         return <Phase1 />;
     }
@@ -53,7 +62,7 @@ const SuiviDossier = () => {
               Suivant
             </button>
           </div>
-          <ProgressBar step={currentPhase} />
+          <ProgressBar step={currentPhase} subStep={currentPhase === 3 ? subStep : 0} />
           {renderPhase()}
         </div>
       </div>
