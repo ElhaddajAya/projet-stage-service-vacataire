@@ -13,6 +13,13 @@ const Phase1 = ({ onPhaseComplete }) => {
     date_naiss: '',
   });
 
+   // Formater la date pour l'input (YYYY-MM-DD)
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+  };
+
   const [message, setMessage] = useState('');
 
   // Récupération des données du vacataire connecté
@@ -30,9 +37,9 @@ const Phase1 = ({ onPhaseComplete }) => {
             nom: data.Nom || '',
             prenom: data.Prenom || '',
             email: data.Email || '',
-            telephone: data.Telephone || '',
+            telephone: data.Numero_tele || '',
             cin: data.CIN || '',
-            date_naiss: data.DateNaiss || '',
+            date_naiss: formatDate(data.Date_naiss) || '',
           });
         } else {
           console.error('Erreur lors de la récupération des données');

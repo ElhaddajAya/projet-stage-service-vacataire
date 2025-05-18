@@ -192,7 +192,7 @@ app.get('/vacataire-info', (req, res) => {
     return res.status(401).json({ message: 'Utilisateur non connecté' });
   }
 
-  const query = 'SELECT Nom, Prenom, Email, Numero_tele, CIN, Photo, Date_naiss FROM vacataire WHERE ID_vacat = ?';
+  const query = 'SELECT * FROM vacataire WHERE ID_vacat = ?';
   db.query(query, [vacataireId], (err, results) => {
     if (err) {
       console.error('Erreur lors de la récupération des informations du vacataire:', err);
