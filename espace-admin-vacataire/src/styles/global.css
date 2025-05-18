@@ -488,14 +488,9 @@ form input[type="password"]:focus {
 
 /* ... existing styles ... */
 
-.table-container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: transparent;
-  padding: 20px;
-  border-radius: 8px;
-}
+/* espace-admin-vacataire/src/styles/global.css */
+
+/* ... existing styles ... */
 
 .table-vacataires {
   width: 100%;
@@ -504,6 +499,7 @@ form input[type="password"]:focus {
   overflow: hidden;
   background-color: #fff;
   border: 1px solid #e5e7eb;
+  table-layout: fixed; /* Ensures columns respect defined widths */
 }
 
 .table-vacataires thead tr {
@@ -517,6 +513,9 @@ form input[type="password"]:focus {
   text-align: center;
   font-size: 0.95rem;
   color: #374151;
+  overflow: hidden; /* Prevents content from spilling out */
+  text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+  white-space: nowrap; /* Prevents text wrapping */
 }
 
 .table-vacataires th {
@@ -534,6 +533,37 @@ form input[type="password"]:focus {
   font-weight: 400;
 }
 
+/* Define specific column widths */
+.table-vacataires th:nth-child(1),
+.table-vacataires td:nth-child(1) { /* ID column */
+  width: 6%; /* Fixed width for ID */
+  max-width: 8%;
+}
+
+.table-vacataires th:nth-child(2),
+.table-vacataires td:nth-child(2) { /* Nom Complet column */
+  width: 25%; /* Reasonable width for names */
+  max-width: 25%;
+}
+
+.table-vacataires th:nth-child(3),
+.table-vacataires td:nth-child(3) { /* Département column */
+  width: 15%; /* Moderate width */
+  max-width: 15%;
+}
+
+.table-vacataires th:nth-child(4),
+.table-vacataires td:nth-child(4) { /* État de Dossier column */
+  width: 15%; /* Moderate width */
+  max-width: 15%;
+}
+
+.table-vacataires th:nth-child(5),
+.table-vacataires td:nth-child(5) { /* Action column */
+  width: 30%; /* Space for buttons */
+  max-width: 30%;
+}
+
 /* Action buttons */
 .table-vacataires td button {
   margin: 0 5px;
@@ -545,6 +575,7 @@ form input[type="password"]:focus {
   transition: background-color 0.2s ease;
 }
 
+/* ... rest of the existing styles ... */
 .btn-valider {
   background-color: #2ecc71;
   color: white;

@@ -132,29 +132,31 @@ const VacataireList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentVacataires.map((vacataire) => (
-                <tr key={vacataire.ID_vacat}>
-                  <td>{vacataire.ID_vacat}</td>
-                  <td>{`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}</td>
-                  <td>{vacataire.Diplome || 'Informatique'}</td>
-                  <td>{vacataire.Etat_dossier || 'En attente'}</td>
-                  <td>
-                    <button
-                      className="btn-valider"
-                      onClick={() => handleVirement(vacataire)}
-                    >
-                      Valider Virement
-                    </button>
-                    <button
-                      className="btn-etude"
-                      onClick={() => handleEtudeDossier(vacataire.ID_vacat)}
-                    >
-                      Étude Dossier
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            {currentVacataires.map((vacataire) => (
+              <tr key={vacataire.ID_vacat}>
+                <td>{vacataire.ID_vacat}</td>
+                <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
+                  {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
+                </td>
+                <td title={vacataire.Diplome || 'Informatique'}>{vacataire.Diplome || 'Informatique'}</td>
+                <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
+                <td>
+                  <button
+                    className="btn-valider"
+                    onClick={() => handleVirement(vacataire)}
+                  >
+                    Valider Virement
+                  </button>
+                  <button
+                    className="btn-etude"
+                    onClick={() => handleEtudeDossier(vacataire.ID_vacat)}
+                  >
+                    Étude Dossier
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
           </table>
 
           {showModal && selectedVacataire && (
