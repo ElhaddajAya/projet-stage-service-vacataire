@@ -797,4 +797,41 @@ form input[type="password"]:focus {
 
 .btn-refuser:hover {
   background-color: #c0392b; /* Darker red on hover */
+}/* espace-admin-vacataire/src/styles/global.css */
+
+/* ... existing styles ... */
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination-btn {
+  border: 1.5px solid #4b5563;
+  background-color: white;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #4b5563;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #d1d5db;
+}
+
+.pagination-btn:disabled {
+  border-color: #d1d5db;
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 1rem;
+  color: #374151;
 }

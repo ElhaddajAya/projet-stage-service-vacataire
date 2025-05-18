@@ -100,7 +100,12 @@ app.get('/vacataires', (req, res) => {
     if (err) {
       res.status(500).send('Erreur lors de la récupération des vacataires');
     } else {
-      res.json(results);
+      // Transform results to set default Etat_dossier to 'En attente' if null
+      const vacatairesWithDefault = results.map((vacataire) => ({
+        ...vacataire,
+        Etat_dossier: vacataire.Etat_dossier || 'En attente',
+      }));
+      res.json(vacatairesWithDefault);
     }
   });
 });

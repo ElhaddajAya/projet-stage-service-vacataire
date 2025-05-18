@@ -12,6 +12,8 @@ const VacataireList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedVacataire, setSelectedVacataire] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+  const vacatairesPerPage = 5; // Number of vacataires per page
 
   const navigate = useNavigate();
 
@@ -35,20 +37,41 @@ const VacataireList = () => {
   // Handle search
   useEffect(() => {
     const filtered = vacataires.filter((vacataire) => {
-    const nom = vacataire.Nom || '';
-    const prenom = vacataire.Prenom || '';
-    const email = vacataire.Email || '';
-    const cin = vacataire.CIN || '';
-    const search = searchTerm.toLowerCase();
-    return (
+      const nom = vacataire.Nom || '';
+      const prenom = vacataire.Prenom || '';
+      const email = vacataire.Email || '';
+      const cin = vacataire.CIN || '';
+      const search = searchTerm.toLowerCase();
+      return (
         nom.toLowerCase().includes(search) ||
         prenom.toLowerCase().includes(search) ||
         email.toLowerCase().includes(search) ||
         cin.toLowerCase().includes(search)
-  );
-});
+      );
+    });
     setFilteredVacataires(filtered);
+    setCurrentPage(1); // Reset to first page when search changes
   }, [searchTerm, vacataires]);
+
+  // Calculate the vacataires to display on the current page
+  const indexOfLastVacataire = currentPage * vacatairesPerPage;
+  const indexOfFirstVacataire = indexOfLastVacataire - vacatairesPerPage;
+  const currentVacataires = filteredVacataires.slice(indexOfFirstVacataire, indexOfLastVacataire);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredVacataires.length / vacatairesPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -73,22 +96,30 @@ const VacataireList = () => {
           {/* Barre de recherche avec icône à droite */}
           <div className="search-container">
             <input
-type="text"
-placeholder="Rechercher un vacataire..."
-value={searchTerm}
-onChange={handleSearch}
-className="search-bar"
-/>
-{searchTerm && (
-<button
-onClick={() => setSearchTerm('')}
-style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}
->
-✕
-</button>
-)}
-<FontAwesomeIcon icon={faSearch} className="search-icon" />
-</div>
+              type="text"
+              placeholder="Rechercher un vacataire..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="search-bar"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                style={{
+                  position: 'absolute',
+                  right: '40px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                ✕
+              </button>
+            )}
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          </div>
 
           <table className="table-vacataires">
             <thead>
@@ -96,18 +127,16 @@ style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY
                 <th>ID</th>
                 <th>Nom Complet</th>
                 <th>Département</th>
-                
                 <th>État de Dossier</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredVacataires.map((vacataire) => (
+              {currentVacataires.map((vacataire) => (
                 <tr key={vacataire.ID_vacat}>
                   <td>{vacataire.ID_vacat}</td>
                   <td>{`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}</td>
                   <td>{vacataire.Diplome || 'Informatique'}</td>
-                  
                   <td>{vacataire.Etat_dossier || 'En attente'}</td>
                   <td>
                     <button
@@ -153,11 +182,25 @@ style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY
             </div>
           )}
 
-          {/* Pagination (static for now) */}
+          {/* Pagination */}
           <div className="pagination">
-            <button className="pagination-btn">&lt;</button>
-            <span className="pagination-count">10</span>
-            <button className="pagination-btn">&gt;</button>
+            <button
+              className="pagination-btn"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            <span className="pagination-info">
+              Page {currentPage} de {totalPages}
+            </span>
+            <button
+              className="pagination-btn"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </main>
