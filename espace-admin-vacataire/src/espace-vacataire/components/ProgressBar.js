@@ -2,19 +2,20 @@
 import React from 'react';
 import '../../style/ProgressBar.css';
 
-const ProgressBar = ({ step }) => {
+const ProgressBar = ({ step, subStep = 0 }) => {
   return (
     <div className="progress-container">
-  {[1, 2, 3].map((item, index) => (
-    <div key={index} className="progress-step">
-      <div className={`circle ${step >= item ? 'active' : ''}`} />
-      {index < 2 && ( // affiche la ligne sauf après le dernier cercle
-        <div className={`line ${step > item ? 'active' : ''}`} />
-      )}
+      {[1, 2, 3].map((item, index) => (
+        <div key={index} className="progress-step">
+          <div className={`circle ${step >= item ? 'active' : ''} ${step > item || (step === 3 && subStep >= index + 1) ? 'checked' : ''}`}>
+            {(step > item || (step === 3 && subStep >= index + 1)) && '✓'}
+          </div>
+          {index < 2 && ( // affiche la ligne sauf après le dernier cercle
+            <div className={`line ${step > item ? 'active' : ''}`} />
+          )}
+        </div>
+      ))}
     </div>
-  ))}
-</div>
-
   );
 };
 
