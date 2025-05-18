@@ -103,15 +103,17 @@ const Phase1 = () => {
               />
             </div>
             
-            <div className="form-group file-upload">
-              <label>Photo</label>
+            <div className="form-group">
+              <label>Date de Naissance</label>
               <input 
-                type="file" 
-                name="photo"
-                onChange={(e) => setFormData((prev) => ({ ...prev, photo: e.target.files[0]?.name || '' }))}
-                accept="image/*"
+                 type="text"
+                name="date_naiss"
+                placeholder="JJ/MM/AAAA"
+                value={formData.date_naiss}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = formData.date_naiss ? "date" : "text")}
+                onChange={handleInputChange}
               />
-              {/* {fileName && <div className="file-name">{fileName}</div>} */}
             </div>
             
             <div className="buttons">

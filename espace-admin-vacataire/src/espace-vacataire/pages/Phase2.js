@@ -26,6 +26,17 @@ const Phase2 = () => {
             <form className="form">
 
                 <div className="form-group file-upload">
+                    <label>Photo</label>
+                    <input 
+                        type="file" 
+                        name="photo"
+                        onChange={(e) => handleFileChange(e, 'photo')}
+                        accept="image/*"
+                    />
+                    {/* {fileName && <div className="file-name">{fileName}</div>} */}
+                </div>
+
+                <div className="form-group file-upload">
                     <label>Fichier CIN</label>
                     <input 
                         type="file" 
