@@ -160,6 +160,37 @@ app.post('/logout', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+// Route pour mettre à jour les informations du vacataire
+app.put('/update-vacataire', (req, res) => {
+  const { nom, prenom, email, telephone, cin, date_naiss } = req.body;
+
+  // Assure-toi que la session contient l'ID du vacataire connecté
+  const vacataireId = req.session.userId;
+
+  if (!vacataireId) {
+    return res.status(401).json({ message: 'Non autorisé. Veuillez vous connecter.' });
+  }
+
+  const query = `
+    UPDATE vacataire
+    SET Nom = ?, Prenom = ?, Email = ?, Telephone = ?, CIN = ?, Date_naiss = ?
+    WHERE id = ?
+  `;
+
+  const values = [nom, prenom, email, telephone, cin, date_naiss, vacataireId];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Erreur MySQL : ", err);
+      return res.status(500).json({ message: "Erreur serveur" });
+    }
+
+    return res.status(200).json({ message: "Informations mises à jour avec succès" });
+  });
+});
+
+
 // Démarre le serveur
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);

@@ -12,7 +12,7 @@ import Phase2 from './Phase2';
 import Phase3 from './Phase3';
 
 const SuiviDossier = () => {
-  const [currentPhase, setCurrentPhase] = useState(2);
+  const [currentPhase, setCurrentPhase] = useState(1);
   const [subStep, setSubStep] = useState(1);
 
   const handleNextPhase = () => {
@@ -47,7 +47,7 @@ const SuiviDossier = () => {
       case 1:
         return <Phase1 />;
       case 2:
-        return <Phase2 />;
+        return <Phase2  onPhaseComplete={handleNextPhase}/>;
       case 3:
         return <Phase3 onNextSubStep={handleNextSubStep} />;
       default:

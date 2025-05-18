@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import '../../style/phase1.css';
+import { useNavigate } from "react-router-dom";
+const Phase1 = ({ onPhaseComplete }) => {
 
-const Phase1 = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
     email: '',
     telephone: '',
     cin: '',
-    photo: '',
+    date_naiss: '',
   });
 
   // Récupération des données du vacataire connecté
@@ -28,7 +32,7 @@ const Phase1 = () => {
             email: data.Email || '',
             telephone: data.Telephone || '',
             cin: data.CIN || '',
-            photo: data.Photo || '',
+            date_naiss: data.DateNaiss || '',
           });
         } else {
           console.error('Erreur lors de la récupération des données');
@@ -46,10 +50,34 @@ const Phase1 = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:5000/update-vacataire', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // navigate('/phase2'); // Redirige vers Phase 2
+        onPhaseComplete();
+      } else {
+        console.error('Erreur lors de la mise à jour');
+      }
+    } catch (err) {
+      console.error('Erreur réseau', err);
+    }
+  };
+
     return (
         <>
             <h2>Phase 1 - Informations Personnelles</h2>
-          <form className="form">
+          <form className="form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Nom</label>
               <input type="text" 
@@ -117,7 +145,7 @@ const Phase1 = () => {
             </div>
             
             <div className="buttons">
-              <button type="button">Modifier</button>
+              <button type="button">Annuler</button>
               <button type="submit">Soumettre</button>
             </div>
           </form>
