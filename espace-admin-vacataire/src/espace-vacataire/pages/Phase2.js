@@ -5,7 +5,9 @@ import axios from 'axios';
 // Utility function to extract filename from path
 const extractFilename = (path) => {
   if (!path) return null;
-  return path.split('/').pop(); // e.g., "uploads/1621357890-photo.jpg" -> "1621357890-photo.jpg"
+  const filename = path.split('/').pop(); // e.g., "uploads/1747608012498-PHOTO.jpg" -> "1747608012498-PHOTO.jpg"
+  const baseName = filename.split('-').pop(); // Remove timestamp, e.g., "PHOTO.jpg"
+  return baseName.split('.')[0]; // Remove extension, e.g., "PHOTO"
 };
 
 const Phase2 = ({ onPhaseComplete }) => {
