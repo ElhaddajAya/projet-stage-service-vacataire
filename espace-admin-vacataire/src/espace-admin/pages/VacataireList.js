@@ -82,7 +82,7 @@ const VacataireList = () => {
                     {/* Pagination */}
                     <div className="pagination">
                       <button className="pagination-btn">&lt;</button>
-                      <span className="pagination-count">10</span>
+                      <span className="pagination-count">1</span>
                       <button className="pagination-btn">&gt;</button>
                     </div>
                 </div>
