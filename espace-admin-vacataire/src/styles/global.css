@@ -464,3 +464,22 @@ form input[type="password"]:focus {
 .navigation-buttons button[type="button"]:hover:not(:disabled) {
   background-color: #d1d5db;
 }
+
+/* Affichage des messages d'erreur sous les champs */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Erreur générale affichée en haut du formulaire */
+.error-global {
+  color: #e74c3c;
+  font-size: 1rem;
+  margin: 8px 0;
+  padding: 8px;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  border: 1px solid #f5c6cb;
+}

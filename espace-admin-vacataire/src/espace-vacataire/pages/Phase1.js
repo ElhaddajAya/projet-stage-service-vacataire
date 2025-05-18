@@ -1,17 +1,50 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../../style/phase1.css';
 
 const Phase1 = () => {
-    const [fileName, setFileName] = useState('');
+  const [formData, setFormData] = useState({
+    nom: '',
+    prenom: '',
+    email: '',
+    telephone: '',
+    cin: '',
+    photo: '',
+  });
 
-    const handleFileChange = (e) => {
-        if (e.target.files.length > 0) {
-        setFileName(e.target.files[0].name);
+  // Récupération des données du vacataire connecté
+  useEffect(() => {
+    const fetchVacataireData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/vacataire-info', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setFormData({
+            nom: data.Nom || '',
+            prenom: data.Prenom || '',
+            email: data.Email || '',
+            telephone: data.Telephone || '',
+            cin: data.CIN || '',
+            photo: data.Photo || '',
+          });
         } else {
-        setFileName('');
+          console.error('Erreur lors de la récupération des données');
         }
+      } catch (err) {
+        console.error('Erreur réseau', err);
+      }
     };
+
+    fetchVacataireData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
     return (
         <>
@@ -19,34 +52,63 @@ const Phase1 = () => {
           <form className="form">
             <div className="form-group">
               <label>Nom</label>
-              <input type="text" placeholder="Entrez votre nom" />
+              <input type="text" 
+                name="nom"
+                placeholder="Entrez votre nom"
+                value={formData.nom}
+                onChange={handleInputChange} 
+              />
             </div>
             
             <div className="form-group">
               <label>Prénom</label>
-              <input type="text" placeholder="Entrez votre prénom" />
+              <input type="text" 
+                name="prenom"
+                placeholder="Entrez votre prénom" 
+                value={formData.prenom}
+                onChange={handleInputChange}
+              />
             </div>
             
             <div className="form-group">
               <label>Email</label>
-              <input type="email" placeholder="exemple@domaine.com"/>
+               <input 
+                type="email" 
+                name="email"
+                placeholder="exemple@domaine.com"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
             </div>
             
             <div className="form-group">
               <label>Téléphone</label>
-              <input type="text" placeholder="06 00 00 00 00"/>
+              <input 
+                type="text" 
+                name="telephone"
+                placeholder="06 00 00 00 00"
+                value={formData.telephone}
+                onChange={handleInputChange}
+              />
             </div>
             
             <div className="form-group">
               <label>CIN</label>
-              <input type="text"  placeholder="AB123456"/>
+              <input 
+                type="text" 
+                name="cin"
+                placeholder="AB123456"
+                value={formData.cin}
+                onChange={handleInputChange}
+              />
             </div>
             
             <div className="form-group file-upload">
               <label>Photo</label>
               <input 
                 type="file" 
-                onChange={handleFileChange}
+                name="photo"
+                onChange={(e) => setFormData((prev) => ({ ...prev, photo: e.target.files[0]?.name || '' }))}
                 accept="image/*"
               />
               {/* {fileName && <div className="file-name">{fileName}</div>} */}

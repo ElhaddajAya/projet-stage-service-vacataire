@@ -11,8 +11,9 @@ import Phase1 from './Phase1';
 import Phase2 from './Phase2';
 import Phase3 from './Phase3';
 
+
 const SuiviDossier = () => {
-  const [currentPhase, setCurrentPhase] = useState(2);
+  const [currentPhase, setCurrentPhase] = useState(1);
 
   const handleNextPhase = () => {
     if (currentPhase < 3) {

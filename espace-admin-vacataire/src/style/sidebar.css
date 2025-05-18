@@ -63,7 +63,7 @@ label #cancel {
 
 .sidebar header img {
   background-color: transparent;
-  border: black 5px solid;
+  border: black 1px solid;
   width: 100px;
   height: 100px;
   border-radius: 50%;
