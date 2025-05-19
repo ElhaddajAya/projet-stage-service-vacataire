@@ -67,7 +67,7 @@ const SuiviDossier = () => {
           }
 
           // Déterminer si le virement est effectué
-          setIsVirementEffectue(data.Etat_virement === 'Effectué');
+          setIsVirementEffectue(data.Etat_virement === 'Effectué' || data.Etat_dossier === 'Validé');
           setCurrentPhase(phase);
           setSubStep(subStep);
           // message Refuser
