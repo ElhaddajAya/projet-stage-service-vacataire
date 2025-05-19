@@ -1,38 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import '../../style/sidebar.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import avatar from '../../../src/avatar.png'; // Assure-toi que le logo est dans ton dossier src
+import avatar from '../../../src/avatar.png'; // Default avatar
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
-  const [username, setUsername] = useState('Utilisateur');
+  const [userData, setUserData] = useState({ nom: 'Utilisateur', prenom: '', photo: null });
   const navigate = useNavigate();
 
-  // Récupérer le nom de l'utilisateur connecté
+  // Fetch user data including prenom and photo
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch('http://localhost:5000/check-auth', {
+        const response = await fetch('http://localhost:5000/vacataire-info', {
           method: 'GET',
           credentials: 'include',
         });
 
         const data = await response.json();
-        
-        if (response.ok && data.authenticated) {
-          setUsername(data.user.nom); // Mettre à jour le nom de l'utilisateur
+
+        if (response.ok && data) {
+          setUserData({
+            nom: data.Nom || 'Utilisateur',
+            prenom: data.Prenom || '',
+            photo: data.Photo ? `http://localhost:5000/${data.Photo}` : null, // Prepend backend URL
+          });
         } else {
-          console.error('Utilisateur non authentifié');
+          console.error('Utilisateur non authentifié ou erreur de données');
         }
       } catch (err) {
-        console.error('Erreur lors de la vérification de l\'authentification', err);
+        console.error('Erreur lors de la récupération des informations utilisateur', err);
       }
     };
 
     fetchUser();
-  }, []); // Charger le nom lors du montage
+  }, []); // Load data on mount
 
-  // Fonction de déconnexion
+  // Function to handle logout
   const handleLogout = async () => {
     try {
       const response = await fetch('http://localhost:5000/logout', {
@@ -41,7 +45,7 @@ const Sidebar = () => {
       });
 
       if (response.ok) {
-        // Rediriger vers la page de connexion après déconnexion
+        // Redirect to login page after logout
         navigate('/login');
       } else {
         console.error('Erreur lors de la déconnexion');
@@ -61,8 +65,11 @@ const Sidebar = () => {
 
       <div className="sidebar">
         <header>
-          <img src={avatar} alt="avatar" />
-          <p>{username}</p>
+          <img src={userData.photo || avatar} alt="avatar" />
+          <p>
+            {userData.prenom && `${userData.prenom} `}
+            {userData.nom}
+          </p>
         </header>
         <ul>
           <li>

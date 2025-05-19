@@ -7,6 +7,7 @@ const fs = require('fs').promises; // Use promises version of fs for async opera
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use('/uploads', express.static('uploads')); // Serve uploaded files
 
 const cors = require('cors');
 const multer = require('multer');
