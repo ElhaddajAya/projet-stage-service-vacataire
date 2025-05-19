@@ -258,7 +258,7 @@ app.post('/upload-documents', upload.fields([
     // Only update Etat_dossier to 'En cours' if it is currently 'En attente'
     if (existingData.Etat_dossier === 'En attente') {
       updateFields.Etat_dossier = 'En cours';
-    }
+    } 
 
     // Track old file paths to delete
     const oldFilesToDelete = [];

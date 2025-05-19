@@ -47,7 +47,6 @@ const getFiliereId = (filiereNom, callback) => {
   });
 };
 
-// Fonction pour insérer les informations d'enseignement
 // Fonction d'insertion des informations d'enseignement
 const insertEnseignement = (vacataireId, filiereId, semestre, semaines, heures, matiere) => {
   // Vérifier et nettoyer les valeurs
