@@ -148,7 +148,7 @@ const VacataireList = () => {
           <table className="table-vacataires">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>N/O</th> {/* Changed from ID to Numéro d'ordre */}
                 <th>Nom Complet</th>
                 <th>État de Virement</th>
                 <th>État de Dossier</th>
@@ -156,9 +156,9 @@ const VacataireList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentVacataires.map((vacataire) => (
+              {currentVacataires.map((vacataire, index) => (
                 <tr key={vacataire.ID_vacat}>
-                  <td>{vacataire.ID_vacat}</td>
+                  <td>{indexOfFirstVacataire + index + 1}</td> {/* Sequential order number */}
                   <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
                     {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
                   </td>
@@ -222,8 +222,8 @@ const VacataireList = () => {
               className="pagination-btn"
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-            > {'>'}
-              
+            >
+              {'>'}
             </button>
           </div>
         </div>
