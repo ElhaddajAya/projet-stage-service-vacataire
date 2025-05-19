@@ -82,27 +82,27 @@ const EtudeDossier = () => {
             <div className="details-section">
               <h2>Informations Personnelles</h2>
               <div className="detail-row">
-                <span className="detail-label">Nom:</span>
+                <span className="detail-label">Nom :</span>
                 <span>{vacataire.Nom}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Prénom:</span>
+                <span className="detail-label">Prénom :</span>
                 <span>{vacataire.Prenom || 'N/A'}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Date de Naissance:</span>
+                <span className="detail-label">Date de Naissance :</span>
                 <span>{formatDate(vacataire.Date_naiss)}</span> {/* Fixed date formatting */}
               </div>
               <div className="detail-row">
-                <span className="detail-label">Email:</span>
+                <span className="detail-label">Email :</span>
                 <span>{vacataire.Email || 'N/A'}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Numéro de Téléphone:</span>
+                <span className="detail-label">Numéro de Téléphone :</span>
                 <span>{vacataire.Numero_tele || 'N/A'}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">CIN:</span>
+                <span className="detail-label">CIN :</span>
                 <span>{vacataire.CIN || 'N/A'}</span>
               </div>
             </div>
@@ -110,7 +110,7 @@ const EtudeDossier = () => {
             <div className="details-section">
               <h2>Documents</h2>
               <div className="detail-row">
-                <span className="detail-label">Photo:</span>
+                <span className="detail-label">Photo :</span>
                 {vacataire.Photo ? (
                   <a href={vacataire.Photo} target="_blank" rel="noopener noreferrer">
                     Voir la Photo
@@ -120,7 +120,7 @@ const EtudeDossier = () => {
                 )}
               </div>
               <div className="detail-row">
-                <span className="detail-label">CV:</span>
+                <span className="detail-label">CV :</span>
                 {vacataire.CV ? (
                   <a href={vacataire.CV} target="_blank" rel="noopener noreferrer">
                     Voir le CV
@@ -130,7 +130,7 @@ const EtudeDossier = () => {
                 )}
               </div>
               <div className="detail-row">
-                <span className="detail-label">Attestation:</span>
+                <span className="detail-label">Attestation :</span>
                 {vacataire.Attest_non_emploi ? (
                   <a href={vacataire.Attest_non_emploi} target="_blank" rel="noopener noreferrer">
                     Voir l'Attestation
@@ -144,15 +144,15 @@ const EtudeDossier = () => {
             <div className="details-section">
               <h2>Autres Informations</h2>
               <div className="detail-row">
-                <span className="detail-label">Département:</span>
+                <span className="detail-label">Département :</span>
                 <span>{vacataire.Diplome || 'N/A'}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">État de Dossier:</span>
+                <span className="detail-label">État de Dossier :</span>
                 <span>{vacataire.EtatDossier || 'N/A'}</span> {/* Use EtatDossier from backend */}
               </div>
               <div className="detail-row">
-                <span className="detail-label">État de Virement:</span>
+                <span className="detail-label">État de Virement :</span>
                 <span>{vacataire.EtatVirement || 'N/A'}</span> {/* Use EtatVirement from backend */}
               </div>
             </div>

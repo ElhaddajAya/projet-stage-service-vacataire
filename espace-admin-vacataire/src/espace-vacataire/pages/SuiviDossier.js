@@ -62,6 +62,8 @@ const SuiviDossier = () => {
                 subStep = 2; // Carte 2: "Dossier validé"
               } else if (data.Etat_dossier === 'Validé' && data.Etat_virement === 'Effectué') {
                 subStep = 3; // Carte 3: "Effectué"
+              } else if (data.Etat_dossier === 'Refusé') {
+                subStep = 3; // Carte 4: "Dossier refusé"
               }
             }
           }
@@ -142,7 +144,7 @@ const SuiviDossier = () => {
         <div className="content">
            {dossierStatus === 'Refusé' && (
             <div className="message-bar">
-               <div id='textMsgBar'>Dossier refusé : </div> votre document est incorrect.
+               <div id='textMsgBar'>Dossier refusé : </div> Le document CV n'est pas conforme.
             </div>
           )} 
           <ProgressBar

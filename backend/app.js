@@ -258,6 +258,29 @@ app.get('/vacataire-info', (req, res) => {
   });
 });
 
+// Route pour récupérer les informations de l'admin connecté
+app.get('/admin-info', (req, res) => {
+  const adminId = req.session.userId;
+
+  if (!adminId) {
+    return res.status(401).json({ message: 'Utilisateur non connecté' });
+  }
+
+  const query = 'SELECT * FROM admin WHERE ID_admin = ?';
+  db.query(query, [adminId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des informations de l\'admin:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Admin non rencontré' });
+    }
+
+    res.json(results[0]); // Retourne les informations de l'admin
+  });
+});
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

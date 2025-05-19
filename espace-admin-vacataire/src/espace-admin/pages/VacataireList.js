@@ -5,6 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 
 const VacataireList = () => {
   const [vacataires, setVacataires] = useState([]);
@@ -113,6 +114,7 @@ const VacataireList = () => {
   return (
     <div>
       <Header />
+      <Sidebar />
       <main className="page-container">
         <div className="table-container">
           <h1 className="page-title">Liste des Vacataires</h1>
