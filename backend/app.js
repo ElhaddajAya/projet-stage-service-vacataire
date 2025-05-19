@@ -32,7 +32,6 @@ app.use(session({
   }
 }));
 
-
 app.get('/', (req, res) => {
   res.send('Backend opérationnel 🚀');
 });
@@ -86,7 +85,31 @@ app.put('/vacataire/:id/update-etat', (req, res) => {
   });
 });
 
-// Route pour récupérer tous les vacataires (réservée aux admins)
+// Route to update the Etat_virement of a vacataire
+app.put('/vacataire/:id/update-virement', (req, res) => {
+  const vacataireId = req.params.id;
+  const { Etat_virement } = req.body;
+
+  if (!Etat_virement) {
+    return res.status(400).json({ message: 'État du virement est requis' });
+  }
+
+  const query = 'UPDATE vacataire SET Etat_virement = ? WHERE ID_vacat = ?';
+  db.query(query, [Etat_virement, vacataireId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la mise à jour de l\'état du virement:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Vacataire non trouvé' });
+    }
+
+    res.json({ message: 'État du virement mis à jour avec succès' });
+  });
+});
+
+// Route pour récupérer tous les vacataires
 app.get('/vacataires', (req, res) => {
   if (!req.session.userId || req.session.role !== 'admin') {
     return res.status(403).json({ message: 'Accès réservé aux administrateurs' });
@@ -97,10 +120,11 @@ app.get('/vacataires', (req, res) => {
     if (err) {
       res.status(500).send('Erreur lors de la récupération des vacataires');
     } else {
-      // Transform results to set default Etat_dossier to 'En attente' if null
+      // Transform results to set default Etat_dossier and Etat_virement to 'En attente' if null
       const vacatairesWithDefault = results.map((vacataire) => ({
         ...vacataire,
         Etat_dossier: vacataire.Etat_dossier || 'En attente',
+        Etat_virement: vacataire.Etat_virement || 'En attente',
       }));
       res.json(vacatairesWithDefault);
     }
@@ -292,7 +316,7 @@ app.post('/upload-documents', upload.fields([
     // Only update Etat_dossier to 'En cours' if it is currently 'En attente'
     if (existingData.Etat_dossier === 'En attente') {
       updateFields.Etat_dossier = 'En cours';
-    } 
+    }
 
     // Track old file paths to delete
     const oldFilesToDelete = [];
@@ -368,8 +392,6 @@ app.post('/logout', (req, res) => {
     res.json({ message: 'Déconnexion réussie' });
   });
 });
-
-
 
 const PORT = process.env.PORT || 5000;
 

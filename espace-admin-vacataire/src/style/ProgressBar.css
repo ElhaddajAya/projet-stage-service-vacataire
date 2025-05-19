@@ -33,7 +33,8 @@
   border-color: #5da9f5;
 }
 
-.circle:hover {
+/* Apply hover effect only to circles that are not unclickable */
+.circle:hover:not(.unclickable) {
   transform: scale(1.1); /* Slightly enlarge on hover */
   border-color: #3b82f6; /* Darker blue on hover */
   background-color: #3b82f6;
@@ -41,6 +42,11 @@
 
 .circle.checked {
   color: white;
+}
+
+.circle.unclickable {
+  /* Optional: Add visual cue (e.g., slightly grayed out) to reinforce unclickable state */
+  opacity: 0.5;
 }
 
 .line {
