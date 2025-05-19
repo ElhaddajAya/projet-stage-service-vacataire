@@ -1,4 +1,3 @@
-// src/espace-vacataire/pages/SuiviDossier.js
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
@@ -14,6 +13,7 @@ import Phase3 from './Phase3';
 const SuiviDossier = () => {
   const [currentPhase, setCurrentPhase] = useState(1);
   const [subStep, setSubStep] = useState(1);
+  const [isVirementEffectue, setIsVirementEffectue] = useState(false);
 
   // Récupérer l'état du vacataire au montage du composant
   useEffect(() => {
@@ -63,6 +63,8 @@ const SuiviDossier = () => {
             }
           }
 
+          // Déterminer si le virement est effectué
+          setIsVirementEffectue(data.Etat_virement === 'Effectué');
           setCurrentPhase(phase);
           setSubStep(subStep);
         } else {
@@ -98,6 +100,10 @@ const SuiviDossier = () => {
   };
 
   const handleCircleClick = (phase) => {
+    // Prevent navigation to Phases 1 and 2 if virement is effectué
+    if (isVirementEffectue && phase !== 3) {
+      return;
+    }
     setCurrentPhase(phase);
     if (phase !== 3) {
       setSubStep(1);
@@ -133,6 +139,7 @@ const SuiviDossier = () => {
             step={currentPhase}
             subStep={currentPhase === 3 ? subStep : 0}
             onCircleClick={handleCircleClick}
+            isVirementEffectue={isVirementEffectue} // Passer la prop
           />
           {renderPhase()}
         </div>

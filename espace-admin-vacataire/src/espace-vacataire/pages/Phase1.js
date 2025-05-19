@@ -69,7 +69,7 @@ const Phase1 = ({ onPhaseComplete }) => {
 
       if (response.status === 200) {
         setMessage('✅ Informations mises à jour avec succès');
-        onPhaseComplete(2); // Passer à la phase suivante
+        onPhaseComplete(2); // Passer à la phase 2
       } else {
         setMessage('❌ Erreur lors de la mise à jour');
       }
@@ -90,6 +90,7 @@ const Phase1 = ({ onPhaseComplete }) => {
                 placeholder="Entrez votre nom"
                 value={formData.nom}
                 onChange={handleInputChange} 
+                required
               />
             </div>
             
@@ -100,6 +101,7 @@ const Phase1 = ({ onPhaseComplete }) => {
                 placeholder="Entrez votre prénom" 
                 value={formData.prenom}
                 onChange={handleInputChange}
+                required
               />
             </div>
             
@@ -111,6 +113,7 @@ const Phase1 = ({ onPhaseComplete }) => {
                 placeholder="exemple@domaine.com"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
             </div>
             
@@ -122,6 +125,7 @@ const Phase1 = ({ onPhaseComplete }) => {
                 placeholder="06 00 00 00 00"
                 value={formData.telephone}
                 onChange={handleInputChange}
+                required
               />
             </div>
             
@@ -133,6 +137,7 @@ const Phase1 = ({ onPhaseComplete }) => {
                 placeholder="AB123456"
                 value={formData.cin}
                 onChange={handleInputChange}
+                required
               />
             </div>
             
@@ -146,6 +151,7 @@ const Phase1 = ({ onPhaseComplete }) => {
                 onFocus={(e) => (e.target.type = "date")}
                 onBlur={(e) => (e.target.type = formData.date_naiss ? "date" : "text")}
                 onChange={handleInputChange}
+                required
               />
             </div>
 

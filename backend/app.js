@@ -253,8 +253,12 @@ app.post('/upload-documents', upload.fields([
     const updateFields = {
       ...existingData,
       Fonctionnaire: isFonctionnaire === 'true' ? 1 : 0,
-      Etat_dossier: 'En cours',
     };
+
+    // Only update Etat_dossier to 'En cours' if it is currently 'En attente'
+    if (existingData.Etat_dossier === 'En attente') {
+      updateFields.Etat_dossier = 'En cours';
+    }
 
     // Track old file paths to delete
     const oldFilesToDelete = [];

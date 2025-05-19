@@ -98,6 +98,7 @@ const Phase2 = ({ onPhaseComplete }) => {
         if (response.status === 200) {
             setMessage('✅ Documents téléchargés avec succès');
             onPhaseComplete(3); // Advance to Phase 3
+            
         } else {
             setMessage('❌ Erreur lors du téléchargement des documents');
         }
@@ -119,6 +120,7 @@ const Phase2 = ({ onPhaseComplete }) => {
                         name="photo"
                         onChange={(e) => handleFileChange(e, 'photo')}
                         accept="image/png, image/jpeg, image/jpg"
+                        required
                     />
                     {(fileObjects.photo || existingFiles.photo) && (
                         <div className="file-name">
@@ -134,6 +136,7 @@ const Phase2 = ({ onPhaseComplete }) => {
                         name="cin"
                         accept="pdf/pdf"
                         onChange={(e) => handleFileChange(e, 'cin')}
+                        required
                     />
                     {(fileObjects.cin || existingFiles.cin) && (
                         <div className="file-name">
@@ -149,6 +152,7 @@ const Phase2 = ({ onPhaseComplete }) => {
                         name="cv"
                         type="file" 
                         onChange={(e) => handleFileChange(e, 'cv')}
+                        required
                     />
                     {(fileObjects.cv || existingFiles.cv) && (
                         <div className="file-name">
@@ -164,6 +168,7 @@ const Phase2 = ({ onPhaseComplete }) => {
                         name="diplome"
                         accept="pdf/pdf"
                         onChange={(e) => handleFileChange(e, 'diplome')}
+                        required
                     />
                     {(fileObjects.diplome || existingFiles.diplome) && (
                         <div className="file-name">
@@ -203,6 +208,7 @@ const Phase2 = ({ onPhaseComplete }) => {
                             name={isFonctionnaire ? "autorisation" : "attestation"}
                             accept="pdf/pdf"
                             onChange={(e) => handleFileChange(e, isFonctionnaire ? 'autorisation' : 'attestation')}
+                            required
                         />
                         {(fileObjects[isFonctionnaire ? 'autorisation' : 'attestation'] || existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']) && (
                             <div className="file-name">
