@@ -18,19 +18,19 @@ const VacataireList = () => {
   const navigate = useNavigate();
 
   // Fetch vacataires from the backend
-  useEffect(() => {
-    const fetchVacataires = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/vacataires', {
-          withCredentials: true,
-        });
-        setVacataires(response.data);
-        setFilteredVacataires(response.data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des vacataires:', error);
-      }
-    };
+  const fetchVacataires = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/vacataires', {
+        withCredentials: true,
+      });
+      setVacataires(response.data);
+      setFilteredVacataires(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des vacataires:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchVacataires();
   }, []);
 
@@ -82,6 +82,30 @@ const VacataireList = () => {
     setShowModal(true);
   };
 
+  const handleConfirmVirement = async () => {
+    if (!selectedVacataire) return;
+
+    try {
+      // Send request to update Etat_virement to 'Effectué'
+      await axios.put(
+        `http://localhost:5000/vacataire/${selectedVacataire.ID_vacat}/update-virement`,
+        { Etat_virement: 'Effectué' },
+        { withCredentials: true }
+      );
+
+      // Refresh the table data
+      await fetchVacataires();
+
+      // Close the modal
+      setShowModal(false);
+      setSelectedVacataire(null);
+      alert('Virement validé avec succès!');
+    } catch (error) {
+      console.error('Erreur lors de la validation du virement:', error);
+      alert('Erreur lors de la validation du virement');
+    }
+  };
+
   const handleEtudeDossier = (vacataireId) => {
     navigate(`/espace-admin/etude-dossier/${vacataireId}`);
   };
@@ -126,7 +150,7 @@ const VacataireList = () => {
               <tr>
                 <th>ID</th>
                 <th>Nom Complet</th>
-                <th>Département</th>
+                <th>État de Virement</th>
                 <th>État de Dossier</th>
                 <th>Action</th>
               </tr>
@@ -138,7 +162,7 @@ const VacataireList = () => {
                   <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
                     {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
                   </td>
-                  <td title={vacataire.Diplome || 'Informatique'}>{vacataire.Diplome || 'Informatique'}</td>
+                  <td title={vacataire.Etat_virement || 'En attente'}>{vacataire.Etat_virement || 'En attente'}</td>
                   <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
                   <td>
                     <button
@@ -167,10 +191,7 @@ const VacataireList = () => {
                 <div className="modal-buttons">
                   <button
                     className="btn-valider"
-                    onClick={() => {
-                      alert('Virement validé!');
-                      setShowModal(false);
-                    }}
+                    onClick={handleConfirmVirement}
                   >
                     Confirmer
                   </button>
