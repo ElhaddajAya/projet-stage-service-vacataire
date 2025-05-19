@@ -11,8 +11,11 @@ import Phase2 from './Phase2';
 import Phase3 from './Phase3';
 
 const SuiviDossier = () => {
+  // État pour suivre les phase 1 2 3
   const [currentPhase, setCurrentPhase] = useState(1);
+  // État pour suivre les sous-étapes de la phase 3 // 1: "En cours", 2: "Dossier validé", 3: "Effectué"
   const [subStep, setSubStep] = useState(1);
+  // État pour savoir si le virement est effectué
   const [isVirementEffectue, setIsVirementEffectue] = useState(false);
   // message Refuser
   const [dossierStatus, setDossierStatus] = useState(null);

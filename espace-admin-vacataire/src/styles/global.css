@@ -658,3 +658,22 @@ form input[type="password"]:focus {
 .message-bar #textMsgBar {
   font-weight: bold;
 }
+
+.progress-bar.disabled {
+  pointer-events: none !important;
+  opacity: 0.6 !important;
+}
+.progress-bar.disabled .progress-step,
+.progress-bar.disabled .progress-circle,
+.progress-bar.disabled .progress-line {
+  background-color: #ccc !important;
+  color: #999 !important;
+  border-color: #ccc !important;
+}
+.progress-bar.disabled .progress-step span,
+.progress-bar.disabled .progress-circle span,
+.progress-bar.disabled .progress-step svg,
+.progress-bar.disabled .progress-circle svg {
+  color: #999 !important;
+  fill: #999 !important;
+}
