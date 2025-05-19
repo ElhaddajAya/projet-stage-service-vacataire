@@ -39,14 +39,14 @@ const VacataireList = () => {
     const filtered = vacataires.filter((vacataire) => {
       const nom = vacataire.Nom || '';
       const prenom = vacataire.Prenom || '';
-      const email = vacataire.Email || '';
-      const cin = vacataire.CIN || '';
+      const Etat_virement = vacataire.Etat_virement || '';
+      const Etat_dossier = vacataire.Etat_dossier || '';
       const search = searchTerm.toLowerCase();
       return (
         nom.toLowerCase().includes(search) ||
         prenom.toLowerCase().includes(search) ||
-        email.toLowerCase().includes(search) ||
-        cin.toLowerCase().includes(search)
+        Etat_virement.toLowerCase().includes(search) ||
+        Etat_dossier.toLowerCase().includes(search)
       );
     });
     setFilteredVacataires(filtered);
@@ -213,7 +213,7 @@ const VacataireList = () => {
               onClick={handlePrevPage}
               disabled={currentPage === 1}
             >
-              
+              {'<'}
             </button>
             <span className="pagination-info">
               Page {currentPage} de {totalPages}
@@ -222,7 +222,7 @@ const VacataireList = () => {
               className="pagination-btn"
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-            >
+            > {'>'}
               
             </button>
           </div>
