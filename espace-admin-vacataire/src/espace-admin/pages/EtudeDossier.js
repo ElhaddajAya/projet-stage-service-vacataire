@@ -35,6 +35,13 @@ const EtudeDossier = () => {
   if (error) return <div>{error}</div>;
   if (!vacataire) return <div>Vacataire non trouvé</div>;
 
+  // Formater la date pour l'affichage (YYYY-MM-DD)
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+  };
+
   const handleValidateDossier = async () => {
     try {
       await axios.put(
@@ -42,6 +49,7 @@ const EtudeDossier = () => {
         { Etat_dossier: 'Validé' },
         { withCredentials: true }
       );
+      alert('Dossier validé avec succès!');
       navigate('/espace-admin/vacataires');
     } catch (err) {
       console.error('Erreur lors de la validation du dossier:', err);
@@ -56,6 +64,7 @@ const EtudeDossier = () => {
         { Etat_dossier: 'Refusé' },
         { withCredentials: true }
       );
+      alert('Dossier refusé avec succès!');
       navigate('/espace-admin/vacataires');
     } catch (err) {
       console.error('Erreur lors du refus du dossier:', err);
@@ -82,7 +91,7 @@ const EtudeDossier = () => {
               </div>
               <div className="detail-row">
                 <span className="detail-label">Date de Naissance:</span>
-                <span>{vacataire.Date_naiss || 'N/A'}</span>
+                <span>{formatDate(vacataire.Date_naiss)}</span> {/* Fixed date formatting */}
               </div>
               <div className="detail-row">
                 <span className="detail-label">Email:</span>
@@ -140,11 +149,11 @@ const EtudeDossier = () => {
               </div>
               <div className="detail-row">
                 <span className="detail-label">État de Dossier:</span>
-                <span>{vacataire.Etat_dossier || 'N/A'}</span>
+                <span>{vacataire.EtatDossier || 'N/A'}</span> {/* Use EtatDossier from backend */}
               </div>
               <div className="detail-row">
                 <span className="detail-label">État de Virement:</span>
-                <span>{vacataire.Etat_virement || 'N/A'}</span>
+                <span>{vacataire.EtatVirement || 'N/A'}</span> {/* Use EtatVirement from backend */}
               </div>
             </div>
           </div>
