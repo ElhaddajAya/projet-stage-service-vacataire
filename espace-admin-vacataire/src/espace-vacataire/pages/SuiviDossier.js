@@ -17,9 +17,11 @@ const SuiviDossier = () => {
   const [subStep, setSubStep] = useState(1);
   // État pour savoir si le virement est effectué
   const [isVirementEffectue, setIsVirementEffectue] = useState(false);
-  // message Refuser
+  // dossiers status refuse
   const [dossierStatus, setDossierStatus] = useState(null);
-
+  // Ajouter des états pour suivre la complétion des phases
+  const [phase1Complete, setPhase1Complete] = useState(false);
+  const [phase2Complete, setPhase2Complete] = useState(false);
 
   // Récupérer l'état du vacataire au montage du composant
   useEffect(() => {
@@ -44,6 +46,9 @@ const SuiviDossier = () => {
             data.CIN &&
             data.Date_naiss;
 
+          // Mettre à jour l'état de complétion de la Phase 1
+          setPhase1Complete(personalInfoComplete);
+
           if (personalInfoComplete) {
             phase = 2; // Passer à la Phase 2 si les informations personnelles sont complètes
 
@@ -55,6 +60,9 @@ const SuiviDossier = () => {
               data.Diplome &&
               (data.Fonctionnaire ? data.Autorisation_fichier : data.Attest_non_emploi);
 
+            // Mettre à jour l'état de complétion de la Phase 2
+            setPhase2Complete(documentsSubmitted);
+
             if (documentsSubmitted || data.Etat_dossier === 'En cours' || data.Etat_dossier === 'Validé') {
               phase = 3; // Passer à la Phase 3 si les documents sont soumis ou si le dossier est en cours/validé
 
@@ -65,6 +73,8 @@ const SuiviDossier = () => {
                 subStep = 2; // Carte 2: "Dossier validé"
               } else if (data.Etat_dossier === 'Validé' && data.Etat_virement === 'Effectué') {
                 subStep = 3; // Carte 3: "Effectué"
+              } else if (data.Etat_dossier === 'Refusé') {
+                subStep = 3; // Carte 4: "Dossier refusé"
               }
             }
           }
@@ -73,7 +83,6 @@ const SuiviDossier = () => {
           setIsVirementEffectue(data.Etat_virement === 'Effectué' || data.Etat_dossier === 'Validé');
           setCurrentPhase(phase);
           setSubStep(subStep);
-          // message Refuser
           setDossierStatus(data.Etat_dossier);
         } else {
           console.error('Erreur lors de la récupération des données du vacataire');
@@ -143,16 +152,19 @@ const SuiviDossier = () => {
       <div className="main">
         <Sidebar />
         <div className="content">
-           {dossierStatus === 'Refusé' && (
+          {dossierStatus === 'Refusé' && (
             <div className="message-bar">
-               <div id='textMsgBar'>Dossier refusé : </div> votre document est incorrect.
+              <div id='textMsgBar'>Dossier refusé : </div> Le document CV n'est pas conforme.
             </div>
           )} 
           <ProgressBar
-            step={currentPhase}
+            step={dossierStatus === 'Refusé' ? 0 : currentPhase}
             subStep={currentPhase === 3 ? subStep : 0}
             onCircleClick={handleCircleClick}
-            isVirementEffectue={isVirementEffectue} // Passer la prop
+            isVirementEffectue={isVirementEffectue}
+            phase1Complete={phase1Complete} // Nouvelle prop
+            phase2Complete={phase2Complete} // Nouvelle prop
+            isDisabled={dossierStatus === 'Refusé'}
           />
           {renderPhase()}
         </div>

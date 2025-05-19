@@ -5,6 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 
 const VacataireList = () => {
   const [vacataires, setVacataires] = useState([]);
@@ -113,6 +114,7 @@ const VacataireList = () => {
   return (
     <div>
       <Header />
+      <Sidebar />
       <main className="page-container">
         <div className="table-container">
           <h1 className="page-title">Liste des Vacataires</h1>
@@ -148,22 +150,22 @@ const VacataireList = () => {
           <table className="table-vacataires">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>N/O</th> {/* Changed from ID to Numéro d'ordre */}
                 <th>Nom Complet</th>
-                <th>État de Virement</th>
                 <th>État de Dossier</th>
+                <th>État de Virement</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {currentVacataires.map((vacataire) => (
+              {currentVacataires.map((vacataire, index) => (
                 <tr key={vacataire.ID_vacat}>
-                  <td>{vacataire.ID_vacat}</td>
+                  <td>{indexOfFirstVacataire + index + 1}</td> {/* Sequential order number */}
                   <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
                     {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
                   </td>
-                  <td title={vacataire.Etat_virement || 'En attente'}>{vacataire.Etat_virement || 'En attente'}</td>
                   <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
+                  <td title={vacataire.Etat_virement || 'En attente'}>{vacataire.Etat_virement || 'En attente'}</td>
                   <td>
                     <button
                       className="btn-valider"
@@ -222,8 +224,8 @@ const VacataireList = () => {
               className="pagination-btn"
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-            > {'>'}
-              
+            >
+              {'>'}
             </button>
           </div>
         </div>
