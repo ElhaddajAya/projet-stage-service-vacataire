@@ -523,14 +523,14 @@ form input[type="password"]:focus {
 }
 
 .btn-annuler:hover {
-  background-color: #d1d5db;
+  background-color: #d1d5db !important;	
 }
 
 /* Etude Dossier Page */
 .vacataire-details {
-  max-width: 1200px;
+  max-width: 1500px; /* Increased from 1200px to 1400px */
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px; /* Slightly increased padding for better spacing */
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -539,14 +539,14 @@ form input[type="password"]:focus {
 .details-grid {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 30px; /* Increased gap for better separation */
   margin-bottom: 20px;
 }
 
 .details-section {
   flex: 1;
-  min-width: 0;
-  padding: 15px;
+  min-width: 300px; /* Increased min-width to ensure sections don't shrink too much */
+  padding: 20px; /* Increased padding for better readability */
   background-color: #f9fafb;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
@@ -579,7 +579,7 @@ form input[type="password"]:focus {
 .detail-row a {
   width: 60%;
   color: #1f2937;
-  text-align: right;
+  text-align: left;
 }
 
 .detail-row a {
@@ -633,13 +633,14 @@ form input[type="password"]:focus {
 }
 
 /* Responsive Design */
-@media (max-width: 900px) {
+@media (max-width: 1000px) { /* Adjusted breakpoint to accommodate wider layout */
   .details-grid {
     flex-direction: column;
   }
 
   .details-section {
     width: 100%;
+    min-width: 0; /* Reset min-width for smaller screens */
   }
 }
 .message-bar {
