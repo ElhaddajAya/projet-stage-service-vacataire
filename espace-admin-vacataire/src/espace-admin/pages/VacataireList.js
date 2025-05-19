@@ -152,8 +152,8 @@ const VacataireList = () => {
               <tr>
                 <th>N/O</th> {/* Changed from ID to Numéro d'ordre */}
                 <th>Nom Complet</th>
-                <th>État de Virement</th>
                 <th>État de Dossier</th>
+                <th>État de Virement</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -164,8 +164,8 @@ const VacataireList = () => {
                   <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
                     {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
                   </td>
-                  <td title={vacataire.Etat_virement || 'En attente'}>{vacataire.Etat_virement || 'En attente'}</td>
                   <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
+                  <td title={vacataire.Etat_virement || 'En attente'}>{vacataire.Etat_virement || 'En attente'}</td>
                   <td>
                     <button
                       className="btn-valider"
