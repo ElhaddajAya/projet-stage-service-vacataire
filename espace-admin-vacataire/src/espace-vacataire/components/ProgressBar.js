@@ -7,7 +7,9 @@ const ProgressBar = ({ step, subStep = 0, onCircleClick, isVirementEffectue }) =
       {[1, 2, 3].map((item, index) => (
         <div key={index} className="progress-step">
           <div
-            className={`circle ${step >= item ? 'active' : ''} ${step > item || (step === 3 && subStep >= index + 1) ? 'checked' : ''}`}
+            className={`circle ${step >= item ? 'active' : ''} ${step > item || (step === 3 && subStep >= index + 1) ? 'checked' : ''} ${
+              isVirementEffectue && item !== 3 ? 'unclickable' : ''
+            }`}
             onClick={isVirementEffectue && item !== 3 ? null : () => onCircleClick && onCircleClick(item)} // Disable click for Phases 1 and 2 if virement effectué
             style={{ cursor: isVirementEffectue && item !== 3 ? 'not-allowed' : 'pointer' }} // Change cursor to indicate non-clickable
           >
