@@ -14,6 +14,9 @@ const SuiviDossier = () => {
   const [currentPhase, setCurrentPhase] = useState(1);
   const [subStep, setSubStep] = useState(1);
   const [isVirementEffectue, setIsVirementEffectue] = useState(false);
+  // message Refuser
+  const [dossierStatus, setDossierStatus] = useState(null);
+
 
   // Récupérer l'état du vacataire au montage du composant
   useEffect(() => {
@@ -67,6 +70,8 @@ const SuiviDossier = () => {
           setIsVirementEffectue(data.Etat_virement === 'Effectué' || data.Etat_dossier === 'Validé');
           setCurrentPhase(phase);
           setSubStep(subStep);
+          // message Refuser
+          setDossierStatus(data.Etat_dossier);
         } else {
           console.error('Erreur lors de la récupération des données du vacataire');
         }
@@ -135,6 +140,11 @@ const SuiviDossier = () => {
       <div className="main">
         <Sidebar />
         <div className="content">
+           {dossierStatus === 'Refusé' && (
+            <div className="message-bar">
+               <div id='textMsgBar'>Dossier refusé : </div> votre document est incorrect.
+            </div>
+          )} 
           <ProgressBar
             step={currentPhase}
             subStep={currentPhase === 3 ? subStep : 0}

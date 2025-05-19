@@ -643,3 +643,18 @@ form input[type="password"]:focus {
     min-width: 0; /* Reset min-width for smaller screens */
   }
 }
+.message-bar {
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  color: #b91c1c;
+  padding: 1rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  /* for aligner */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.message-bar #textMsgBar {
+  font-weight: bold;
+}
