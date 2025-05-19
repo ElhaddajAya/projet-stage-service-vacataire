@@ -315,7 +315,7 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-valider {
   background-color: #2ecc71;
   color: white;
-  border: none;
+  border: 0.5px solid #252525 !important;
 }
 
 .table-vacataires td .btn-valider:hover:not(:disabled) {
@@ -331,7 +331,8 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-etude {
   background-color: #3498db;
   color: white;
-  border: none;
+  padding: 0.67rem 1.4rem;
+  border: 0.5px solid #252525;
   margin-left: 20px;
 }
 
@@ -342,7 +343,7 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-refuser {
   background-color: #e74c3c;
   color: white;
-  border: none;
+  border: 0.5px solid #252525 !important;
 }
 
 .table-vacataires td .btn-refuser:hover {
@@ -376,10 +377,10 @@ form input[type="password"]:focus {
 .btn-etude {
   background-color: #3498db;
   color: white;
-  border: none;
-  padding: 0.5rem 1rem;
+  border: 0.5px solid #252525;
+  padding: 0.3rem 1rem;
   border-radius: 4px;
-  font-size: 0.9rem;
+  font-size: 0.96rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -617,7 +618,7 @@ form input[type="password"]:focus {
 .btn-refuser {
   background-color: #e74c3c;
   color: white;
-  border: none;
+  border: 0.5px solid #252525;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -765,13 +766,12 @@ form input[type="password"]:focus {
 
 .btn-valider,
 .btn-annuler {
-  padding: 10px 20px;
-  border: none;
+  padding: 10px 20px;   
+  border: 0.5px solid #252525;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-valider {
@@ -781,7 +781,6 @@ form input[type="password"]:focus {
 
 .btn-valider:hover {
   background-color: #38a169;
-  transform: translateY(-1px);
 }
 
 .btn-valider:disabled {
@@ -791,13 +790,13 @@ form input[type="password"]:focus {
 }
 
 .btn-annuler {
-  background-color: #e53e3e;
-  color: white;
+  background-color: #ffffff;
+  border: 1px solid #252525;
+  color: #222;
 }
 
 .btn-annuler:hover {
-  background-color: #c53030;
-  transform: translateY(-1px);
+  background-color: #d1d5db !important;	
 }
 
 @keyframes fadeIn {
