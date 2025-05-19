@@ -1,5 +1,5 @@
 // src/espace-vacataire/pages/SuiviDossier.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import ProgressBar from '../components/ProgressBar';
@@ -15,9 +15,70 @@ const SuiviDossier = () => {
   const [currentPhase, setCurrentPhase] = useState(1);
   const [subStep, setSubStep] = useState(1);
 
+  // Récupérer l'état du vacataire au montage du composant
+  useEffect(() => {
+    const fetchVacatairePhase = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/vacataire-info', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          let phase = 1;
+          let subStep = 1;
+
+          // Vérifier si les informations personnelles sont complètes (Phase 1)
+          const personalInfoComplete =
+            data.Nom &&
+            data.Prenom &&
+            data.Email &&
+            data.Numero_tele &&
+            data.CIN &&
+            data.Date_naiss;
+
+          if (personalInfoComplete) {
+            phase = 2; // Passer à la Phase 2 si les informations personnelles sont complètes
+
+            // Vérifier si les documents sont soumis (Phase 2)
+            const documentsSubmitted =
+              data.Photo &&
+              data.CIN_fichier &&
+              data.CV &&
+              data.Diplome &&
+              (data.Fonctionnaire ? data.Autorisation_fichier : data.Attest_non_emploi);
+
+            if (documentsSubmitted || data.Etat_dossier === 'En cours' || data.Etat_dossier === 'Validé') {
+              phase = 3; // Passer à la Phase 3 si les documents sont soumis ou si le dossier est en cours/validé
+
+              // Déterminer subStep pour la Phase 3 en fonction de Etat_dossier et Etat_virement
+              if (data.Etat_dossier === 'En cours' && data.Etat_virement === 'En attente') {
+                subStep = 1; // Carte 1: "En cours"
+              } else if (data.Etat_dossier === 'Validé' && data.Etat_virement === 'En attente') {
+                subStep = 2; // Carte 2: "Dossier validé"
+              } else if (data.Etat_dossier === 'Validé' && data.Etat_virement === 'Effectué') {
+                subStep = 3; // Carte 3: "Effectué"
+              }
+            }
+          }
+
+          setCurrentPhase(phase);
+          setSubStep(subStep);
+        } else {
+          console.error('Erreur lors de la récupération des données du vacataire');
+        }
+      } catch (err) {
+        console.error('Erreur réseau lors de la récupération des données:', err);
+      }
+    };
+
+    fetchVacatairePhase();
+  }, []);
+
   const handleNextPhase = (newPhase) => {
     if (newPhase && newPhase > currentPhase) {
-      setCurrentPhase(newPhase); // Met à jour directement si la phase suivante est spécifiée
+      setCurrentPhase(newPhase);
     } else if (currentPhase < 3) {
       setCurrentPhase(currentPhase + 1);
     }
@@ -37,9 +98,9 @@ const SuiviDossier = () => {
   };
 
   const handleCircleClick = (phase) => {
-    setCurrentPhase(phase); // Set the phase to the clicked circle
+    setCurrentPhase(phase);
     if (phase !== 3) {
-      setSubStep(1); // Reset subStep if not in Phase 3
+      setSubStep(1);
     }
   };
 
@@ -71,7 +132,7 @@ const SuiviDossier = () => {
           <ProgressBar
             step={currentPhase}
             subStep={currentPhase === 3 ? subStep : 0}
-            onCircleClick={handleCircleClick} // Pass the callback
+            onCircleClick={handleCircleClick}
           />
           {renderPhase()}
         </div>

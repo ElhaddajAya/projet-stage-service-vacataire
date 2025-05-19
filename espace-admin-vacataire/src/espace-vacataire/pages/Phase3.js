@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Phase3 = ({ onPhaseComplete, subStep, handleNextSubStep }) => {
+const Phase3 = ({ onPhaseComplete, handleNextSubStep }) => {
   const [status, setStatus] = useState({ Etat_dossier: 'en attente', Etat_virement: 'en attente' });
   const [activeCard, setActiveCard] = useState(1);
 
@@ -54,7 +54,7 @@ const Phase3 = ({ onPhaseComplete, subStep, handleNextSubStep }) => {
             <p>Le virement a été effectué. Vous recevrez votre paiement sous peu.</p>
           </div>
         </div>
-        {/* {subStep < 3 && (
+        {/* {activeCard < 3 && (
           <div className="buttons">
             <button type="button" onClick={handleNextSubStep}>
               Simuler prochaine étape
