@@ -10,6 +10,9 @@ const EtudeDossier = () => {
   const [vacataire, setVacataire] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showRefuseModal, setShowRefuseModal] = useState(false); // State for refusal modal
+  const [problemType, setProblemType] = useState(''); // Selected problem type
+  const [description, setDescription] = useState(''); // Description of the problem
 
   const navigate = useNavigate();
 
@@ -58,18 +61,33 @@ const EtudeDossier = () => {
   };
 
   const handleRefuseDossier = async () => {
+    if (!problemType || !description.trim()) {
+      alert('Veuillez sélectionner un type de problème et fournir une description.');
+      return;
+    }
+
     try {
       await axios.put(
         `http://localhost:5000/vacataire/${id}/update-etat`,
-        { Etat_dossier: 'Refusé' },
+        { 
+          Etat_dossier: 'Refusé',
+          Refus_reason: { problemType, description } // Store reason as an object
+        },
         { withCredentials: true }
       );
       alert('Dossier refusé avec succès!');
+      setShowRefuseModal(false); // Close modal
+      setProblemType(''); // Reset problem type
+      setDescription(''); // Reset description
       navigate('/espace-admin/vacataires');
     } catch (err) {
       console.error('Erreur lors du refus du dossier:', err);
       setError('Erreur lors du refus du dossier');
     }
+  };
+
+  const handleOpenRefuseModal = () => {
+    setShowRefuseModal(true);
   };
 
   return (
@@ -165,11 +183,79 @@ const EtudeDossier = () => {
             <button className="btn-valider" onClick={handleValidateDossier}>
               Valider dossier
             </button>
-            <button className="btn-refuser" onClick={handleRefuseDossier}>
+            <button className="btn-refuser" onClick={handleOpenRefuseModal}>
               Refuser dossier
             </button>
           </div>
         </div>
+
+        {showRefuseModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Spécifier le problème</h2>
+              <p>Veuillez indiquer la raison du refus :</p>
+              <div className="checkbox-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    value="Document(s) incorrect(s)"
+                    checked={problemType === 'Document(s) incorrect(s)'}
+                    onChange={(e) => setProblemType(e.target.value)}
+                  />
+                  Document(s) incorrect(s)
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    value="Document(s) manquant(s)"
+                    checked={problemType === 'Document(s) manquant(s)'}
+                    onChange={(e) => setProblemType(e.target.value)}
+                  />
+                  Document(s) manquant(s)
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    value="Autre"
+                    checked={problemType === 'Autre'}
+                    onChange={(e) => setProblemType(e.target.value)}
+                  />
+                  Autre
+                </label>
+              </div>
+              <div className="description-field">
+                <label>
+                  <p>Description du problème :</p>  
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Décrivez le problème..."
+                    rows="4"
+                  />
+                </label>
+              </div>
+              <div className="modal-buttons">
+                <button
+                  className="btn-valider"
+                  onClick={handleRefuseDossier}
+                  disabled={!problemType || !description.trim()}
+                >
+                  Confirmer refus
+                </button>
+                <button
+                  className="btn-annuler"
+                  onClick={() => {
+                    setShowRefuseModal(false);
+                    setProblemType('');
+                    setDescription('');
+                  }}
+                >
+                  Annuler
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
