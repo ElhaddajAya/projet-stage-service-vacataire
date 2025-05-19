@@ -111,6 +111,10 @@ app.put('/vacataire/:id/update-virement', (req, res) => {
 
 // Route pour récupérer tous les vacataires
 app.get('/vacataires', (req, res) => {
+  if (!req.session.userId || req.session.role !== 'admin') {
+    return res.status(403).json({ message: 'Accès réservé aux administrateurs' });
+  }
+
   const query = 'SELECT * FROM vacataire';
   db.query(query, (err, results) => {
     if (err) {
@@ -127,7 +131,7 @@ app.get('/vacataires', (req, res) => {
   });
 });
 
-// Route pour la connexion d'un vacataire
+// Route pour la connexion d'un vacataire ou admin
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   
@@ -135,28 +139,58 @@ app.post('/login', (req, res) => {
     return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
   }
 
-  const query = 'SELECT ID_vacat, Nom FROM vacataire WHERE username = ? AND mdp = ?';
-  db.query(query, [username, password], (err, results) => {
+  // Vérifier d'abord dans la table vacataire
+  const vacataireQuery = 'SELECT ID_vacat, Nom FROM vacataire WHERE username = ? AND mdp = ?';
+  db.query(vacataireQuery, [username, password], (err, vacataireResults) => {
     if (err) {
-      console.error('Erreur de connexion:', err);
+      console.error('Erreur de connexion (vacataire):', err);
       return res.status(500).json({ message: 'Erreur serveur' });
     }
-    
-    if (results.length === 0) {
-      return res.status(401).json({ message: 'Identifiants incorrects' });
+
+    if (vacataireResults.length > 0) {
+      // Utilisateur est un vacataire
+      const vacataire = vacataireResults[0];
+      req.session.userId = vacataire.ID_vacat;
+      req.session.nom = vacataire.Nom;
+      req.session.role = 'vacataire';
+      
+      return res.json({ 
+        message: 'Connexion réussie',
+        user: { 
+          id: vacataire.ID_vacat,
+          nom: vacataire.Nom,
+          role: 'vacataire'
+        }
+      });
     }
-    
-    // Stocker l'ID du vacataire dans la session
-    const vacataire = results[0];
-    req.session.userId = vacataire.ID_vacat;
-    req.session.nom = vacataire.Nom;
-    
-    res.json({ 
-      message: 'Connexion réussie',
-      user: { 
-        id: vacataire.ID_vacat,
-        nom: vacataire.Nom
+
+    // Si pas trouvé dans vacataire, vérifier dans la table admin
+    const adminQuery = 'SELECT ID_admin FROM admin WHERE username = ? AND mdp = ?';
+    db.query(adminQuery, [username, password], (err, adminResults) => {
+      if (err) {
+        console.error('Erreur de connexion (admin):', err);
+        return res.status(500).json({ message: 'Erreur serveur' });
       }
+
+      if (adminResults.length > 0) {
+        // Utilisateur est un admin
+        const admin = adminResults[0];
+        req.session.userId = admin.ID_admin;
+        req.session.nom = admin.Nom;
+        req.session.role = 'admin';
+        
+        return res.json({ 
+          message: 'Connexion réussie',
+          user: { 
+            id: admin.ID_admin,
+            nom: admin.Nom,
+            role: 'admin'
+          }
+        });
+      }
+
+      // Aucun utilisateur trouvé
+      return res.status(401).json({ message: 'Identifiants incorrects' });
     });
   });
 });

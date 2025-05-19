@@ -32,11 +32,18 @@ const LoginForm = () => {
     try {
       const response = await axios.post('http://localhost:5000/login', 
         { username, password }, 
-        { withCredentials: true } // Important pour inclure les cookies de session
+        { withCredentials: true }
       );
 
       if (response.status === 200) {
-        navigate('/espace-vacataire/suivi-dossier');
+        const { role } = response.data.user;
+        if (role === 'vacataire') {
+          navigate('/espace-vacataire/suivi-dossier');
+        } else if (role === 'admin') {
+          navigate('/espace-admin/vacataires');
+        } else {
+          setError((prev) => ({ ...prev, global: 'Rôle utilisateur inconnu' }));
+        }
       } else {
         setError((prev) => ({ ...prev, global: response.data.message || 'Erreur lors de la connexion' }));
       }
