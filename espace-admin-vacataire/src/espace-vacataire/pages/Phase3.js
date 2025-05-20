@@ -44,9 +44,9 @@ const Phase3 = ({ onPhaseComplete, handleNextSubStep, isRefused }) => {
         </div>
         {!isRefused && activeCard < 3 && (
           <div className="buttons">
-            <button type="button" onClick={handleNextSubStep} disabled={isRefused || activeCard === 3}>
+            {/* <button type="button" onClick={handleNextSubStep} disabled={isRefused || activeCard === 3}>
               Simuler prochaine étape
-            </button>
+            </button> */}
           </div>
         )}
       </form>

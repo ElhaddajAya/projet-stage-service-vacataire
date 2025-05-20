@@ -11,40 +11,35 @@ const extractFilename = (path) => {
 };
 
 const Phase2 = ({ onPhaseComplete }) => {
-    const [fileObjects, setFileObjects] = useState({
-        photo: null,
-        cin: null,
-        cv: null,
-        diplome: null,
-        autorisation: null,
-        attestation: null,
-    });
-    const [existingFiles, setExistingFiles] = useState({
-        photo: null,
-        cin: null,
-        cv: null,
-        diplome: null,
-        autorisation: null,
-        attestation: null,
-    });
-    const [isFonctionnaire, setIsFonctionnaire] = useState(null);
-    const [message, setMessage] = useState('');
-
-    const handleFileChange = (e, fileType) => {
-        if (e.target.files.length > 0) {
-        setFileObjects((prev) => ({
-            ...prev,
-            [fileType]: e.target.files[0],
-        }));
-        } else {
-        setFileObjects((prev) => ({
-            ...prev,
-            [fileType]: null,
-        }));
-        }
+  const [fileObjects, setFileObjects] = useState(() => {
+    // Initialize from localStorage if available
+    const savedFiles = localStorage.getItem('phase2FileObjects');
+    return savedFiles ? JSON.parse(savedFiles) : {
+      photo: null,
+      cin: null,
+      cv: null,
+      diplome: null,
+      autorisation: null,
+      attestation: null,
     };
+  });
+  const [existingFiles, setExistingFiles] = useState({
+    photo: null,
+    cin: null,
+    cv: null,
+    diplome: null,
+    autorisation: null,
+    attestation: null,
+  });
+  const [isFonctionnaire, setIsFonctionnaire] = useState(null);
+  const [message, setMessage] = useState('');
 
-    // Fetch existing documents and Fonctionnaire status on mount
+  // Save fileObjects to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('phase2FileObjects', JSON.stringify(fileObjects));
+  }, [fileObjects]);
+
+  // Fetch existing documents and Fonctionnaire status on mount
   useEffect(() => {
     const fetchVacataireData = async () => {
       try {
@@ -75,160 +70,212 @@ const Phase2 = ({ onPhaseComplete }) => {
     fetchVacataireData();
   }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setMessage('');
+  const handleFileChange = (e, fileType) => {
+    if (e.target.files.length > 0) {
+      setFileObjects((prev) => ({
+        ...prev,
+        [fileType]: e.target.files[0],
+      }));
+    } else {
+      setFileObjects((prev) => ({
+        ...prev,
+        [fileType]: null,
+      }));
+    }
+  };
 
-        const formData = new FormData();
-        Object.keys(fileObjects).forEach((key) => {
-        if (fileObjects[key]) {
-            formData.append(key, fileObjects[key]);
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage('');
+
+    const formData = new FormData();
+    Object.keys(fileObjects).forEach((key) => {
+      if (fileObjects[key]) {
+        formData.append(key, fileObjects[key]);
+      }
+    });
+    formData.append('isFonctionnaire', isFonctionnaire !== null ? isFonctionnaire : false);
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload-documents', formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 200) {
+        setMessage('✅ Documents téléchargés avec succès');
+        // Reset fileObjects after successful upload
+        setFileObjects({
+          photo: null,
+          cin: null,
+          cv: null,
+          diplome: null,
+          autorisation: null,
+          attestation: null,
         });
-        formData.append('isFonctionnaire', isFonctionnaire !== null ? isFonctionnaire : false);
-
-        try {
-        const response = await axios.post('http://localhost:5000/upload-documents', formData, {
-            withCredentials: true,
-            headers: {
-            'Content-Type': 'multipart/form-data',
-            },
+        // Clear localStorage
+        localStorage.removeItem('phase2FileObjects');
+        // Re-fetch existing files to update the UI
+        const updatedResponse = await fetch('http://localhost:5000/vacataire-info', {
+          method: 'GET',
+          credentials: 'include',
         });
-
-        if (response.status === 200) {
-            setMessage('✅ Documents téléchargés avec succès');
-            onPhaseComplete(3); // Advance to Phase 3
-            
-        } else {
-            setMessage('❌ Erreur lors du téléchargement des documents');
+        if (updatedResponse.ok) {
+          const updatedData = await updatedResponse.json();
+          setExistingFiles({
+            photo: extractFilename(updatedData.Photo),
+            cin: extractFilename(updatedData.CIN_fichier),
+            cv: extractFilename(updatedData.CV),
+            diplome: extractFilename(updatedData.Diplome),
+            autorisation: extractFilename(updatedData.Autorisation_fichier),
+            attestation: extractFilename(updatedData.Attest_non_emploi),
+          });
         }
-        } catch (err) {
+        onPhaseComplete(3); // Advance to Phase 3
+      } else {
         setMessage('❌ Erreur lors du téléchargement des documents');
-        console.error(err);
-        }
-    };
+      }
+    } catch (err) {
+      setMessage('❌ Erreur lors du téléchargement des documents');
+      console.error(err);
+    }
+  };
 
-    return (
-        <>
-            <h2>Phase 2 - Documents exigés</h2>
-            <form className="form" onSubmit={handleSubmit}>
+  return (
+    <>
+      <h2>Phase 2 - Documents exigés</h2>
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="form-group file-upload">
+          <label>Photo</label>
+          <input
+            type="file"
+            name="photo"
+            onChange={(e) => handleFileChange(e, 'photo')}
+            accept="image/png, image/jpeg, image/jpg"
+            required={!existingFiles.photo} // Make required only if no existing file
+          />
+          {(fileObjects.photo || existingFiles.photo) && (
+            <div className="file-name">
+              {fileObjects.photo ? fileObjects.photo.name : existingFiles.photo}
+            </div>
+          )}
+        </div>
 
-                <div className="form-group file-upload">
-                    <label>Photo</label>
-                    <input 
-                        type="file" 
-                        name="photo"
-                        onChange={(e) => handleFileChange(e, 'photo')}
-                        accept="image/png, image/jpeg, image/jpg"
-                        required
-                    />
-                    {(fileObjects.photo || existingFiles.photo) && (
-                        <div className="file-name">
-                        {fileObjects.photo ? fileObjects.photo.name : existingFiles.photo}
-                        </div>
-                    )}
-                </div>
+        <div className="form-group file-upload">
+          <label>Fichier CIN</label>
+          <input
+            type="file"
+            name="cin"
+            accept="application/pdf"
+            onChange={(e) => handleFileChange(e, 'cin')}
+            required={!existingFiles.cin}
+          />
+          {(fileObjects.cin || existingFiles.cin) && (
+            <div className="file-name">
+              {fileObjects.cin ? fileObjects.cin.name : existingFiles.cin}
+            </div>
+          )}
+        </div>
 
-                <div className="form-group file-upload">
-                    <label>Fichier CIN</label>
-                    <input 
-                        type="file" 
-                        name="cin"
-                        accept="pdf/pdf"
-                        onChange={(e) => handleFileChange(e, 'cin')}
-                        required
-                    />
-                    {(fileObjects.cin || existingFiles.cin) && (
-                        <div className="file-name">
-                        {fileObjects.cin ? fileObjects.cin.name : existingFiles.cin}
-                        </div>
-                    )}
-                </div>
+        <div className="form-group file-upload">
+          <label>Fichier CV</label>
+          <input
+            accept="application/pdf"
+            name="cv"
+            type="file"
+            onChange={(e) => handleFileChange(e, 'cv')}
+            required={!existingFiles.cv}
+          />
+          {(fileObjects.cv || existingFiles.cv) && (
+            <div className="file-name">
+              {fileObjects.cv ? fileObjects.cv.name : existingFiles.cv}
+            </div>
+          )}
+        </div>
 
-                <div className="form-group file-upload">
-                    <label>Fichier CV</label>
-                    <input 
-                        accept='pdf/pdf'
-                        name="cv"
-                        type="file" 
-                        onChange={(e) => handleFileChange(e, 'cv')}
-                        required
-                    />
-                    {(fileObjects.cv || existingFiles.cv) && (
-                        <div className="file-name">
-                            {fileObjects.cv ? fileObjects.cv.name : existingFiles.cv}
-                        </div>
-                    )}                
-                </div>
+        <div className="form-group file-upload">
+          <label>Fichier Diplômes</label>
+          <input
+            type="file"
+            name="diplome"
+            accept="application/pdf"
+            onChange={(e) => handleFileChange(e, 'diplome')}
+            required={!existingFiles.diplome}
+          />
+          {(fileObjects.diplome || existingFiles.diplome) && (
+            <div className="file-name">
+              {fileObjects.diplome ? fileObjects.diplome.name : existingFiles.diplome}
+            </div>
+          )}
+          <small>Tous les diplômes obtenus dans un seul fichier .pdf</small>
+        </div>
 
-                <div className="form-group file-upload">
-                    <label>Fichier Diplômes</label>
-                    <input 
-                        type="file" 
-                        name="diplome"
-                        accept="pdf/pdf"
-                        onChange={(e) => handleFileChange(e, 'diplome')}
-                        required
-                    />
-                    {(fileObjects.diplome || existingFiles.diplome) && (
-                        <div className="file-name">
-                        {fileObjects.diplome ? fileObjects.diplome.name : existingFiles.diplome}
-                        </div>
-                    )}
-                    <small>Tous les diplômes obtenus dans un seul fichier .pdf</small>
-                </div>
+        <div className="form-group radio-group">
+          <label>Fonctionnaire :</label>
+          <div className="radio-options">
+            <label>
+              <input
+                type="radio"
+                name="fonctionnaire"
+                checked={isFonctionnaire === true}
+                onChange={() => setIsFonctionnaire(true)}
+              /> Oui
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="fonctionnaire"
+                checked={isFonctionnaire === false}
+                onChange={() => setIsFonctionnaire(false)}
+              /> Non
+            </label>
+          </div>
+        </div>
 
-                <div className="form-group radio-group">
-                    <label>Fonctionnaire :</label>
-                    <div className="radio-options">
-                        <label>
-                            <input 
-                                type="radio" 
-                                name="fonctionnaire" 
-                                checked={isFonctionnaire === true} 
-                                onChange={() => setIsFonctionnaire(true)}
-                            /> Oui
-                        </label>
-                        <label>
-                            <input 
-                                type="radio" 
-                                name="fonctionnaire" 
-                                checked={isFonctionnaire === false} 
-                                onChange={() => setIsFonctionnaire(false)}
-                            /> Non
-                        </label>
-                    </div>
-                </div>
+        {isFonctionnaire !== null && (
+          <div className="form-group file-upload">
+            <label>{isFonctionnaire ? 'Fichier Autorisation' : 'Attestation de non emploi'}</label>
+            <input
+              type="file"
+              name={isFonctionnaire ? 'autorisation' : 'attestation'}
+              accept="application/pdf"
+              onChange={(e) => handleFileChange(e, isFonctionnaire ? 'autorisation' : 'attestation')}
+              required={!existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']}
+            />
+            {(fileObjects[isFonctionnaire ? 'autorisation' : 'attestation'] || existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']) && (
+              <div className="file-name">
+                {fileObjects[isFonctionnaire ? 'autorisation' : 'attestation']
+                  ? fileObjects[isFonctionnaire ? 'autorisation' : 'attestation'].name
+                  : existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']}
+              </div>
+            )}
+          </div>
+        )}
 
-                {isFonctionnaire !== null && (
-                    <div className="form-group file-upload">
-                        <label>{isFonctionnaire ? "Fichier Autorisation" : "Attestation de non emploi"}</label>
-                        <input 
-                            type="file" 
-                            name={isFonctionnaire ? "autorisation" : "attestation"}
-                            accept="pdf/pdf"
-                            onChange={(e) => handleFileChange(e, isFonctionnaire ? 'autorisation' : 'attestation')}
-                            required
-                        />
-                        {(fileObjects[isFonctionnaire ? 'autorisation' : 'attestation'] || existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']) && (
-                            <div className="file-name">
-                                {fileObjects[isFonctionnaire ? 'autorisation' : 'attestation']
-                                ? fileObjects[isFonctionnaire ? 'autorisation' : 'attestation'].name
-                                : existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']}
-                            </div>
-                        )}
-                    </div>
-                )}
+        {message && <div className="error-global">{message}</div>}
 
-                {message && <div className="error-global">{message}</div>}
-
-                <div className="buttons">
-                    <button type="button">Annuler</button>
-                    <button type="submit">Soumettre</button>
-                </div>
-            </form>
-        </>
-    );
+        <div className="buttons">
+          <button type="button" onClick={() => {
+            // Clear localStorage and reset fileObjects on cancel
+            localStorage.removeItem('phase2FileObjects');
+            setFileObjects({
+              photo: null,
+              cin: null,
+              cv: null,
+              diplome: null,
+              autorisation: null,
+              attestation: null,
+            });
+          }}>
+            Annuler
+          </button>
+          <button type="submit">Soumettre</button>
+        </div>
+      </form>
+    </>
+  );
 };
 
 export default Phase2;

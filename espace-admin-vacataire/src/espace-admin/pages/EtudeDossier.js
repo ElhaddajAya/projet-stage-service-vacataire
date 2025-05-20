@@ -1,4 +1,3 @@
-// espace-admin-vacataire/src/espace-admin/pages/EtudeDossier.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +14,7 @@ const EtudeDossier = () => {
   const [description, setDescription] = useState('');
 
   const navigate = useNavigate();
+  const BACKEND_URL = 'http://localhost:5000';
 
   useEffect(() => {
     const fetchVacataireDetails = async () => {
@@ -129,8 +129,18 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">Photo :</span>
                 {vacataire.Photo ? (
-                  <a href={vacataire.Photo} target="_blank" rel="noopener noreferrer">
+                  <a href={`${BACKEND_URL}/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
                     Voir la Photo
+                  </a>
+                ) : (
+                  <span>Non disponible</span>
+                )}
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">CIN (fichier) :</span>
+                {vacataire.CIN_fichier ? (
+                  <a href={`${BACKEND_URL}/${vacataire.CIN_fichier}`} target="_blank" rel="noopener noreferrer">
+                    Voir le fichier CIN
                   </a>
                 ) : (
                   <span>Non disponible</span>
@@ -139,7 +149,7 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">CV :</span>
                 {vacataire.CV ? (
-                  <a href={vacataire.CV} target="_blank" rel="noopener noreferrer">
+                  <a href={`${BACKEND_URL}/${vacataire.CV}`} target="_blank" rel="noopener noreferrer">
                     Voir le CV
                   </a>
                 ) : (
@@ -147,22 +157,45 @@ const EtudeDossier = () => {
                 )}
               </div>
               <div className="detail-row">
-                <span className="detail-label">Attestation :</span>
-                {vacataire.Attest_non_emploi ? (
-                  <a href={vacataire.Attest_non_emploi} target="_blank" rel="noopener noreferrer">
-                    Voir l'Attestation
+                <span className="detail-label">Diplôme :</span>
+                {vacataire.Diplome ? (
+                  <a href={`${BACKEND_URL}/${vacataire.Diplome}`} target="_blank" rel="noopener noreferrer">
+                    Voir le Diplôme
                   </a>
                 ) : (
                   <span>Non disponible</span>
                 )}
               </div>
+              {vacataire.Fonctionnaire ? (
+                <div className="detail-row">
+                  <span className="detail-label">Autorisation :</span>
+                  {vacataire.Autorisation_fichier ? (
+                    <a href={`${BACKEND_URL}/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
+                      Voir l'Autorisation
+                    </a>
+                  ) : (
+                    <span>Non disponible</span>
+                  )}
+                </div>
+              ) : (
+                <div className="detail-row">
+                  <span className="detail-label">Attestation de non-emploi :</span>
+                  {vacataire.Attest_non_emploi ? (
+                    <a href={`${BACKEND_URL}/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
+                      Voir l'Attestation
+                    </a>
+                  ) : (
+                    <span>Non disponible</span>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="details-section">
               <h2>Autres Informations</h2>
               <div className="detail-row">
-                <span className="detail-label">Département :</span>
-                <span>{vacataire.Diplome || 'N/A'}</span>
+                <span className="detail-label">Fonctionnaire :</span>
+                <span>{vacataire.Fonctionnaire ? 'Oui' : 'Non'}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">État de Dossier :</span>

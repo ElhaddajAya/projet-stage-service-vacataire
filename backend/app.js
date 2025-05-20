@@ -27,14 +27,24 @@ app.get('/', (req, res) => res.send('Backend opérationnel 🚀'));
 // Route to fetch details of a specific vacataire
 app.get('/vacataire-details/:id', (req, res) => {
   const vacataireId = req.params.id;
+
   const query = `
     SELECT ID_vacat, Nom, Prenom, Numero_tele AS Numero_tele, Email, CIN, Date_naiss, 
-           Photo, CV, Attest_non_emploi AS Attestation, Diplome AS Departement, 
+           Photo, CIN_fichier, CV, Diplome, Autorisation_fichier, Attest_non_emploi, Fonctionnaire,
            Etat_dossier AS EtatDossier, Etat_virement AS EtatVirement
-    FROM vacataire WHERE ID_vacat = ?`;
+    FROM vacataire 
+    WHERE ID_vacat = ?
+  `;
   db.query(query, [vacataireId], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Erreur serveur' });
-    if (results.length === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
+    if (err) {
+      console.error('Erreur lors de la récupération des détails du vacataire:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Vacataire non trouvé' });
+    }
+
     res.json(results[0]);
   });
 });
