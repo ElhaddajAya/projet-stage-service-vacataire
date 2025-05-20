@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import '../../styles/global.css';
+import Sidebar from '../components/Sidebar';
 
 const EtudeDossier = () => {
   const { id } = useParams(); // Get the vacataire ID from the URL
@@ -93,6 +94,7 @@ const EtudeDossier = () => {
   return (
     <div>
       <Header />
+      <Sidebar />
       <main className="page-container">
         <h1 className="page-title">Étude du Dossier - {vacataire.Nom} {vacataire.Prenom || ''}</h1>
         <div className="vacataire-details">
