@@ -6,13 +6,13 @@ import Header from '../components/Header';
 import '../../styles/global.css';
 
 const EtudeDossier = () => {
-  const { id } = useParams(); // Get the vacataire ID from the URL
+  const { id } = useParams();
   const [vacataire, setVacataire] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showRefuseModal, setShowRefuseModal] = useState(false); // State for refusal modal
-  const [problemType, setProblemType] = useState(''); // Selected problem type
-  const [description, setDescription] = useState(''); // Description of the problem
+  const [showRefuseModal, setShowRefuseModal] = useState(false);
+  const [problemType, setProblemType] = useState('');
+  const [description, setDescription] = useState('');
 
   const navigate = useNavigate();
 
@@ -38,11 +38,10 @@ const EtudeDossier = () => {
   if (error) return <div>{error}</div>;
   if (!vacataire) return <div>Vacataire non trouvé</div>;
 
-  // Formater la date pour l'affichage (YYYY-MM-DD)
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+    return date.toISOString().split('T')[0];
   };
 
   const handleValidateDossier = async () => {
@@ -71,14 +70,14 @@ const EtudeDossier = () => {
         `http://localhost:5000/vacataire/${id}/update-etat`,
         { 
           Etat_dossier: 'Refusé',
-          Refus_reason: { problemType, description } // Store reason as an object
+          Refus_reason: { problemType, description }
         },
         { withCredentials: true }
       );
       alert('Dossier refusé avec succès!');
-      setShowRefuseModal(false); // Close modal
-      setProblemType(''); // Reset problem type
-      setDescription(''); // Reset description
+      setShowRefuseModal(false);
+      setProblemType('');
+      setDescription('');
       navigate('/espace-admin/vacataires');
     } catch (err) {
       console.error('Erreur lors du refus du dossier:', err);
@@ -109,7 +108,7 @@ const EtudeDossier = () => {
               </div>
               <div className="detail-row">
                 <span className="detail-label">Date de Naissance :</span>
-                <span>{formatDate(vacataire.Date_naiss)}</span> {/* Fixed date formatting */}
+                <span>{formatDate(vacataire.Date_naiss)}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">Email :</span>
@@ -167,11 +166,11 @@ const EtudeDossier = () => {
               </div>
               <div className="detail-row">
                 <span className="detail-label">État de Dossier :</span>
-                <span>{vacataire.EtatDossier || 'N/A'}</span> {/* Use EtatDossier from backend */}
+                <span>{vacataire.EtatDossier || 'N/A'}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">État de Virement :</span>
-                <span>{vacataire.EtatVirement || 'N/A'}</span> {/* Use EtatVirement from backend */}
+                <span>{vacataire.EtatVirement || 'N/A'}</span>
               </div>
             </div>
           </div>
@@ -225,7 +224,7 @@ const EtudeDossier = () => {
               </div>
               <div className="description-field">
                 <label>
-                  <p>Description du problème :</p>  
+                  <p>Description du problème :</p>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
