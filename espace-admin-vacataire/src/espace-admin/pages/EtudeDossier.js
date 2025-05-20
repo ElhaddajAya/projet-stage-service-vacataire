@@ -114,7 +114,6 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">Date de Naissance :</span>
                 <span>{formatDate(vacataire.Date_naiss)}</span>
-                <span>{formatDate(vacataire.Date_naiss)}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">Email :</span>
