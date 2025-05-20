@@ -208,10 +208,21 @@ app.get('/vacataire-info', (req, res) => {
     const vacataireData = results[0];
     if (vacataireData.Etat_dossier === 'Refusé' && vacataireData.Refus_reason) {
       try {
-        vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+        // Check if Refus_reason is already an object or invalid JSON
+        if (typeof vacataireData.Refus_reason === 'object' && vacataireData.Refus_reason !== null) {
+          // If it's an object, use it as is
+          console.log('Refus_reason is already an object, skipping parse:', vacataireData.Refus_reason);
+        } else if (typeof vacataireData.Refus_reason === 'string') {
+          // Attempt to parse only if it's a string
+          vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+        } else {
+          // Handle invalid cases (e.g., [object Object])
+          console.warn('Invalid Refus_reason format, resetting to null:', vacataireData.Refus_reason);
+          vacataireData.Refus_reason = null;
+        }
       } catch (parseError) {
         console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
-        vacataireData.Refus_reason = null;
+        vacataireData.Refus_reason = null; // Reset to null if parsing fails
       }
     }
     res.json(vacataireData);

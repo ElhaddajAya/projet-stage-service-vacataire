@@ -81,9 +81,8 @@ const SuiviDossier = () => {
         <div className="content">
           {dossierStatus === 'Refusé' && refusReason && (
             <div className="message-bar">
-              <div id="textMsgBar">Dossier refusé : </div>
-              {refusReason.problemType && <span>{refusReason.problemType}</span>}
-              {refusReason.description && <span> - {refusReason.description}</span>}
+              <div id="textMsgBar">{refusReason.problemType && refusReason.problemType } : </div>
+              {refusReason.description && <span> {refusReason.description}</span>}
             </div>
           )}
           <ProgressBar

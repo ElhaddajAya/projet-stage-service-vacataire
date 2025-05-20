@@ -653,20 +653,32 @@ form input[type="password"]:focus {
   }
 }
 .message-bar {
-  background-color: #fee2e2;
-  border-left: 4px solid #ef4444;
+  background-color: #fee2e2; /* Fond rouge clair */
+  border: 1px solid #ef4444; /* Ajout d'une bordure complète pour un look plus "encadré" */
+  border-left: 4px solid #ef4444; /* Conserver la bordure gauche plus épaisse pour l'accentuation */
   color: #b91c1c;
-  padding: 1rem;
-  margin-bottom: 3rem;
-  text-align: center;
-  /* for aligner */
+  padding: 1rem 1.5rem; /* Légèrement plus de padding horizontal pour l'élégance */
+  margin-bottom: 2rem; /* Réduire légèrement la marge pour une meilleure intégration */
+  border-radius: 6px; /* Coins arrondis pour une apparence plus moderne */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre subtile pour un effet "flottant" */
   display: flex;
+  flex-wrap: wrap; /* Permettre au contenu de passer à la ligne si nécessaire */
   justify-content: center;
   align-items: center;
+  gap: 5px; /* Espacement entre les éléments enfants */
+  font-size: 1rem; /* Taille de police cohérente */
+  line-height: 1.5; /* Hauteur de ligne pour une meilleure lisibilité */
 }
+
 .message-bar #textMsgBar {
   font-weight: bold;
   padding-right: 5px;
+  flex-shrink: 0; /* Empêche le rétrécissement excessif */
+}
+
+.message-bar span {
+  flex-shrink: 1; /* Permet aux spans de s'ajuster si nécessaire */
+  text-align: center; /* Assure que chaque span est centré */
 }
 /* disabled progressBar lors Dossier error */
 .progress-container.disabled {
