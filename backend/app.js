@@ -24,28 +24,54 @@ app.use(session({
 
 app.get('/', (req, res) => res.send('Backend opérationnel 🚀'));
 
-// Route to fetch details of a specific vacataire
+// Route to fetch details of a specific vacataire, including teaching information
 app.get('/vacataire-details/:id', (req, res) => {
   const vacataireId = req.params.id;
 
-  const query = `
+  // Query to get vacataire details
+  const vacataireQuery = `
     SELECT ID_vacat, Nom, Prenom, Numero_tele AS Numero_tele, Email, CIN, Date_naiss, 
-           Photo, CIN_fichier, CV, Diplome, Autorisation_fichier, Attest_non_emploi, Fonctionnaire,
-           Etat_dossier AS EtatDossier, Etat_virement AS EtatVirement
+           Photo, CV, Attest_non_emploi AS Attestation, Diplome AS Departement, 
+           Etat_dossier AS EtatDossier, Etat_virement AS EtatVirement, Fonctionnaire,
+           Autorisation_fichier, Attest_non_emploi
     FROM vacataire 
     WHERE ID_vacat = ?
   `;
-  db.query(query, [vacataireId], (err, results) => {
+
+  // Query to get teaching information with filiere name
+  const enseignementQuery = `
+    SELECT e.Matiere, e.Nbr_heurs AS Nombre_heures, e.Semestre, e.Nbr_semaines, f.Nom_fil AS Filiere
+    FROM enseigner e
+    JOIN filiere f ON e.ID_fil = f.ID_fil
+    WHERE e.ID_vacat = ?
+  `;
+
+  // Execute vacataire query
+  db.query(vacataireQuery, [vacataireId], (err, vacataireResults) => {
     if (err) {
       console.error('Erreur lors de la récupération des détails du vacataire:', err);
       return res.status(500).json({ message: 'Erreur serveur' });
     }
 
-    if (results.length === 0) {
+    if (vacataireResults.length === 0) {
       return res.status(404).json({ message: 'Vacataire non trouvé' });
     }
 
-    res.json(results[0]);
+    // Execute enseignement query
+    db.query(enseignementQuery, [vacataireId], (err, enseignementResults) => {
+      if (err) {
+        console.error('Erreur lors de la récupération des informations d\'enseignement:', err);
+        return res.status(500).json({ message: 'Erreur serveur' });
+      }
+
+      // Combine results
+      const responseData = {
+        ...vacataireResults[0],
+        Enseignements: enseignementResults
+      };
+
+      res.json(responseData);
+    });
   });
 });
 

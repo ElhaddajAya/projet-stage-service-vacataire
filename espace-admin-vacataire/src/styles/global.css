@@ -866,6 +866,65 @@ form input[type="password"]:focus {
     font-size: 0.9rem;
   }
 }
+
+.enseignement-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  max-height: 300px; /* Hauteur maximale fixe */
+  overflow-y: auto; /* Barre de défilement verticale si nécessaire */
+  display: block; /* Nécessaire pour que max-height et overflow fonctionnent */
+}
+
+.enseignement-table th,
+.enseignement-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
+}
+
+.enseignement-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  position: sticky;
+  top: 0; /* Fixe les en-têtes en haut lors du défilement */
+  z-index: 1; /* Assure que les en-têtes restent au-dessus des données */
+}
+
+.enseignement-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.enseignement-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Adjust column widths for better spacing */
+.enseignement-table th:nth-child(1),
+.enseignement-table td:nth-child(1) {
+  width: 30%; /* Matière */
+}
+
+.enseignement-table th:nth-child(2),
+.enseignement-table td:nth-child(2) {
+  width: 15%; /* Filière */
+}
+
+.enseignement-table th:nth-child(3),
+.enseignement-table td:nth-child(3) {
+  width: 15%; /* Nombre d'heures */
+}
+
+.enseignement-table th:nth-child(4),
+.enseignement-table td:nth-child(4) {
+  width: 15%; /* Semestre */
+}
+
+.enseignement-table th:nth-child(5),
+.enseignement-table td:nth-child(5) {
+  width: 25%; /* Nombre de semaines */
+}
 .completed-row {
   background-color: #d4eddaa0; /* Slight green background */
   transition: background-color 0.3s ease; /* Smooth transition for visual feedback */
