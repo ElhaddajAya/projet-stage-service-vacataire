@@ -7,6 +7,21 @@
   margin-bottom: 3rem;
 }
 
+.progress-container.disabled {
+  opacity: 0.6; /* Slightly gray out the entire progress bar */
+}
+
+.progress-container.disabled .circle {
+  border-color: #d1d5db; /* Gray border for disabled state */
+  background-color: transparent !important; /* Override active/checked colors */
+  color: #d1d5db !important; /* Gray checkmark */
+  cursor: not-allowed;
+}
+
+.progress-container.disabled .line::before {
+  background-color: #d1d5db; /* Gray line for disabled state */
+}
+
 .progress-step {
   display: flex;
   align-items: center;
@@ -18,7 +33,7 @@
   border: 3px solid #84bef76f;
   border-radius: 50%;
   background-color: transparent;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
   position: relative;
   display: flex;
@@ -33,7 +48,6 @@
   border-color: #5da9f5;
 }
 
-/* Apply hover effect only to circles that are not unclickable */
 .circle:hover:not(.unclickable) {
   transform: scale(1.1); /* Slightly enlarge on hover */
   border-color: #3b82f6; /* Darker blue on hover */
@@ -45,14 +59,14 @@
 }
 
 .circle.unclickable {
-  /* Optional: Add visual cue (e.g., slightly grayed out) to reinforce unclickable state */
   opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .line {
   width: 220px;
   height: 4px;
-  background-color: #84bef76f; /* Start transparent */
+  background-color: #84bef76f;
   margin-left: 8px;
   margin-right: 8px;
   position: relative;
@@ -66,15 +80,14 @@
   left: 0;
   height: 100%;
   width: 0;
-  background-color: #5da9f5; /* Color during animation */
+  background-color: #5da9f5;
   transition: width 0.4s ease;
 }
 
 .line.active::before {
-  width: 100%; /* Animate to full width */
+  width: 100%;
 }
 
-/* Remove the opacity transition since we're handling color entirely with ::before */
 .line.active {
-  /* No need for background-color or opacity here */
+  /* No additional styles needed */
 }

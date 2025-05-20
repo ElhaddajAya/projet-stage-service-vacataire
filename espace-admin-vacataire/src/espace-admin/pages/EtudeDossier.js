@@ -7,14 +7,19 @@ import Sidebar from '../components/Sidebar';
 
 const EtudeDossier = () => {
   const { id } = useParams();
+  const { id } = useParams();
   const [vacataire, setVacataire] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showRefuseModal, setShowRefuseModal] = useState(false);
   const [problemType, setProblemType] = useState('');
   const [description, setDescription] = useState('');
+  const [showRefuseModal, setShowRefuseModal] = useState(false);
+  const [problemType, setProblemType] = useState('');
+  const [description, setDescription] = useState('');
 
   const navigate = useNavigate();
+  const BACKEND_URL = 'http://localhost:5000';
 
   useEffect(() => {
     const fetchVacataireDetails = async () => {
@@ -42,6 +47,7 @@ const EtudeDossier = () => {
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
     return date.toISOString().split('T')[0];
   };
 
@@ -72,10 +78,14 @@ const EtudeDossier = () => {
         { 
           Etat_dossier: 'Refusé',
           Refus_reason: { problemType, description }
+          Refus_reason: { problemType, description }
         },
         { withCredentials: true }
       );
       alert('Dossier refusé avec succès!');
+      setShowRefuseModal(false);
+      setProblemType('');
+      setDescription('');
       setShowRefuseModal(false);
       setProblemType('');
       setDescription('');
@@ -111,6 +121,7 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">Date de Naissance :</span>
                 <span>{formatDate(vacataire.Date_naiss)}</span>
+                <span>{formatDate(vacataire.Date_naiss)}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">Email :</span>
@@ -133,6 +144,16 @@ const EtudeDossier = () => {
                 {vacataire.Photo ? (
                   <a href={`http://localhost:5000/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
                     Voir la Photo
+                  </a>
+                ) : (
+                  <span>Non disponible</span>
+                )}
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">CIN (fichier) :</span>
+                {vacataire.CIN_fichier ? (
+                  <a href={`${BACKEND_URL}/${vacataire.CIN_fichier}`} target="_blank" rel="noopener noreferrer">
+                    Voir le fichier CIN
                   </a>
                 ) : (
                   <span>Non disponible</span>
@@ -173,6 +194,29 @@ const EtudeDossier = () => {
                   </>
                 )}
               </div>
+              {vacataire.Fonctionnaire ? (
+                <div className="detail-row">
+                  <span className="detail-label">Autorisation :</span>
+                  {vacataire.Autorisation_fichier ? (
+                    <a href={`${BACKEND_URL}/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
+                      Voir l'Autorisation
+                    </a>
+                  ) : (
+                    <span>Non disponible</span>
+                  )}
+                </div>
+              ) : (
+                <div className="detail-row">
+                  <span className="detail-label">Attestation de non-emploi :</span>
+                  {vacataire.Attest_non_emploi ? (
+                    <a href={`${BACKEND_URL}/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
+                      Voir l'Attestation
+                    </a>
+                  ) : (
+                    <span>Non disponible</span>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="details-section">
@@ -257,6 +301,7 @@ const EtudeDossier = () => {
               </div>
               <div className="description-field">
                 <label>
+                  <p>Description du problème :</p>
                   <p>Description du problème :</p>
                   <textarea
                     value={description}
