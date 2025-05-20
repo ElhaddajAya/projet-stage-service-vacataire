@@ -1,4 +1,3 @@
-// espace-admin-vacataire/src/espace-admin/pages/EtudeDossier.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,13 +6,13 @@ import '../../styles/global.css';
 import Sidebar from '../components/Sidebar';
 
 const EtudeDossier = () => {
-  const { id } = useParams(); // Get the vacataire ID from the URL
+  const { id } = useParams();
   const [vacataire, setVacataire] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showRefuseModal, setShowRefuseModal] = useState(false); // State for refusal modal
-  const [problemType, setProblemType] = useState(''); // Selected problem type
-  const [description, setDescription] = useState(''); // Description of the problem
+  const [showRefuseModal, setShowRefuseModal] = useState(false);
+  const [problemType, setProblemType] = useState('');
+  const [description, setDescription] = useState('');
 
   const navigate = useNavigate();
 
@@ -23,6 +22,7 @@ const EtudeDossier = () => {
         const response = await axios.get(`http://localhost:5000/vacataire-details/${id}`, {
           withCredentials: true,
         });
+        console.log('Response data:', response.data); // Débogage
         setVacataire(response.data);
         setLoading(false);
       } catch (err) {
@@ -39,11 +39,10 @@ const EtudeDossier = () => {
   if (error) return <div>{error}</div>;
   if (!vacataire) return <div>Vacataire non trouvé</div>;
 
-  // Formater la date pour l'affichage (YYYY-MM-DD)
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+    return date.toISOString().split('T')[0];
   };
 
   const handleValidateDossier = async () => {
@@ -72,14 +71,14 @@ const EtudeDossier = () => {
         `http://localhost:5000/vacataire/${id}/update-etat`,
         { 
           Etat_dossier: 'Refusé',
-          Refus_reason: { problemType, description } // Store reason as an object
+          Refus_reason: { problemType, description }
         },
         { withCredentials: true }
       );
       alert('Dossier refusé avec succès!');
-      setShowRefuseModal(false); // Close modal
-      setProblemType(''); // Reset problem type
-      setDescription(''); // Reset description
+      setShowRefuseModal(false);
+      setProblemType('');
+      setDescription('');
       navigate('/espace-admin/vacataires');
     } catch (err) {
       console.error('Erreur lors du refus du dossier:', err);
@@ -103,7 +102,7 @@ const EtudeDossier = () => {
               <h2>Informations Personnelles</h2>
               <div className="detail-row">
                 <span className="detail-label">Nom :</span>
-                <span>{vacataire.Nom}</span>
+                <span>{vacataire.Nom || 'N/A'}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">Prénom :</span>
@@ -111,7 +110,7 @@ const EtudeDossier = () => {
               </div>
               <div className="detail-row">
                 <span className="detail-label">Date de Naissance :</span>
-                <span>{formatDate(vacataire.Date_naiss)}</span> {/* Fixed date formatting */}
+                <span>{formatDate(vacataire.Date_naiss)}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">Email :</span>
@@ -132,7 +131,7 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">Photo :</span>
                 {vacataire.Photo ? (
-                  <a href={vacataire.Photo} target="_blank" rel="noopener noreferrer">
+                  <a href={`http://localhost:5000/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
                     Voir la Photo
                   </a>
                 ) : (
@@ -142,7 +141,7 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">CV :</span>
                 {vacataire.CV ? (
-                  <a href={vacataire.CV} target="_blank" rel="noopener noreferrer">
+                  <a href={`http://localhost:5000/${vacataire.CV}`} target="_blank" rel="noopener noreferrer">
                     Voir le CV
                   </a>
                 ) : (
@@ -150,31 +149,62 @@ const EtudeDossier = () => {
                 )}
               </div>
               <div className="detail-row">
-                <span className="detail-label">Attestation :</span>
-                {vacataire.Attest_non_emploi ? (
-                  <a href={vacataire.Attest_non_emploi} target="_blank" rel="noopener noreferrer">
-                    Voir l'Attestation
-                  </a>
+                {vacataire.Fonctionnaire ? (
+                  <>
+                    <span className="detail-label">Autorisation :</span>
+                    {vacataire.Autorisation_fichier ? (
+                      <a href={`http://localhost:5000/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
+                        Voir l'Autorisation
+                      </a>
+                    ) : (
+                      <span>Non disponible</span>
+                    )}
+                  </>
                 ) : (
-                  <span>Non disponible</span>
+                  <>
+                    <span className="detail-label">Attestation de non-emploi :</span>
+                    {vacataire.Attest_non_emploi ? (
+                      <a href={`http://localhost:5000/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
+                        Voir l'Attestation
+                      </a>
+                    ) : (
+                      <span>Non disponible</span>
+                    )}
+                  </>
                 )}
               </div>
             </div>
 
             <div className="details-section">
-              <h2>Autres Informations</h2>
-              <div className="detail-row">
-                <span className="detail-label">Département :</span>
-                <span>{vacataire.Diplome || 'N/A'}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">État de Dossier :</span>
-                <span>{vacataire.EtatDossier || 'N/A'}</span> {/* Use EtatDossier from backend */}
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">État de Virement :</span>
-                <span>{vacataire.EtatVirement || 'N/A'}</span> {/* Use EtatVirement from backend */}
-              </div>
+              <h2>Matières Enseignées</h2>
+              {vacataire.Enseignements && vacataire.Enseignements.length > 0 ? (
+                <div className="enseignement-table-container">
+                  <table className="enseignement-table">
+                    <thead>
+                      <tr>
+                        <th>Matière</th>
+                        <th>Filière</th>
+                        <th>Nombre d'heures</th>
+                        <th>Semestre</th>
+                        <th>Nombre de semaines</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {vacataire.Enseignements.map((enseignement, index) => (
+                        <tr key={index}>
+                          <td>{enseignement.Matiere || 'N/A'}</td>
+                          <td>{enseignement.Filiere || 'N/A'}</td>
+                          <td>{enseignement.Nombre_heures || 'N/A'}</td>
+                          <td>{enseignement.Semestre || 'N/A'}</td>
+                          <td>{enseignement.Nbr_semaines || 'N/A'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>Aucune matière enseignée enregistrée.</p>
+              )}
             </div>
           </div>
 
@@ -227,7 +257,7 @@ const EtudeDossier = () => {
               </div>
               <div className="description-field">
                 <label>
-                  <p>Description du problème :</p>  
+                  <p>Description du problème :</p>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
