@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import '../../styles/global.css';
+import Sidebar from '../components/Sidebar';
 
 const EtudeDossier = () => {
   const { id } = useParams();
@@ -22,7 +23,7 @@ const EtudeDossier = () => {
         const response = await axios.get(`http://localhost:5000/vacataire-details/${id}`, {
           withCredentials: true,
         });
-        console.log('Response data:', response.data); // Débogage
+        console.log('Response data:', response.data);
         setVacataire(response.data);
         setLoading(false);
       } catch (err) {
@@ -42,7 +43,6 @@ const EtudeDossier = () => {
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
     return date.toISOString().split('T')[0];
   };
 
@@ -80,9 +80,6 @@ const EtudeDossier = () => {
       setShowRefuseModal(false);
       setProblemType('');
       setDescription('');
-      setShowRefuseModal(false);
-      setProblemType('');
-      setDescription('');
       navigate('/espace-admin/vacataires');
     } catch (err) {
       console.error('Erreur lors du refus du dossier:', err);
@@ -97,8 +94,16 @@ const EtudeDossier = () => {
   return (
     <div>
       <Header />
+      <Sidebar />
       <main className="page-container">
         <h1 className="page-title">Étude du Dossier - {vacataire.Nom} {vacataire.Prenom || ''}</h1>
+        {vacataire.EtatDossier === 'Refusé' && vacataire.Refus_reason && (
+          <div className="message-bar">
+            <div id="textMsgBar">Dossier refusé : </div>
+            {vacataire.Refus_reason.problemType && <span>{vacataire.Refus_reason.problemType}</span>}
+            {vacataire.Refus_reason.description && <span> - {vacataire.Refus_reason.description}</span>}
+          </div>
+        )}
         <div className="vacataire-details">
           <div className="details-grid">
             <div className="details-section">
@@ -134,7 +139,7 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">Photo :</span>
                 {vacataire.Photo ? (
-                  <a href={`http://localhost:5000/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
+                  <a href={`${BACKEND_URL}/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
                     Voir la Photo
                   </a>
                 ) : (
@@ -154,36 +159,48 @@ const EtudeDossier = () => {
               <div className="detail-row">
                 <span className="detail-label">CV :</span>
                 {vacataire.CV ? (
-                  <a href={`http://localhost:5000/${vacataire.CV}`} target="_blank" rel="noopener noreferrer">
+                  <a href={`${BACKEND_URL}/${vacataire.CV}`} target="_blank" rel="noopener noreferrer">
                     Voir le CV
                   </a>
                 ) : (
                   <span>Non disponible</span>
                 )}
               </div>
-              {vacataire.Fonctionnaire ? (
-                <div className="detail-row">
-                  <span className="detail-label">Autorisation :</span>
-                  {vacataire.Autorisation_fichier ? (
-                    <a href={`${BACKEND_URL}/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
-                      Voir l'Autorisation
-                    </a>
-                  ) : (
-                    <span>Non disponible</span>
-                  )}
-                </div>
-              ) : (
-                <div className="detail-row">
-                  <span className="detail-label">Attestation de non-emploi :</span>
-                  {vacataire.Attest_non_emploi ? (
-                    <a href={`${BACKEND_URL}/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
-                      Voir l'Attestation
-                    </a>
-                  ) : (
-                    <span>Non disponible</span>
-                  )}
-                </div>
-              )}
+              <div className="detail-row">
+                <span className="detail-label">Diplôme :</span>
+                {vacataire.Diplome ? (
+                  <a href={`${BACKEND_URL}/${vacataire.Diplome}`} target="_blank" rel="noopener noreferrer">
+                    Voir le Diplôme
+                  </a>
+                ) : (
+                  <span>Non disponible</span>
+                )}
+              </div>
+              <div className="detail-row">
+                {vacataire.Fonctionnaire ? (
+                  <>
+                    <span className="detail-label">Autorisation :</span>
+                    {vacataire.Autorisation_fichier ? (
+                      <a href={`${BACKEND_URL}/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
+                        Voir l'Autorisation
+                      </a>
+                    ) : (
+                      <span>Non disponible</span>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <span className="detail-label">Attestation de non-emploi :</span>
+                    {vacataire.Attest_non_emploi ? (
+                      <a href={`${BACKEND_URL}/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
+                        Voir l'Attestation
+                      </a>
+                    ) : (
+                      <span>Non disponible</span>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
 
             <div className="details-section">
@@ -223,17 +240,17 @@ const EtudeDossier = () => {
             <button className="btn-retour" onClick={() => navigate('/espace-admin/vacataires')}>
               Retour
             </button>
-            <button
-              className="btn-valider"
+            <button 
+              className="btn-valider" 
               onClick={handleValidateDossier}
-              disabled={vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué'}
+              disabled={(vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué') || vacataire.EtatDossier === 'Refusé'}  
             >
               Valider dossier
             </button>
-            <button
-              className="btn-refuser"
+            <button 
+              className="btn-refuser" 
               onClick={handleOpenRefuseModal}
-              disabled={vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué'}
+              disabled={(vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué') || vacataire.EtatDossier === 'Refusé'}
             >
               Refuser dossier
             </button>
@@ -289,7 +306,7 @@ const EtudeDossier = () => {
                 <button
                   className="btn-valider"
                   onClick={handleRefuseDossier}
-                  disabled={!problemType || !description.trim() || (vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué')}
+                  disabled={!problemType || !description.trim()}
                 >
                   Confirmer refus
                 </button>
