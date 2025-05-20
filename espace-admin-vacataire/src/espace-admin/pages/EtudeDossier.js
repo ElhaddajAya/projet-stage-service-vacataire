@@ -74,7 +74,6 @@ const EtudeDossier = () => {
         { 
           Etat_dossier: 'Refusé',
           Refus_reason: { problemType, description }
-          Refus_reason: { problemType, description }
         },
         { withCredentials: true }
       );
