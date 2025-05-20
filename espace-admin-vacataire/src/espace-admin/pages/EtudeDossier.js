@@ -278,7 +278,6 @@ const EtudeDossier = () => {
               <div className="description-field">
                 <label>
                   <p>Description du problème :</p>
-                  <p>Description du problème :</p>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
