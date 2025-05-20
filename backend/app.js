@@ -33,7 +33,7 @@ app.get('/vacataire-details/:id', (req, res) => {
     SELECT ID_vacat, Nom, Prenom, Numero_tele AS Numero_tele, Email, CIN, Date_naiss, 
            Photo, CV, Attest_non_emploi AS Attestation, Diplome AS Departement, 
            Etat_dossier AS EtatDossier, Etat_virement AS EtatVirement, Fonctionnaire,
-           Autorisation_fichier, Attest_non_emploi
+           Autorisation_fichier, Attest_non_emploi, CIN_fichier
     FROM vacataire 
     WHERE ID_vacat = ?
   `;

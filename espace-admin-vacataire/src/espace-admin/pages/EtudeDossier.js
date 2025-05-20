@@ -164,31 +164,6 @@ const EtudeDossier = () => {
                   <span>Non disponible</span>
                 )}
               </div>
-              <div className="detail-row">
-                {vacataire.Fonctionnaire ? (
-                  <>
-                    <span className="detail-label">Autorisation :</span>
-                    {vacataire.Autorisation_fichier ? (
-                      <a href={`http://localhost:5000/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
-                        Voir l'Autorisation
-                      </a>
-                    ) : (
-                      <span>Non disponible</span>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <span className="detail-label">Attestation de non-emploi :</span>
-                    {vacataire.Attest_non_emploi ? (
-                      <a href={`http://localhost:5000/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
-                        Voir l'Attestation
-                      </a>
-                    ) : (
-                      <span>Non disponible</span>
-                    )}
-                  </>
-                )}
-              </div>
               {vacataire.Fonctionnaire ? (
                 <div className="detail-row">
                   <span className="detail-label">Autorisation :</span>
