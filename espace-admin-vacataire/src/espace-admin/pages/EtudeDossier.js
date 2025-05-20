@@ -7,13 +7,9 @@ import Sidebar from '../components/Sidebar';
 
 const EtudeDossier = () => {
   const { id } = useParams();
-  const { id } = useParams();
   const [vacataire, setVacataire] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showRefuseModal, setShowRefuseModal] = useState(false);
-  const [problemType, setProblemType] = useState('');
-  const [description, setDescription] = useState('');
   const [showRefuseModal, setShowRefuseModal] = useState(false);
   const [problemType, setProblemType] = useState('');
   const [description, setDescription] = useState('');
