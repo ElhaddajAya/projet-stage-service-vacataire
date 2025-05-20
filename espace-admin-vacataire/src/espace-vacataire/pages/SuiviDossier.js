@@ -154,7 +154,7 @@ const SuiviDossier = () => {
         <div className="content">
           {dossierStatus === 'Refusé' && (
             <div className="message-bar">
-              <div id='textMsgBar'>Dossier refusé : </div> Le document CV n'est pas conforme.
+              <div id='textMsgBar'>Dossier refusé: </div> Le document CV n'est pas conforme.
             </div>
           )} 
           <ProgressBar

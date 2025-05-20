@@ -657,8 +657,9 @@ form input[type="password"]:focus {
 }
 .message-bar #textMsgBar {
   font-weight: bold;
+  padding-right: 5px;
 }
-/* Hiiiiiiind */
+/* disabled progressBar lors Dossier error */
 .progress-container.disabled {
   pointer-events: none !important; /* Désactive les clics */
   opacity: 0.6 !important; /* Effet grisé */
