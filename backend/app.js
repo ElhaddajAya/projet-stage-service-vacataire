@@ -31,9 +31,9 @@ app.get('/vacataire-details/:id', (req, res) => {
   // Query to get vacataire details
   const vacataireQuery = `
     SELECT ID_vacat, Nom, Prenom, Numero_tele AS Numero_tele, Email, CIN, Date_naiss, 
-           Photo, CV, Attest_non_emploi AS Attestation, Diplome AS Departement, 
+           Photo, CV, Attest_non_emploi AS Attestation, Diplome, 
            Etat_dossier AS EtatDossier, Etat_virement AS EtatVirement, Fonctionnaire,
-           Autorisation_fichier, Attest_non_emploi, CIN_fichier
+           Autorisation_fichier, Attest_non_emploi, CIN_fichier, Refus_reason
     FROM vacataire 
     WHERE ID_vacat = ?
   `;
@@ -57,6 +57,17 @@ app.get('/vacataire-details/:id', (req, res) => {
       return res.status(404).json({ message: 'Vacataire non trouvé' });
     }
 
+    const vacataireData = vacataireResults[0];
+    // Parse Refus_reason if it exists and the dossier is refused
+    if (vacataireData.EtatDossier === 'Refusé' && vacataireData.Refus_reason) {
+      try {
+        vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+      } catch (parseError) {
+        console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
+        vacataireData.Refus_reason = null; // Reset to null if parsing fails
+      }
+    }
+
     // Execute enseignement query
     db.query(enseignementQuery, [vacataireId], (err, enseignementResults) => {
       if (err) {
@@ -66,7 +77,7 @@ app.get('/vacataire-details/:id', (req, res) => {
 
       // Combine results
       const responseData = {
-        ...vacataireResults[0],
+        ...vacataireData,
         Enseignements: enseignementResults
       };
 
@@ -82,8 +93,24 @@ app.put('/vacataire/:id/update-etat', (req, res) => {
 
   if (!Etat_dossier) return res.status(400).json({ message: 'État du dossier est requis' });
 
+  // Validate Refus_reason if provided
+  let refusReasonToStore = null;
+  if (Refus_reason) {
+    if (typeof Refus_reason === 'string') {
+      console.error('Refus_reason received as string:', Refus_reason);
+      return res.status(400).json({ message: 'Refus_reason doit être un objet, pas une chaîne' });
+    }
+    try {
+      refusReasonToStore = JSON.stringify(Refus_reason);
+      console.log('Storing Refus_reason:', refusReasonToStore);
+    } catch (error) {
+      console.error('Erreur lors de la conversion de Refus_reason en JSON:', error);
+      return res.status(400).json({ message: 'Format invalide pour Refus_reason' });
+    }
+  }
+
   const query = 'UPDATE vacataire SET Etat_dossier = ?, Refus_reason = ? WHERE ID_vacat = ?';
-  db.query(query, [Etat_dossier, Refus_reason ? JSON.stringify(Refus_reason) : null, vacataireId], (err, results) => {
+  db.query(query, [Etat_dossier, refusReasonToStore, vacataireId], (err, results) => {
     if (err) {
       console.error('Erreur lors de la mise à jour de l\'état du dossier:', err);
       return res.status(500).json({ message: 'Erreur serveur' });
@@ -180,7 +207,12 @@ app.get('/vacataire-info', (req, res) => {
     if (results.length === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
     const vacataireData = results[0];
     if (vacataireData.Etat_dossier === 'Refusé' && vacataireData.Refus_reason) {
-      vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason); // Parse Refus_reason
+      try {
+        vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+      } catch (parseError) {
+        console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
+        vacataireData.Refus_reason = null;
+      }
     }
     res.json(vacataireData);
   });

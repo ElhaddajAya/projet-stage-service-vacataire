@@ -934,3 +934,13 @@ form input[type="password"]:focus {
 .completed-row:hover {
   background-color: #d4edda !important; /* Slightly darker green on hover */
 }
+
+.refused-row {
+  background-color: #f8d7da!important; /* Slight red background */
+  transition: background-color 0.3s ease; /* Smooth transition for visual feedback */
+}
+
+/* Optional: Add hover effect to distinguish rows */
+.refused-row:hover {
+  background-color: #f5c6cb !important; /* Slightly darker red on hover */
+}

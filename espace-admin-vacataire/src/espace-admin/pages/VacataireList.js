@@ -163,6 +163,8 @@ const VacataireList = () => {
                   className={
                     vacataire.Etat_dossier === 'Validé' && vacataire.Etat_virement === 'Effectué'
                       ? 'completed-row'
+                      : vacataire.Etat_dossier === 'Refusé'
+                      ? 'refused-row'
                       : ''
                   }
                 >
@@ -170,7 +172,7 @@ const VacataireList = () => {
                   <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
                     {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
                   </td>
-                  <td title={vacataire.Etat_dossier || 'En attente'}>{vacataire.Etat_dossier || 'En attente'}</td>
+                  <td title={vacataire.Etat_dossier === 'En cours' ? 'En attente' : 'En attente' || 'En attente'}>{vacataire.Etat_dossier === 'En cours' ? 'En attente' : vacataire.Etat_dossier || 'En attente'}</td>
                   <td title={vacataire.Etat_virement || 'En attente'}>{vacataire.Etat_virement || 'En attente'}</td>
                   <td>
                     <button
