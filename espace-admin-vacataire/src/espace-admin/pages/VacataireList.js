@@ -1,4 +1,3 @@
-// espace-admin-vacataire/src/espace-admin/pages/VacataireList.js
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -159,7 +158,14 @@ const VacataireList = () => {
             </thead>
             <tbody>
               {currentVacataires.map((vacataire, index) => (
-                <tr key={vacataire.ID_vacat}>
+                <tr
+                  key={vacataire.ID_vacat}
+                  className={
+                    vacataire.Etat_dossier === 'Validé' && vacataire.Etat_virement === 'Effectué'
+                      ? 'completed-row'
+                      : ''
+                  }
+                >
                   <td>{indexOfFirstVacataire + index + 1}</td> {/* Sequential order number */}
                   <td title={`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}>
                     {`${vacataire.Nom || ''} ${vacataire.Prenom || ''}`}
@@ -172,13 +178,13 @@ const VacataireList = () => {
                       onClick={() => handleVirement(vacataire)}
                       disabled={vacataire.Etat_dossier !== 'Validé'}
                     >
-                      Valider Virement
+                      Effectuer Virement
                     </button>
                     <button
                       className="btn-etude"
                       onClick={() => handleEtudeDossier(vacataire.ID_vacat)}
                     >
-                      Étude Dossier
+                      Étudier Dossier
                     </button>
                   </td>
                 </tr>

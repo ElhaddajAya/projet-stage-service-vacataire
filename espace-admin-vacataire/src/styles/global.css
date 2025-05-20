@@ -857,3 +857,12 @@ form input[type="password"]:focus {
     font-size: 0.9rem;
   }
 }
+.completed-row {
+  background-color: #d4eddaa0; /* Slight green background */
+  transition: background-color 0.3s ease; /* Smooth transition for visual feedback */
+}
+
+/* Optional: Add hover effect to distinguish rows */
+.completed-row:hover {
+  background-color: #d4edda !important; /* Slightly darker green on hover */
+}
