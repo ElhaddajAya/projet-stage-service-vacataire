@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import '../../styles/global.css';
-import Sidebar from '../components/Sidebar';
 
 const EtudeDossier = () => {
   const { id } = useParams();
@@ -93,7 +92,6 @@ const EtudeDossier = () => {
   return (
     <div>
       <Header />
-      <Sidebar />
       <main className="page-container">
         <h1 className="page-title">Étude du Dossier - {vacataire.Nom} {vacataire.Prenom || ''}</h1>
         <div className="vacataire-details">
@@ -214,10 +212,18 @@ const EtudeDossier = () => {
             <button className="btn-retour" onClick={() => navigate('/espace-admin/vacataires')}>
               Retour
             </button>
-            <button className="btn-valider" onClick={handleValidateDossier}>
+            <button
+              className="btn-valider"
+              onClick={handleValidateDossier}
+              disabled={vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué'}
+            >
               Valider dossier
             </button>
-            <button className="btn-refuser" onClick={handleOpenRefuseModal}>
+            <button
+              className="btn-refuser"
+              onClick={handleOpenRefuseModal}
+              disabled={vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué'}
+            >
               Refuser dossier
             </button>
           </div>
@@ -272,7 +278,7 @@ const EtudeDossier = () => {
                 <button
                   className="btn-valider"
                   onClick={handleRefuseDossier}
-                  disabled={!problemType || !description.trim()}
+                  disabled={!problemType || !description.trim() || (vacataire.EtatDossier === 'Validé' && vacataire.EtatVirement === 'Effectué')}
                 >
                   Confirmer refus
                 </button>

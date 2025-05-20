@@ -626,10 +626,19 @@ form input[type="password"]:focus {
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-left: 5px;
+  transition: all 0.3s ease;
 }
 
 .button-group .btn-refuser:hover {
-  background-color: #c0392b !important; /* Specific override for Etude Dossier */
+  background-color: #c0392b; /* Specific override for Etude Dossier */
+}
+/* New rule to disable hover when disabled */
+.btn-refuser:disabled,
+.btn-refuser[disabled] {
+  cursor: not-allowed; /* Change cursor to indicate unclickable */
+  opacity: 0.5; /* Slightly gray out the button */
+  background-color: #e74c3c; /* Default color, adjust to match your disabled state */
+  /* Override hover effect */
 }
 
 /* Responsive Design */

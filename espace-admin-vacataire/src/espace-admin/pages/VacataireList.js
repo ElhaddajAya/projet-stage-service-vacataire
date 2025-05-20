@@ -176,7 +176,7 @@ const VacataireList = () => {
                     <button
                       className="btn-valider"
                       onClick={() => handleVirement(vacataire)}
-                      disabled={vacataire.Etat_dossier !== 'Validé'}
+                      disabled={vacataire.Etat_dossier !== 'Validé' || vacataire.Etat_virement === 'Effectué'}
                     >
                       Effectuer Virement
                     </button>
