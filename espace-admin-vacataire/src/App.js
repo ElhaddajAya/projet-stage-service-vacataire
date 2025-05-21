@@ -6,6 +6,7 @@ import VacataireList from './espace-admin/pages/VacataireList';
 import SuiviDossier from './espace-vacataire/pages/SuiviDossier';
 import EtudeDossier from './espace-admin/pages/EtudeDossier';
 import './styles/global.css';
+import InfosPersonnelles from './espace-vacataire/pages/InfosPersonnelles';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/espace-vacataire/suivi-dossier" element={<SuiviDossier />} />
         <Route path="/espace-admin/vacataires" element={<VacataireList />} />
         <Route path="/espace-admin/etude-dossier/:id" element={<EtudeDossier />} />
+        <Route path="/espace-vacataire/infos-personnelles" element={<InfosPersonnelles />} />
       </Routes>
     </Router>
   );

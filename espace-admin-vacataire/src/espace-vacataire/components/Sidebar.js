@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../style/sidebar.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import avatar from '../../../src/avatar.png'; // Default avatar
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const [userData, setUserData] = useState({ nom: 'Utilisateur', prenom: '', photo: null });
@@ -73,7 +73,8 @@ const Sidebar = () => {
         </header>
         <ul>
           <li>
-            <a href="#"><i className="fas fa-user"></i> Infos Personelles</a>
+            {/* <a href="#"><i className="fas fa-user"></i> Infos Personelles</a> */}
+            <Link to="/espace-vacataire/infos-personnelles"><i className="fas fa-user"></i> Infos Personnelles</Link>
           </li>
           <li>
             <a href="#"><i className="fas fa-file-alt"></i> Documents</a>

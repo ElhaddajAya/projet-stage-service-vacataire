@@ -1,0 +1,115 @@
+.page-container {
+  margin-left: 250px; /* Ajusté pour la sidebar */
+  padding: 40px 20px; /* Plus de padding vertical pour un meilleur espacement */
+  /* background-color: #f9f9f9; Conserver la couleur de fond */
+  min-height: calc(100vh - 60px); /* Ajusté pour le header */
+  display: flex; /* Utiliser flexbox pour centrer */
+  flex-direction: column;
+  align-items: center; /* Centrer horizontalement */
+  justify-content: center; /* Centrer verticalement */
+}
+
+.page-title {
+  font-size: 28px; /* Taille légèrement plus grande pour un titre plus élégant */
+  font-weight: 700; /* Poids plus marqué */
+  margin-bottom: 30px; /* Plus d'espace en bas */
+  color: #333;
+  text-align: center; /* Centrer le titre */
+  letter-spacing: 1px; /* Espacement des lettres pour un look raffiné */
+}
+
+.personal-info-container {
+  max-width: 600px; /* Largeur maximale conservée */
+  width: 100%; /* S'assurer qu'il prend toute la largeur disponible jusqu'à max-width */
+  background: #fff; /* Conserver la couleur de fond */
+  padding: 30px; /* Plus de padding pour un meilleur espacement interne */
+  border-radius: 12px; /* Bordures plus arrondies */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre plus douce et plus profonde */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
+}
+
+.personal-info-container:hover {
+  transform: translateY(-5px); /* Légère élévation au survol */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between; /* Conserver l'alignement entre label et valeur */
+  align-items: center; /* Alignement vertical centré */
+  margin-bottom: 20px; /* Plus d'espace entre les lignes */
+  font-size: 16px;
+  color: #555;
+  padding: 10px 0; /* Espacement vertical interne */
+  border-bottom: 1px solid #eee; /* Ligne de séparation subtile */
+  transition: background-color 0.2s ease; /* Transition pour un effet au survol */
+}
+
+.info-row:last-child {
+  border-bottom: none; /* Pas de bordure pour la dernière ligne */
+}
+
+.info-row:hover {
+  background-color: #f7f7f7; /* Légère couleur de fond au survol */
+}
+
+.info-label {
+  font-weight: 600; /* Poids légèrement plus léger mais toujours marqué */
+  color: #333;
+  width: 180px; /* Largeur fixe pour les labels */
+  display: inline-block; /* Assurer un bon alignement */
+}
+
+.info-value {
+  color: #000;
+  font-weight: 400; /* Poids normal pour les valeurs */
+  text-align: right; /* Alignement à droite pour un look plus propre */
+  flex: 1; /* Prend tout l'espace restant */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .page-container {
+    margin-left: 0; /* Pas de marge si la sidebar est masquée */
+    padding: 20px; /* Réduire le padding sur mobile */
+  }
+
+  .personal-info-container {
+    padding: 20px; /* Réduire le padding sur mobile */
+  }
+
+  .info-row {
+    flex-direction: column; /* Passer en colonne sur mobile */
+    align-items: flex-start; /* Aligner à gauche */
+    padding: 8px 0; /* Réduire l'espacement */
+  }
+
+  .info-label {
+    width: auto; /* Pas de largeur fixe sur mobile */
+    margin-bottom: 5px; /* Espacement entre label et valeur */
+  }
+
+  .info-value {
+    text-align: left; /* Aligner à gauche sur mobile */
+  }
+
+  .page-title {
+    font-size: 24px; /* Réduire la taille du titre sur mobile */
+    margin-bottom: 20px; /* Réduire l'espace */
+  }
+}
+
+/* Pour les écrans encore plus petits (par exemple, téléphones en mode portrait) */
+@media (max-width: 480px) {
+  .personal-info-container {
+    padding: 15px; /* Encore moins de padding */
+  }
+
+  .info-row {
+    margin-bottom: 15px; /* Réduire l'espace entre les lignes */
+  }
+
+  .info-label, .info-value {
+    font-size: 14px; /* Réduire la taille de la police */
+  }
+}
