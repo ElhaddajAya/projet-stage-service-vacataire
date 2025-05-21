@@ -73,11 +73,11 @@ const Sidebar = () => {
         </header>
         <ul>
           <li>
-            {/* <a href="#"><i className="fas fa-user"></i> Infos Personelles</a> */}
             <Link to="/espace-vacataire/infos-personnelles"><i className="fas fa-user"></i> Infos Personnelles</Link>
           </li>
           <li>
-            <a href="#"><i className="fas fa-file-alt"></i> Documents</a>
+            {/* <a href="#"><i className="fas fa-file-alt"></i> Documents</a> */}
+            <Link to="/espace-vacataire/documents"><i className="fas fa-file-alt"></i> Documents</Link>
           </li>
           <li>
             <a href="#"><i className="fas fa-user-cog"></i> Compte</a>

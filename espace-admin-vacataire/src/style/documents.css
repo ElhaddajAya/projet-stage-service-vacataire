@@ -1,0 +1,131 @@
+.page-container {
+  margin-left: 100px; /* Ajusté pour la sidebar */
+  padding: 40px 20px;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrer horizontalement */
+  justify-content: center; /* Centrer verticalement */
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.documents-container {
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.documents-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.doc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  text-align: right;
+  font-size: 16px;
+  color: #555;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.doc-row:last-child {
+  border-bottom: none;
+}
+
+.doc-row:hover {
+  background-color: #f7f7f7;
+}
+
+.doc-label {
+  font-weight: 600;
+  color: #333;
+  width: 180px;
+  display: inline-block;
+}
+
+.doc-row a {
+  color: #007bff; /* Couleur bleue pour les liens */
+  text-decoration: none;
+  font-weight: 400;
+  flex: 1;
+  text-align: right;
+  transition: color 0.2s ease;
+}
+
+.doc-row a:hover {
+  color: #0056b3; /* Couleur plus foncée au survol */
+  text-decoration: underline;
+}
+
+.doc-row span {
+  color: #888; /* Couleur pour "Non disponible" */
+  font-weight: 400;
+  flex: 1;
+  text-align: right;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .page-container {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .documents-container {
+    padding: 20px;
+  }
+
+  .doc-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 0;
+  }
+
+  .doc-label {
+    width: auto;
+    margin-bottom: 5px;
+  }
+
+  .doc-row a,
+  .doc-row span {
+    text-align: left;
+  }
+
+  .page-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .documents-container {
+    padding: 15px;
+  }
+
+  .doc-row {
+    margin-bottom: 15px;
+  }
+
+  .doc-label,
+  .doc-row a,
+  .doc-row span {
+    font-size: 14px;
+  }
+}

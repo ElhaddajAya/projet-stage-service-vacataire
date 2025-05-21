@@ -1,7 +1,6 @@
 .page-container {
-  margin-left: 250px; /* Ajusté pour la sidebar */
+  margin-left: 100px; /* Ajusté pour la sidebar */
   padding: 40px 20px; /* Plus de padding vertical pour un meilleur espacement */
-  /* background-color: #f9f9f9; Conserver la couleur de fond */
   min-height: calc(100vh - 60px); /* Ajusté pour le header */
   display: flex; /* Utiliser flexbox pour centrer */
   flex-direction: column;
