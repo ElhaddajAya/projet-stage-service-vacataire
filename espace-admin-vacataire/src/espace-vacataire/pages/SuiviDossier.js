@@ -41,7 +41,7 @@ const SuiviDossier = () => {
               if (data.Etat_dossier === 'En cours' && data.Etat_virement === 'En attente') subStep = 1;
               else if (data.Etat_dossier === 'Validé' && data.Etat_virement === 'En attente') subStep = 2;
               else if (data.Etat_dossier === 'Validé' && data.Etat_virement === 'Effectué') subStep = 3;
-              else if (data.Etat_dossier === 'Refusé') subStep = 1; // Default to initial substep for refused
+              else if (data.Etat_dossier === 'Refusé') subStep = 1;
             }
           }
 
@@ -77,16 +77,21 @@ const SuiviDossier = () => {
     <div>
       <Header />
       <div className="main">
+        <input type="checkbox" id="check" />
+        <label htmlFor="check">
+          <i className="fas fa-bars" id="btn"></i>
+          <i className="fas fa-times" id="cancel"></i>
+        </label>
         <Sidebar />
-        <div className="content">
+        <div className="page-container">
           {dossierStatus === 'Refusé' && refusReason && (
             <div className="message-bar">
-              <div id="textMsgBar">{refusReason.problemType && refusReason.problemType } : </div>
-              {refusReason.description && <span> {refusReason.description}</span>}
+              <div id="textMsgBar">{refusReason.problemType && refusReason.problemType}: </div>
+              {refusReason.description && <span>{refusReason.description}</span>}
             </div>
           )}
           <ProgressBar
-            step={dossierStatus === 'Refusé' ? 3 : currentPhase} // Force Phase 3 for refused
+            step={dossierStatus === 'Refusé' ? 3 : currentPhase}
             subStep={currentPhase === 3 ? subStep : 0}
             onCircleClick={handleCircleClick}
             isVirementEffectue={isVirementEffectue}
@@ -94,7 +99,9 @@ const SuiviDossier = () => {
             phase2Complete={phase2Complete}
             isDisabled={dossierStatus === 'Refusé'}
           />
-          {renderPhase()}
+          <div className="content">
+            {renderPhase()}
+          </div>
         </div>
       </div>
     </div>

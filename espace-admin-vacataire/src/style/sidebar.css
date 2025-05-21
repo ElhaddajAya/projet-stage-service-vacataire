@@ -127,7 +127,7 @@ label #btn, label #cancel {
   pointer-events: none;
 }
 
-#check:checked ~ section {
+/* #check:checked ~ section {
   margin-left: 250px;
 }
 
@@ -136,4 +136,4 @@ section {
   background-size: cover;
   height: 100vh;
   transition: all .5s;
-}
+} */

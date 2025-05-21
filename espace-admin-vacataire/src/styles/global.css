@@ -128,15 +128,29 @@ header h1 {
   text-decoration: underline;
 }
 
-/* Main content wrapper for pages like SuiviDossier */
+/* Par défaut, pas de décalage lorsque la sidebar est cachée */
 .main {
-  min-height: calc(100vh - 80px);
-  height: auto;
-  display: flex;
-  position: relative;
+  margin-left: 0;
+  transition: margin-left 0.5s ease; /* Synchroniser avec la transition de la sidebar */
 }
 
-/* Content container */
+/* Décalage lorsque la sidebar est ouverte */
+#check:checked ~ .main {
+  margin-left: 290px; /* Doit correspondre à la largeur de la sidebar */
+}
+
+/* Responsive design : pas de décalage sur mobile */
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0; /* Pas de marge sur mobile */
+  }
+
+  #check:checked ~ .main {
+    margin-left: 0; /* Pas de décalage sur mobile */
+  }
+}
+
+/* Content container
 .content {
   max-width: 800px;
   margin: 0 auto;
@@ -146,7 +160,7 @@ header h1 {
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
   width: 100%;
   box-sizing: border-box;
-}
+} */
 
 /* Navigation buttons */
 .navigation-buttons {
@@ -216,8 +230,47 @@ form input[type="password"]:focus {
 
 /* Page container for general pages */
 .page-container {
-  padding: 2rem 3rem;
+  padding: 40px 20px;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #ffffff;
+  transition: margin-left 0.5s ease;
+}
+
+/* Par défaut, pas de décalage lorsque la sidebar est cachée */
+#check:not(:checked) ~ .page-container {
+  margin-left: 0;
+}
+
+/* Décalage lorsque la sidebar est ouverte */
+#check:checked ~ .page-container {
+  margin-left: 290px; /* Doit correspondre à la largeur de la sidebar */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .page-container {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  #check:checked ~ .page-container {
+    margin-left: 0;
+  }
+}
+
+/* Contenu à l'intérieur de page-container */
+.page-container .content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+  padding: 2rem;
 }
 
 /* Page title */
@@ -528,7 +581,7 @@ form input[type="password"]:focus {
 
 /* Etude Dossier Page */
 .vacataire-details {
-  max-width: 1500px; /* Increased from 1200px to 1400px */
+  max-width: 1300px; /* Increased from 1200px to 1400px */
   margin: 0 auto;
   padding: 30px; /* Slightly increased padding for better spacing */
   background-color: #fff;
