@@ -1,131 +1,126 @@
 .page-container {
   margin-left: 100px; /* Ajusté pour la sidebar */
-  padding: 40px 20px;
-  min-height: calc(100vh - 60px);
-  display: flex;
+  padding: 40px 20px; /* Plus de padding vertical pour un meilleur espacement */
+  min-height: calc(100vh - 60px); /* Ajusté pour le header */
+  display: flex; /* Utiliser flexbox pour centrer */
   flex-direction: column;
   align-items: center; /* Centrer horizontalement */
   justify-content: center; /* Centrer verticalement */
 }
 
 .page-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 30px;
+  font-size: 28px; /* Taille légèrement plus grande pour un titre plus élégant */
+  font-weight: 700; /* Poids plus marqué */
+  margin-bottom: 30px; /* Plus d'espace en bas */
   color: #333;
-  text-align: center;
-  letter-spacing: 1px;
+  text-align: center; /* Centrer le titre */
+  letter-spacing: 1px; /* Espacement des lettres pour un look raffiné */
 }
 
-.documents-container {
-  max-width: 600px;
-  width: 100%;
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.personal-info-container {
+  max-width: 600px; /* Largeur maximale conservée */
+  width: 100%; /* S'assurer qu'il prend toute la largeur disponible jusqu'à max-width */
+  background: #fff; /* Conserver la couleur de fond */
+  padding: 30px; /* Plus de padding pour un meilleur espacement interne */
+  border-radius: 12px; /* Bordures plus arrondies */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre plus douce et plus profonde */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
 }
 
-.documents-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+.personal-info-container:hover {
+  transform: translateY(-5px); /* Légère élévation au survol */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
 }
 
-.doc-row {
+.info-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  text-align: right;
+  justify-content: space-between; /* Conserver l'alignement entre label et valeur */
+  align-items: center; /* Alignement vertical centré */
+  margin-bottom: 20px; /* Plus d'espace entre les lignes */
   font-size: 16px;
   color: #555;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
+  padding: 10px 0; /* Espacement vertical interne */
+  border-bottom: 1px solid #eee; /* Ligne de séparation subtile */
+  transition: background-color 0.2s ease; /* Transition pour un effet au survol */
 }
 
-.doc-row:last-child {
-  border-bottom: none;
+.info-row:last-child {
+  border-bottom: none; /* Pas de bordure pour la dernière ligne */
 }
 
-.doc-row:hover {
-  background-color: #f7f7f7;
+.info-row:hover {
+  background-color: #f7f7f7; /* Légère couleur de fond au survol */
 }
 
-.doc-label {
-  font-weight: 600;
+.info-label {
+  font-weight: 600; /* Poids légèrement plus léger mais toujours marqué */
   color: #333;
-  width: 180px;
-  display: inline-block;
+  width: 180px; /* Largeur fixe pour les labels */
+  display: inline-block; /* Assurer un bon alignement */
 }
 
-.doc-row a {
-  color: #007bff; /* Couleur bleue pour les liens */
+.info-value {
+  color: #000;
+  font-weight: 400; /* Poids normal pour les valeurs */
+  text-align: right; /* Alignement à droite pour un look plus propre */
+  flex: 1; /* Prend tout l'espace restant */
+}
+
+/* Styles spécifiques pour les liens dans .info-value */
+.info-value a {
+  color: #007bff; /* Couleur bleue pour les liens, comme dans l'original */
   text-decoration: none;
-  font-weight: 400;
-  flex: 1;
-  text-align: right;
   transition: color 0.2s ease;
 }
 
-.doc-row a:hover {
+.info-value a:hover {
   color: #0056b3; /* Couleur plus foncée au survol */
   text-decoration: underline;
-}
-
-.doc-row span {
-  color: #888; /* Couleur pour "Non disponible" */
-  font-weight: 400;
-  flex: 1;
-  text-align: right;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .page-container {
-    margin-left: 0;
-    padding: 20px;
+    margin-left: 0; /* Pas de marge si la sidebar est masquée */
+    padding: 20px; /* Réduire le padding sur mobile */
   }
 
-  .documents-container {
-    padding: 20px;
+  .personal-info-container {
+    padding: 20px; /* Réduire le padding sur mobile */
   }
 
-  .doc-row {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 8px 0;
+  .info-row {
+    flex-direction: column; /* Passer en colonne sur mobile */
+    align-items: flex-start; /* Aligner à gauche */
+    padding: 8px 0; /* Réduire l'espacement */
   }
 
-  .doc-label {
-    width: auto;
-    margin-bottom: 5px;
+  .info-label {
+    width: auto; /* Pas de largeur fixe sur mobile */
+    margin-bottom: 5px; /* Espacement entre label et valeur */
   }
 
-  .doc-row a,
-  .doc-row span {
-    text-align: left;
+  .info-value {
+    text-align: left; /* Aligner à gauche sur mobile */
   }
 
   .page-title {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 24px; /* Réduire la taille du titre sur mobile */
+    margin-bottom: 20px; /* Réduire l'espace */
   }
 }
 
+/* Pour les écrans encore plus petits (par exemple, téléphones en mode portrait) */
 @media (max-width: 480px) {
-  .documents-container {
-    padding: 15px;
+  .personal-info-container {
+    padding: 15px; /* Encore moins de padding */
   }
 
-  .doc-row {
-    margin-bottom: 15px;
+  .info-row {
+    margin-bottom: 15px; /* Réduire l'espace entre les lignes */
   }
 
-  .doc-label,
-  .doc-row a,
-  .doc-row span {
-    font-size: 14px;
+  .info-label, .info-value {
+    font-size: 14px; /* Réduire la taille de la police */
   }
 }

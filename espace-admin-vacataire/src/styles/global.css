@@ -582,13 +582,25 @@ form input[type="password"]:focus {
   text-align: left;
 }
 
-.detail-row a {
+/* .detail-row a {
   color: #3498db;
   text-decoration: underline;
 }
 
 .detail-row a:hover {
   color: #2980b9;
+} */
+
+/* Styles spécifiques pour les liens dans .detail-row */
+.detail-row a {
+  color: #007bff ; /* Couleur bleue pour les liens, comme dans l'original */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.detail-row a:hover {
+  color: #0056b3; /* Couleur plus foncée au survol */
+  text-decoration: underline;
 }
 
 /* Etude Dossier Buttons */

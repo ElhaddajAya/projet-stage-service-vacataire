@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../../components/Header';
 import Sidebar from '../components/Sidebar';
-import '../../style/documents.css'; // Nouveau fichier CSS
+import '../../style/documents.css'; // Nous allons mettre à jour ce fichier
 
 const Documents = () => {
   const [userData, setUserData] = useState({
@@ -73,69 +73,81 @@ const Documents = () => {
       <Sidebar />
       <main className="page-container">
         <h1 className="page-title">Mes Documents</h1>
-        <div className="documents-container">
-          <div className="doc-row">
-            <span className="doc-label">Photo :</span>
-            {userData.photo ? (
-              <a href={`${BACKEND_URL}/${userData.photo}`} target="_blank" rel="noopener noreferrer">
-                Voir la Photo
-              </a>
-            ) : (
-              <span>Non disponible</span>
-            )}
+        <div className="personal-info-container">
+          <div className="info-row">
+            <span className="info-label">Photo :</span>
+            <span className="info-value">
+              {userData.photo ? (
+                <a href={`${BACKEND_URL}/${userData.photo}`} target="_blank" rel="noopener noreferrer">
+                  Voir la Photo
+                </a>
+              ) : (
+                'Non disponible'
+              )}
+            </span>
           </div>
-          <div className="doc-row">
-            <span className="doc-label">CIN (fichier) :</span>
-            {userData.cinFichier ? (
-              <a href={`${BACKEND_URL}/${userData.cinFichier}`} target="_blank" rel="noopener noreferrer">
-                Voir le fichier CIN
-              </a>
-            ) : (
-              <span>Non disponible</span>
-            )}
+          <div className="info-row">
+            <span className="info-label">CIN (fichier) :</span>
+            <span className="info-value">
+              {userData.cinFichier ? (
+                <a href={`${BACKEND_URL}/${userData.cinFichier}`} target="_blank" rel="noopener noreferrer">
+                  Voir le fichier CIN
+                </a>
+              ) : (
+                'Non disponible'
+              )}
+            </span>
           </div>
-          <div className="doc-row">
-            <span className="doc-label">CV :</span>
-            {userData.cv ? (
-              <a href={`${BACKEND_URL}/${userData.cv}`} target="_blank" rel="noopener noreferrer">
-                Voir le CV
-              </a>
-            ) : (
-              <span>Non disponible</span>
-            )}
+          <div className="info-row">
+            <span className="info-label">CV :</span>
+            <span className="info-value">
+              {userData.cv ? (
+                <a href={`${BACKEND_URL}/${userData.cv}`} target="_blank" rel="noopener noreferrer">
+                  Voir le CV
+                </a>
+              ) : (
+                'Non disponible'
+              )}
+            </span>
           </div>
-          <div className="doc-row">
-            <span className="doc-label">Diplôme :</span>
-            {userData.diplome ? (
-              <a href={`${BACKEND_URL}/${userData.diplome}`} target="_blank" rel="noopener noreferrer">
-                Voir le Diplôme
-              </a>
-            ) : (
-              <span>Non disponible</span>
-            )}
+          <div className="info-row">
+            <span className="info-label">Diplôme :</span>
+            <span className="info-value">
+              {userData.diplome ? (
+                <a href={`${BACKEND_URL}/${userData.diplome}`} target="_blank" rel="noopener noreferrer">
+                  Voir le Diplôme
+                </a>
+              ) : (
+                'Non disponible'
+              )}
+            </span>
           </div>
-          <div className="doc-row">
+          <div className="info-row">
             {userData.fonctionnaire ? (
               <>
-                <span className="doc-label">Autorisation :</span>
-                {userData.autorisationFichier ? (
-                  <a href={`${BACKEND_URL}/${userData.autorisationFichier}`} target="_blank" rel="noopener noreferrer">
-                    Voir l'Autorisation
-                  </a>
-                ) : (
-                  <span>Non disponible</span>
-                )}
+                <span className="info-label">Autorisation :</span>
+                <span className="info-value">
+                  {userData.autorisationFichier ? (
+                    <a href={`${BACKEND_URL}/${userData.autorisationFichier}`} target="_blank" rel="noopener noreferrer">
+                      Voir l'Autorisation
+                    </a>
+                  ) : (
+                    'Non disponible'
+                  )}
+                </span>
               </>
             ) : (
               <>
-                <span className="doc-label">Attestation de non-emploi :</span>
-                {userData.attestNonEmploi ? (
-                  <a href={`${BACKEND_URL}/${userData.attestNonEmploi}`} target="_blank" rel="noopener noreferrer">
-                    Voir l'Attestation
-                  </a>
-                ) : (
-                  <span>Non disponible</span>
-                )}
+                <span className="info-label">Attestation de non-emploi :</span>
+                <span className="info-value">
+                  {userData.attestNonEmploi ? (
+                    <a href={`${BACKEND_URL}/${userData.attestNonEmploi}`} target="_blank" rel="noopener noreferrer">
+                      Voir l'Attestation
+                    </a>
+                  ) : (
+                    'Non disponible'
+                  )}
+                </span>
               </>
             )}
           </div>
