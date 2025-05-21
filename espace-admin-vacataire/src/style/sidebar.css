@@ -76,6 +76,7 @@ label #cancel {
 .sidebar header p {
   font-size: 18px;
   font-weight: bold;
+  text-align: center;
   color: black;
   margin: 0;
 }
