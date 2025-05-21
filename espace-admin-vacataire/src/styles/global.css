@@ -364,6 +364,20 @@ form input[type="password"]:focus {
   max-width: 30%;
 }
 
+/* Ajouter ellipsis sur les boutons de la colonne Action lorsque la sidebar est active */
+#check:checked ~ .page-container .table-vacataires td:nth-child(5) button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 45%; /* Réduire la largeur des boutons pour qu'ils tiennent dans la colonne */
+  box-sizing: border-box;
+}
+
+/* Ajuster la marge entre les boutons pour un meilleur espacement */
+#check:checked ~ .page-container .table-vacataires td:nth-child(5) .btn-etude {
+  margin-left: 10px; /* Réduire la marge pour éviter un débordement */
+}
+
 /* Action buttons */
 .table-vacataires td .btn-valider {
   background-color: #2ecc71;
