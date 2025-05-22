@@ -80,7 +80,7 @@ const Sidebar = () => {
           <li>
               <a href="/espace-admin/set-delai-depot">
                 <i className="fas fa-clock"></i>
-                <span>Définir Délai de Dépôt</span>
+                <span>Délai de Dépôt</span>
               </a>
           </li>
           <li onClick={handleLogout}>
