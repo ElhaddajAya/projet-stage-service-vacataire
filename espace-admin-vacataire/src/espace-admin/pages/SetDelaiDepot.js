@@ -6,7 +6,6 @@ import Sidebar from '../components/Sidebar';
 
 // Define custom styles directly in the component, no inheritance from global.css
 const styles = `
-
   /* Main container to hold everything */
   .main-container {
     display: block; /* Simple block layout */
@@ -61,11 +60,24 @@ const styles = `
     border-radius: 7px; /* Initial border radius (adjust this) */
   }
 
-  .delai-depot-form .error-global {
+  .delai-depot-form .message-success {
     margin-top: 10px; /* Initial margin (adjust this) */
     padding: 8px; /* Initial padding (adjust this) */
     font-size: 14px; /* Initial font size (adjust this) */
-    color: #d9534f; /* Red for error */
+    color: #155724; /* Dark green for success */
+    background-color: #d4edda; /* Light green background */
+    border: 1px solid #c3e6cb; /* Green border */
+    border-radius: 4px;
+  }
+
+  .delai-depot-form .message-error {
+    margin-top: 10px; /* Initial margin (adjust this) */
+    padding: 8px; /* Initial padding (adjust this) */
+    font-size: 14px; /* Initial font size (adjust this) */
+    color: #721c24; /* Dark red for error */
+    background-color: #f8d7da; /* Light red background */
+    border: 1px solid #f5c6cb; /* Red border */
+    border-radius: 4px;
   }
 
   .delai-depot-form .buttons {
@@ -84,7 +96,7 @@ const styles = `
   }
 
   .delai-depot-form .buttons .update-btn {
-     background-color: #2ecc71;
+    background-color: #2ecc71;
     color: white;
     border: 0.5px solid #0a853d !important;
   }
@@ -131,6 +143,11 @@ const styles = `
 
     .delai-depot-form .buttons button {
       padding: 6px 12px; /* Adjust this */
+      font-size: 12px; /* Adjust this */
+    }
+
+    .delai-depot-form .message-success,
+    .delai-depot-form .message-error {
       font-size: 12px; /* Adjust this */
     }
   }
@@ -199,7 +216,13 @@ const SetDelaiDepot = () => {
                   required
                 />
               </div>
-              {message && <div className="error-global">{message}</div>}
+              {message && (
+                message.includes('succès') ? (
+                  <div className="message-success">{message}</div>
+                ) : (
+                  <div className="message-error">{message}</div>
+                )
+              )}
               <div className="buttons">
                 <button type="button" className="return-btn" onClick={handleReturn}>
                   Retour
