@@ -3,6 +3,7 @@ const db = require('./config/db');
 const dotenv = require('dotenv');
 const session = require('express-session');
 const fs = require('fs').promises;
+const nodemailer = require('nodemailer');
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,27 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => res.send('Backend opérationnel 🚀'));
+
+// Email transporter configuration using environment variables
+const transporter = nodemailer.createTransport({
+  service: process.env.EMAIL_SERVICE || 'gmail', // Default to Gmail if not set
+  host: process.env.EMAIL_HOST, // e.g., 'smtp.gmail.com' or school's SMTP server
+  port: process.env.EMAIL_PORT || 587, // Default port for TLS
+  secure: process.env.EMAIL_SECURE === 'true' || false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USER, // Email address (to be set by the school)
+    pass: process.env.EMAIL_PASS, // Password or App Password (to be set by the school)
+  },
+});
+
+// Verify transporter configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('Email transporter error:', error);
+  } else {
+    console.log('Email transporter is ready:', success);
+  }
+});
 
 // Route to fetch details of a specific vacataire, including teaching information
 app.get('/vacataire-details/:id', (req, res) => {
@@ -86,14 +108,13 @@ app.get('/vacataire-details/:id', (req, res) => {
   });
 });
 
-// Route to update the Etat_dossier of a vacataire with Refus_reason
+// Route to update the Etat_dossier of a vacataire with Refus_reason and send email
 app.put('/vacataire/:id/update-etat', (req, res) => {
   const vacataireId = req.params.id;
   const { Etat_dossier, Refus_reason } = req.body;
 
   if (!Etat_dossier) return res.status(400).json({ message: 'État du dossier est requis' });
 
-  // Validate Refus_reason if provided
   let refusReasonToStore = null;
   if (Refus_reason) {
     if (typeof Refus_reason === 'string') {
@@ -110,25 +131,109 @@ app.put('/vacataire/:id/update-etat', (req, res) => {
   }
 
   const query = 'UPDATE vacataire SET Etat_dossier = ?, Refus_reason = ? WHERE ID_vacat = ?';
-  db.query(query, [Etat_dossier, refusReasonToStore, vacataireId], (err, results) => {
+  db.query(query, [Etat_dossier, refusReasonToStore, vacataireId], async (err, results) => {
     if (err) {
       console.error('Erreur lors de la mise à jour de l\'état du dossier:', err);
       return res.status(500).json({ message: 'Erreur serveur' });
     }
     if (results.affectedRows === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
+
+    // Fetch vacataire email to send notification
+    db.query('SELECT Email, Nom, Prenom FROM vacataire WHERE ID_vacat = ?', [vacataireId], async (err, vacataireResults) => {
+      if (err || vacataireResults.length === 0) {
+        console.error('Erreur lors de la récupération de l\'email:', err);
+      } else {
+        const vacataire = vacataireResults[0];
+        const email = vacataire.Email;
+        const fullName = `${vacataire.Nom} ${vacataire.Prenom || ''}`;
+
+        let subject, text;
+        if (Etat_dossier === 'Refusé' && Refus_reason) {
+          subject = Refus_reason.problemType ? `Refus de dossier - ${Refus_reason.problemType}` : 'Refus de dossier';
+          text = Refus_reason.problemType ? `${subject}\n\nDescription : ${Refus_reason.description}` : `Refus de dossier\n\nDescription : ${Refus_reason.description}`;
+        } else if (Etat_dossier === 'Validé') {
+          subject = 'Validation de votre dossier';
+          text = `Bonjour ${fullName},\n\nVotre dossier a bien été validé. Vous allez recevoir votre virement prochainement.\n\nCordialement,\nÉcole Supérieure de Technologie de Salé`;
+        }
+
+        if (email && (Etat_dossier === 'Refusé' || Etat_dossier === 'Validé') && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+          const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: subject,
+            text: text + '\n\n--\nÉcole Supérieure de Technologie de Salé',
+            attachments: [
+              {
+                filename: 'logo.jpg',
+                path: './public/logo.jpg', // Adjust path as needed
+                cid: 'estLogo'
+              }
+            ]
+          };
+
+          try {
+            await transporter.sendMail(mailOptions);
+            console.log('Email sent successfully to:', email);
+          } catch (emailError) {
+            console.error('Error sending email:', emailError);
+          }
+        } else {
+          console.warn('Email not sent: Missing EMAIL_USER, EMAIL_PASS, or email address');
+        }
+      }
+    });
+
     res.json({ message: 'État du dossier mis à jour avec succès' });
   });
 });
 
-// Route to update the Etat_virement of a vacataire
+// Route to update the Etat_virement of a vacataire and send email
 app.put('/vacataire/:id/update-virement', (req, res) => {
   const vacataireId = req.params.id;
   const { Etat_virement } = req.body;
   if (!Etat_virement) return res.status(400).json({ message: 'État du virement est requis' });
   const query = 'UPDATE vacataire SET Etat_virement = ? WHERE ID_vacat = ?';
-  db.query(query, [Etat_virement, vacataireId], (err, results) => {
+  db.query(query, [Etat_virement, vacataireId], async (err, results) => {
     if (err) return res.status(500).json({ message: 'Erreur serveur' });
     if (results.affectedRows === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
+
+    if (Etat_virement === 'Effectué') {
+      db.query('SELECT Email, Nom, Prenom FROM vacataire WHERE ID_vacat = ?', [vacataireId], async (err, vacataireResults) => {
+        if (err || vacataireResults.length === 0) {
+          console.error('Erreur lors de la récupération de l\'email:', err);
+        } else {
+          const vacataire = vacataireResults[0];
+          const email = vacataire.Email;
+          const fullName = `${vacataire.Nom} ${vacataire.Prenom || ''}`;
+
+          if (email && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            const mailOptions = {
+              from: process.env.EMAIL_USER,
+              to: email,
+              subject: 'Virement effectué',
+              text: `Bonjour ${fullName},\n\nVotre virement a été effectué avec succès.\n\nCordialement,\nÉcole Supérieure de Technologie de Salé`,
+              attachments: [
+                {
+                  filename: 'logo.jpg',
+                  path: './public/logo.jpg', // Adjust path as needed
+                  cid: 'estLogo'
+                }
+              ]
+            };
+
+            try {
+              await transporter.sendMail(mailOptions);
+              console.log('Email sent successfully to:', email);
+            } catch (emailError) {
+              console.error('Error sending email:', emailError);
+            }
+          } else {
+            console.warn('Email not sent: Missing EMAIL_USER, EMAIL_PASS, or email address');
+          }
+        }
+      });
+    }
+
     res.json({ message: 'État du virement mis à jour avec succès' });
   });
 });

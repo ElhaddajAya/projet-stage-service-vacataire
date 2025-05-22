@@ -1,0 +1,23 @@
+# Configuration de l'environnement pour le projet
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+
+# Adresse email officielle de l'école (ex: noreply@estsale.ac.ma)
+EMAIL_USER=
+
+# Mot de passe ou App Password pour l'email (à obtenir auprès du département IT)
+EMAIL_PASS=
+
+# Service email (ex: 'gmail', 'outlook', ou nom du serveur SMTP de l'école)
+EMAIL_SERVICE=
+
+# Hôte SMTP (ex: 'smtp.gmail.com' pour Gmail, ou serveur interne de l'école)
+EMAIL_HOST=
+
+# Port SMTP (587 pour TLS, 465 pour SSL, à vérifier avec l'école)
+EMAIL_PORT=587
+
+# Utiliser une connexion sécurisée (true pour 465, false pour 587, à vérifier)
+EMAIL_SECURE=false
