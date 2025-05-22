@@ -72,6 +72,7 @@ const Sidebar = () => {
             {userData.prenom && `${userData.prenom} `}
             {userData.nom}
           </p>
+          <small>{userData.role}</small>
         </header>
         <ul>
           <li>

@@ -78,7 +78,7 @@ label #cancel {
   font-weight: bold;
   text-align: center;
   color: black;
-  margin: 0;
+  margin-bottom: 0px;
 }
 
 .sidebar ul a {
