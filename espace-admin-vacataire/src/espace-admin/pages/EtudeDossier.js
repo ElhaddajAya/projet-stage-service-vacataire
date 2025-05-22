@@ -108,96 +108,108 @@ const EtudeDossier = () => {
           <div className="details-grid">
             <div className="details-section">
               <h2>Informations Personnelles</h2>
-              <div className="detail-row">
-                <span className="detail-label">Nom :</span>
-                <span>{vacataire.Nom || 'N/A'}</span>
+              <div className="info-row">
+                <span className="info-label">Nom :</span>
+                <span className="info-value">{vacataire.Nom || 'N/A'}</span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">Prénom :</span>
-                <span>{vacataire.Prenom || 'N/A'}</span>
+              <div className="info-row">
+                <span className="info-label">Prénom :</span>
+                <span className="info-value">{vacataire.Prenom || 'N/A'}</span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">Date de Naissance :</span>
-                <span>{formatDate(vacataire.Date_naiss)}</span>
+              <div className="info-row">
+                <span className="info-label">Date de Naissance :</span>
+                <span className="info-value">{formatDate(vacataire.Date_naiss)}</span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">Email :</span>
-                <span>{vacataire.Email || 'N/A'}</span>
+              <div className="info-row">
+                <span className="info-label">Email :</span>
+                <span className="info-value">{vacataire.Email || 'N/A'}</span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">Numéro de Téléphone :</span>
-                <span>{vacataire.Numero_tele || 'N/A'}</span>
+              <div className="info-row">
+                <span className="info-label">Numéro de Téléphone :</span>
+                <span className="info-value">{vacataire.Numero_tele || 'N/A'}</span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">CIN :</span>
-                <span>{vacataire.CIN || 'N/A'}</span>
+              <div className="info-row">
+                <span className="info-label">CIN :</span>
+                <span className="info-value">{vacataire.CIN || 'N/A'}</span>
               </div>
             </div>
 
             <div className="details-section">
               <h2>Documents</h2>
-              <div className="detail-row">
-                <span className="detail-label">Photo :</span>
-                {vacataire.Photo ? (
-                  <a href={`${BACKEND_URL}/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
-                    Voir la Photo
-                  </a>
-                ) : (
-                  <span>Non disponible</span>
-                )}
+              <div className="info-row">
+                <span className="info-label">Photo :</span>
+                <span className="info-value">
+                  {vacataire.Photo ? (
+                    <a href={`${BACKEND_URL}/${vacataire.Photo}`} target="_blank" rel="noopener noreferrer">
+                      Voir la Photo
+                    </a>
+                  ) : (
+                    'Non disponible'
+                  )}
+                </span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">CIN (fichier) :</span>
-                {vacataire.CIN_fichier ? (
-                  <a href={`${BACKEND_URL}/${vacataire.CIN_fichier}`} target="_blank" rel="noopener noreferrer">
-                    Voir le fichier CIN
-                  </a>
-                ) : (
-                  <span>Non disponible</span>
-                )}
+              <div className="info-row">
+                <span className="info-label">CIN (fichier) :</span>
+                <span className="info-value">
+                  {vacataire.CIN_fichier ? (
+                    <a href={`${BACKEND_URL}/${vacataire.CIN_fichier}`} target="_blank" rel="noopener noreferrer">
+                      Voir le fichier CIN
+                    </a>
+                  ) : (
+                    'Non disponible'
+                  )}
+                </span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">CV :</span>
-                {vacataire.CV ? (
-                  <a href={`${BACKEND_URL}/${vacataire.CV}`} target="_blank" rel="noopener noreferrer">
-                    Voir le CV
-                  </a>
-                ) : (
-                  <span>Non disponible</span>
-                )}
+              <div className="info-row">
+                <span className="info-label">CV :</span>
+                <span className="info-value">
+                  {vacataire.CV ? (
+                    <a href={`${BACKEND_URL}/${vacataire.CV}`} target="_blank" rel="noopener noreferrer">
+                      Voir le CV
+                    </a>
+                  ) : (
+                    'Non disponible'
+                  )}
+                </span>
               </div>
-              <div className="detail-row">
-                <span className="detail-label">Diplôme :</span>
-                {vacataire.Diplome ? (
-                  <a href={`${BACKEND_URL}/${vacataire.Diplome}`} target="_blank" rel="noopener noreferrer">
-                    Voir le Diplôme
-                  </a>
-                ) : (
-                  <span>Non disponible</span>
-                )}
+              <div className="info-row">
+                <span className="info-label">Diplôme :</span>
+                <span className="info-value">
+                  {vacataire.Diplome ? (
+                    <a href={`${BACKEND_URL}/${vacataire.Diplome}`} target="_blank" rel="noopener noreferrer">
+                      Voir le Diplôme
+                    </a>
+                  ) : (
+                    'Non disponible'
+                  )}
+                </span>
               </div>
-              <div className="detail-row">
+              <div className="info-row">
                 {vacataire.Fonctionnaire ? (
                   <>
-                    <span className="detail-label">Autorisation :</span>
-                    {vacataire.Autorisation_fichier ? (
-                      <a href={`${BACKEND_URL}/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
-                        Voir l'Autorisation
-                      </a>
-                    ) : (
-                      <span>Non disponible</span>
-                    )}
+                    <span className="info-label">Autorisation :</span>
+                    <span className="info-value">
+                      {vacataire.Autorisation_fichier ? (
+                        <a href={`${BACKEND_URL}/${vacataire.Autorisation_fichier}`} target="_blank" rel="noopener noreferrer">
+                          Voir l'Autorisation
+                        </a>
+                      ) : (
+                        'Non disponible'
+                      )}
+                    </span>
                   </>
                 ) : (
                   <>
-                    <span className="detail-label">Attestation de non-emploi :</span>
-                    {vacataire.Attest_non_emploi ? (
-                      <a href={`${BACKEND_URL}/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
-                        Voir l'Attestation
-                      </a>
-                    ) : (
-                      <span>Non disponible</span>
-                    )}
+                    <span className="info-label">Attestation de non-emploi :</span>
+                    <span className="info-value">
+                      {vacataire.Attest_non_emploi ? (
+                        <a href={`${BACKEND_URL}/${vacataire.Attest_non_emploi}`} target="_blank" rel="noopener noreferrer">
+                          Voir l'Attestation
+                        </a>
+                      ) : (
+                        'Non disponible'
+                      )}
+                    </span>
                   </>
                 )}
               </div>
