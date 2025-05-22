@@ -39,7 +39,7 @@ const LoginForm = () => {
         const { role } = response.data.user;
         if (role === 'vacataire') {
           navigate('/espace-vacataire/suivi-dossier');
-        } else if (role === 'admin') {
+        } else if (role === 'superadmin' || role === 'admin' || role === 'comptable') {
           navigate('/espace-admin/vacataires');
         } else {
           setError((prev) => ({ ...prev, global: 'Rôle utilisateur inconnu' }));

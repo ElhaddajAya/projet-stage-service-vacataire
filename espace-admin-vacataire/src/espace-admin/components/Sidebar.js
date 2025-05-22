@@ -5,10 +5,10 @@ import avatar from '../../../src/avatar.png'; // Default avatar
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
-  const [userData, setUserData] = useState({ nom: 'Utilisateur', prenom: '', photo: null });
+  const [userData, setUserData] = useState({ nom: 'Utilisateur', prenom: '', photo: null, role: '' });
   const navigate = useNavigate();
 
-  // Fetch user data including prenom and photo
+  // Fetch user data including prenom, photo, and role
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -20,9 +20,12 @@ const Sidebar = () => {
         const data = await response.json();
 
         if (response.ok && data) {
+          console.log('User data:', data); // Log pour débogage
+
           setUserData({
             nom: data.nom || 'Utilisateur',
-            prenom: data.prenom || ''
+            prenom: data.prenom || '',
+            role: data.Role || '', // Récupérer le rôle spécifique
           });
         } else {
           console.error('Utilisateur non authentifié ou erreur de données');
@@ -76,19 +79,23 @@ const Sidebar = () => {
           </li>
           <li onClick={() => navigate('/espace-admin/vacataires')}>
             <a href="#"><i className="fas fa-users-line"></i> Vacataires</a>
-          </li><li>
-            <a href="#"><i className="fas fa-users"></i> Administrateurs</a>
           </li>
-          <li>
-              <a href="/espace-admin/set-delai-depot">
+          {userData.role === 'superadmin' && (
+            <li>
+              <a href="#"><i className="fas fa-users"></i> Administrateurs</a>
+            </li>
+          )}
+          {userData.role === 'superadmin' && (
+            <li onClick={() => navigate('/espace-admin/set-delai-depot')}>
+              <a href="#">
                 <i className="fas fa-clock"></i>
                 <span>Délai de Dépôt</span>
               </a>
-          </li>
+            </li>
+          )}
           <li onClick={handleLogout}>
             <a href="#"><i className="fas fa-sign-out-alt"></i> Déconnexion</a>
           </li> 
-          
         </ul>
       </div>
     </>

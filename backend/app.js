@@ -233,7 +233,9 @@ app.put('/vacataire/:id/update-virement', (req, res) => {
 
 // Route to fetch all vacataires
 app.get('/vacataires', (req, res) => {
-  if (!req.session.userId || req.session.role !== 'admin') return res.status(403).json({ message: 'Accès réservé aux administrateurs' });
+  if (!req.session.userId || !['superadmin', 'admin', 'comptable'].includes(req.session.role)) {
+    return res.status(403).json({ message: 'Accès réservé aux administrateurs, superadmins ou comptables' });
+  }
   const query = 'SELECT * FROM vacataire';
   db.query(query, (err, results) => {
     if (err) return res.status(500).send('Erreur lors de la récupération des vacataires');
@@ -262,15 +264,15 @@ app.post('/login', (req, res) => {
       return res.json({ message: 'Connexion réussie', user: { id: vacataire.ID_vacat, nom: vacataire.Nom, role: 'vacataire' } });
     }
 
-    const adminQuery = 'SELECT ID_admin FROM admin WHERE username = ? AND mdp = ?';
+    const adminQuery = 'SELECT ID_admin, Nom, Role FROM admin WHERE username = ? AND mdp = ?';
     db.query(adminQuery, [username, password], (err, adminResults) => {
       if (err) return res.status(500).json({ message: 'Erreur serveur' });
       if (adminResults.length > 0) {
         const admin = adminResults[0];
         req.session.userId = admin.ID_admin;
         req.session.nom = admin.Nom;
-        req.session.role = 'admin';
-        return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: 'admin' } });
+        req.session.role = admin.Role; // Stocker le rôle spécifique (superadmin, admin, comptable)
+        return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: admin.Role } });
       }
       return res.status(401).json({ message: 'Identifiants incorrects' });
     });
@@ -279,7 +281,7 @@ app.post('/login', (req, res) => {
 
 // Route to check authentication
 app.get('/check-auth', (req, res) => {
-  if (req.session.userId) res.json({ authenticated: true, user: { id: req.session.userId, nom: req.session.nom } });
+  if (req.session.userId) res.json({ authenticated: true, user: { id: req.session.userId, nom: req.session.nom, role: req.session.role } });
   else res.json({ authenticated: false });
 });
 
@@ -414,8 +416,8 @@ app.get('/get-delai-depot', (req, res) => {
 
 // Route to set the delai_depot (admin only)
 app.post('/set-delai-depot', (req, res) => {
-  if (!req.session.userId || req.session.role !== 'admin') {
-    return res.status(403).json({ message: 'Accès réservé aux administrateurs' });
+  if (!req.session.userId || req.session.role !== 'superadmin') {
+    return res.status(403).json({ message: 'Accès réservé aux super administrateurs' });
   }
 
   const { delai_depot } = req.body;
