@@ -79,7 +79,7 @@ const Sidebar = () => {
             {/* <a href="#"><i className="fas fa-file-alt"></i> Documents</a> */}
             <Link to="/espace-vacataire/documents"><i className="fas fa-file-alt"></i> Documents</Link>
           </li>
-          <li>
+          <li onClick={() => navigate('/espace-vacataire/suivi-dossier')}>
             <a href="#"><i className="fas fa-user-cog"></i> Compte</a>
           </li>
           <li onClick={handleLogout}>
