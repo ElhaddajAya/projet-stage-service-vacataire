@@ -156,9 +156,9 @@ const SetDelaiDepot = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/set-delai-depot', { delai_depot: delaiDepot }, { withCredentials: true });
-      setMessage('✅ Délai de dépôt mis à jour avec succès');
+      setMessage('Délai de dépôt mis à jour avec succès');
     } catch (err) {
-      setMessage('❌ Erreur lors de la mise à jour du délai de dépôt');
+      setMessage('Erreur lors de la mise à jour du délai de dépôt');
       console.error(err);
     }
   };
