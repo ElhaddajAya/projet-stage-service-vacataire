@@ -74,8 +74,10 @@ const Sidebar = () => {
           <li>
             <a href="#"><i className="fas fa-user"></i> Infos Personelles</a>
           </li>
-          <li>
-            <a href="#"><i className="fas fa-user-cog"></i> Compte</a>
+          <li onClick={() => navigate('/espace-admin/vacataires')}>
+            <a href="#"><i className="fas fa-users-line"></i> Vacataires</a>
+          </li><li>
+            <a href="#"><i className="fas fa-users"></i> Administrateurs</a>
           </li>
           <li>
               <a href="/espace-admin/set-delai-depot">
