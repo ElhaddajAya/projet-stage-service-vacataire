@@ -76,7 +76,7 @@ const styles = `
   }
 
   .delai-depot-form .buttons button {
-    padding: 8px 15px; /* Initial padding (adjust this) */
+    padding: 0.5rem 1rem;
     font-size: 14px; /* Initial font size (adjust this) */
     border: none;
     border-radius: 4px; /* Initial border radius (adjust this) */
@@ -84,21 +84,29 @@ const styles = `
   }
 
   .delai-depot-form .buttons .update-btn {
-    background-color: #5cb85c; /* Green for update */
+     background-color: #2ecc71;
     color: white;
+    border: 0.5px solid #0a853d !important;
   }
 
   .delai-depot-form .buttons .update-btn:hover {
-    background-color: #4cae4c;
+    background-color: #27ae60;
   }
 
   .delai-depot-form .buttons .return-btn {
-    background-color: #777; /* Gray for return */
-    color: white;
+    background-color: #ffffff;
+    color: #222;
+    border: 0.5px solid #444;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
   }
 
   .delai-depot-form .buttons .return-btn:hover {
-    background-color: #666;
+    background-color: #d1d5db;
   }
 
   /* Responsive adjustments (optional, adjust as needed) */
