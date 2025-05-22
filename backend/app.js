@@ -27,13 +27,13 @@ app.get('/', (req, res) => res.send('Backend opérationnel 🚀'));
 
 // Email transporter configuration using environment variables
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail', // Default to Gmail if not set
-  host: process.env.EMAIL_HOST, // e.g., 'smtp.gmail.com' or school's SMTP server
-  port: process.env.EMAIL_PORT || 587, // Default port for TLS
-  secure: process.env.EMAIL_SECURE === 'true' || false, // true for 465, false for other ports
+  service: process.env.EMAIL_SERVICE || 'gmail',
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT || 587,
+  secure: process.env.EMAIL_SECURE === 'true' || false,
   auth: {
-    user: process.env.EMAIL_USER, // Email address (to be set by the school)
-    pass: process.env.EMAIL_PASS, // Password or App Password (to be set by the school)
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -50,7 +50,6 @@ transporter.verify((error, success) => {
 app.get('/vacataire-details/:id', (req, res) => {
   const vacataireId = req.params.id;
 
-  // Query to get vacataire details
   const vacataireQuery = `
     SELECT ID_vacat, Nom, Prenom, Numero_tele AS Numero_tele, Email, CIN, Date_naiss, 
            Photo, CV, Attest_non_emploi AS Attestation, Diplome, 
@@ -60,7 +59,6 @@ app.get('/vacataire-details/:id', (req, res) => {
     WHERE ID_vacat = ?
   `;
 
-  // Query to get teaching information with filiere name
   const enseignementQuery = `
     SELECT e.Matiere, e.Nbr_heurs AS Nombre_heures, e.Semestre, e.Nbr_semaines, f.Nom_fil AS Filiere
     FROM enseigner e
@@ -68,7 +66,6 @@ app.get('/vacataire-details/:id', (req, res) => {
     WHERE e.ID_vacat = ?
   `;
 
-  // Execute vacataire query
   db.query(vacataireQuery, [vacataireId], (err, vacataireResults) => {
     if (err) {
       console.error('Erreur lors de la récupération des détails du vacataire:', err);
@@ -80,24 +77,21 @@ app.get('/vacataire-details/:id', (req, res) => {
     }
 
     const vacataireData = vacataireResults[0];
-    // Parse Refus_reason if it exists and the dossier is refused
     if (vacataireData.EtatDossier === 'Refusé' && vacataireData.Refus_reason) {
       try {
         vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
       } catch (parseError) {
         console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
-        vacataireData.Refus_reason = null; // Reset to null if parsing fails
+        vacataireData.Refus_reason = null;
       }
     }
 
-    // Execute enseignement query
     db.query(enseignementQuery, [vacataireId], (err, enseignementResults) => {
       if (err) {
         console.error('Erreur lors de la récupération des informations d\'enseignement:', err);
         return res.status(500).json({ message: 'Erreur serveur' });
       }
 
-      // Combine results
       const responseData = {
         ...vacataireData,
         Enseignements: enseignementResults
@@ -138,7 +132,6 @@ app.put('/vacataire/:id/update-etat', (req, res) => {
     }
     if (results.affectedRows === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
 
-    // Fetch vacataire email to send notification
     db.query('SELECT Email, Nom, Prenom FROM vacataire WHERE ID_vacat = ?', [vacataireId], async (err, vacataireResults) => {
       if (err || vacataireResults.length === 0) {
         console.error('Erreur lors de la récupération de l\'email:', err);
@@ -165,7 +158,7 @@ app.put('/vacataire/:id/update-etat', (req, res) => {
             attachments: [
               {
                 filename: 'logo.jpg',
-                path: './public/logo.jpg', // Adjust path as needed
+                path: './public/logo.jpg',
                 cid: 'estLogo'
               }
             ]
@@ -215,7 +208,7 @@ app.put('/vacataire/:id/update-virement', (req, res) => {
               attachments: [
                 {
                   filename: 'logo.jpg',
-                  path: './public/logo.jpg', // Adjust path as needed
+                  path: './public/logo.jpg',
                   cid: 'estLogo'
                 }
               ]
@@ -313,21 +306,17 @@ app.get('/vacataire-info', (req, res) => {
     const vacataireData = results[0];
     if (vacataireData.Etat_dossier === 'Refusé' && vacataireData.Refus_reason) {
       try {
-        // Check if Refus_reason is already an object or invalid JSON
         if (typeof vacataireData.Refus_reason === 'object' && vacataireData.Refus_reason !== null) {
-          // If it's an object, use it as is
           console.log('Refus_reason is already an object, skipping parse:', vacataireData.Refus_reason);
         } else if (typeof vacataireData.Refus_reason === 'string') {
-          // Attempt to parse only if it's a string
           vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
         } else {
-          // Handle invalid cases (e.g., [object Object])
           console.warn('Invalid Refus_reason format, resetting to null:', vacataireData.Refus_reason);
           vacataireData.Refus_reason = null;
         }
       } catch (parseError) {
         console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
-        vacataireData.Refus_reason = null; // Reset to null if parsing fails
+        vacataireData.Refus_reason = null;
       }
     }
     res.json(vacataireData);
@@ -406,6 +395,48 @@ app.post('/upload-documents', upload.fields([
 // Route for logout
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => err ? res.status(500).json({ message: 'Erreur lors de la déconnexion' }) : res.json({ message: 'Déconnexion réussie' }));
+});
+
+// Route to fetch the delai_depot
+app.get('/get-delai-depot', (req, res) => {
+  const query = 'SELECT delai_depot FROM settings ORDER BY id DESC LIMIT 1';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération du délai de dépôt:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Délai de dépôt non défini' });
+    }
+    res.json({ delai_depot: results[0].delai_depot });
+  });
+});
+
+// Route to set the delai_depot (admin only)
+app.post('/set-delai-depot', (req, res) => {
+  if (!req.session.userId || req.session.role !== 'admin') {
+    return res.status(403).json({ message: 'Accès réservé aux administrateurs' });
+  }
+
+  const { delai_depot } = req.body;
+  if (!delai_depot) {
+    return res.status(400).json({ message: 'Délai de dépôt requis' });
+  }
+
+  // Validate the date format (ISO 8601, e.g., "2025-06-01T23:59:59")
+  const deadlineDate = new Date(delai_depot);
+  if (isNaN(deadlineDate.getTime())) {
+    return res.status(400).json({ message: 'Format de date invalide' });
+  }
+
+  const query = 'INSERT INTO settings (delai_depot) VALUES (?) ON DUPLICATE KEY UPDATE delai_depot = ?';
+  db.query(query, [delai_depot, delai_depot], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la mise à jour du délai de dépôt:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+    res.json({ message: 'Délai de dépôt mis à jour avec succès' });
+  });
 });
 
 const PORT = process.env.PORT || 5000;

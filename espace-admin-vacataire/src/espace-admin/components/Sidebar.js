@@ -77,9 +77,16 @@ const Sidebar = () => {
           <li>
             <a href="#"><i className="fas fa-user-cog"></i> Compte</a>
           </li>
+          <li>
+              <a href="/espace-admin/set-delai-depot">
+                <i className="fas fa-clock"></i>
+                <span>Définir Délai de Dépôt</span>
+              </a>
+          </li>
           <li onClick={handleLogout}>
             <a href="#"><i className="fas fa-sign-out-alt"></i> Déconnexion</a>
-          </li>
+          </li> 
+          
         </ul>
       </div>
     </>

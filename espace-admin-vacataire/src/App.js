@@ -7,6 +7,8 @@ import EtudeDossier from './espace-admin/pages/EtudeDossier';
 import InfosPersonnelles from './espace-vacataire/pages/InfosPersonnelles';
 import Documents from './espace-vacataire/pages/Documents';
 import './styles/global.css';
+import SetDelaiDepot from './espace-admin/pages/SetDelaiDepot';
+
 
 // Component to handle dynamic titles
 const TitleUpdater = () => {
@@ -40,6 +42,7 @@ function App() {
         <Route path="/espace-admin/etude-dossier/:id" element={<EtudeDossier />} />
         <Route path="/espace-vacataire/infos-personnelles" element={<InfosPersonnelles />} />
         <Route path="/espace-vacataire/documents" element={<Documents />} />
+        <Route path="/espace-admin/set-delai-depot" element={<SetDelaiDepot />} />
       </Routes>
     </Router>
   );

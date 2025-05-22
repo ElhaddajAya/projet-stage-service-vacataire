@@ -1,4 +1,3 @@
-//espace-vacataire/src/espace-vacataire/pages/SuiviDossier.js
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
@@ -19,6 +18,8 @@ const SuiviDossier = () => {
   const [refusReason, setRefusReason] = useState(null);
   const [phase1Complete, setPhase1Complete] = useState(false);
   const [phase2Complete, setPhase2Complete] = useState(false);
+  const [delaiDepot, setDelaiDepot] = useState(null);
+  const [isPastDeadline, setIsPastDeadline] = useState(false);
 
   useEffect(() => {
     const fetchVacatairePhase = async () => {
@@ -57,20 +58,39 @@ const SuiviDossier = () => {
       }
     };
 
+    const fetchDelaiDepot = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/get-delai-depot', { method: 'GET', credentials: 'include' });
+        if (response.ok) {
+          const data = await response.json();
+          const deadline = new Date(data.delai_depot);
+          setDelaiDepot(deadline);
+
+          const now = new Date();
+          setIsPastDeadline(now > deadline);
+        } else {
+          console.error('Erreur lors de la récupération du délai de dépôt');
+        }
+      } catch (err) {
+        console.error('Erreur réseau:', err);
+      }
+    };
+
     fetchVacatairePhase();
+    fetchDelaiDepot();
   }, []);
 
   const handleNextPhase = (newPhase) => (newPhase > currentPhase ? setCurrentPhase(newPhase) : currentPhase < 3 && setCurrentPhase(currentPhase + 1));
   const handlePreviousPhase = () => currentPhase > 1 && (setCurrentPhase(currentPhase - 1) || (currentPhase === 3 && setSubStep(1)));
   const handleNextSubStep = () => currentPhase === 3 && subStep < 3 && setSubStep(subStep + 1);
-  const handleCircleClick = (phase) => (isVirementEffectue && phase !== 3) || (dossierStatus === 'Refusé' && phase !== 3) ? null : (setCurrentPhase(phase) || (phase !== 3 && setSubStep(1)));
+  const handleCircleClick = (phase) => (isVirementEffectue && phase !== 3) || (dossierStatus === 'Refusé' && phase !== 3) || isPastDeadline ? null : (setCurrentPhase(phase) || (phase !== 3 && setSubStep(1)));
 
   const renderPhase = () => {
     switch (currentPhase) {
-      case 1: return <Phase1 onPhaseComplete={handleNextPhase} />;
-      case 2: return <Phase2 onPhaseComplete={handleNextPhase} />;
+      case 1: return <Phase1 onPhaseComplete={handleNextPhase} isPastDeadline={isPastDeadline} />;
+      case 2: return <Phase2 onPhaseComplete={handleNextPhase} isPastDeadline={isPastDeadline} />;
       case 3: return <Phase3 onPhaseComplete={handleNextPhase} subStep={subStep} handleNextSubStep={handleNextSubStep} isRefused={dossierStatus === 'Refusé'} />;
-      default: return <Phase1 onPhaseComplete={handleNextPhase} />;
+      default: return <Phase1 onPhaseComplete={handleNextPhase} isPastDeadline={isPastDeadline} />;
     }
   };
 
@@ -85,9 +105,18 @@ const SuiviDossier = () => {
         </label>
         <Sidebar />
         <div className="page-container">
+          {delaiDepot && (
+            <div className="message-bar">
+              {isPastDeadline ? (
+                <span>Le délai de dépôt des documents est dépassé.</span>
+              ) : (
+                <span>Délai de dépôt : {delaiDepot.toLocaleString()}</span>
+              )}
+            </div>
+          )}
           {dossierStatus === 'Refusé' && refusReason && (
             <div className="message-bar">
-              <div id="textMsgBar">{refusReason.problemType && refusReason.problemType}: </div>
+              <div id="textMsgBar">{refusReason.problemType && `${refusReason.problemType}: `}</div>
               {refusReason.description && <span>{refusReason.description}</span>}
             </div>
           )}
@@ -98,7 +127,7 @@ const SuiviDossier = () => {
             isVirementEffectue={isVirementEffectue}
             phase1Complete={phase1Complete}
             phase2Complete={phase2Complete}
-            isDisabled={dossierStatus === 'Refusé'}
+            isDisabled={dossierStatus === 'Refusé' || isPastDeadline}
           />
           <div className="content">
             {renderPhase()}

@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import '../../style/phase2.css';
 import axios from 'axios';
 
-// Utility function to extract filename from path
 const extractFilename = (path) => {
   if (!path) return null;
-  const filename = path.split('/').pop(); // e.g., "uploads/1747608012498-PHOTO.jpg" -> "1747608012498-PHOTO.jpg"
-  const baseName = filename.split('-').pop(); // Remove timestamp, e.g., "PHOTO.jpg"
-  return baseName.split('.')[0]; // Remove extension, e.g., "PHOTO"
+  const filename = path.split('/').pop();
+  const baseName = filename.split('-').pop();
+  return baseName.split('.')[0];
 };
 
-const Phase2 = ({ onPhaseComplete }) => {
+const Phase2 = ({ onPhaseComplete, isPastDeadline }) => {
   const [fileObjects, setFileObjects] = useState(() => {
-    // Initialize from localStorage if available
     const savedFiles = localStorage.getItem('phase2FileObjects');
     return savedFiles ? JSON.parse(savedFiles) : {
       photo: null,
@@ -34,12 +32,10 @@ const Phase2 = ({ onPhaseComplete }) => {
   const [isFonctionnaire, setIsFonctionnaire] = useState(null);
   const [message, setMessage] = useState('');
 
-  // Save fileObjects to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('phase2FileObjects', JSON.stringify(fileObjects));
   }, [fileObjects]);
 
-  // Fetch existing documents and Fonctionnaire status on mount
   useEffect(() => {
     const fetchVacataireData = async () => {
       try {
@@ -71,6 +67,7 @@ const Phase2 = ({ onPhaseComplete }) => {
   }, []);
 
   const handleFileChange = (e, fileType) => {
+    if (isPastDeadline) return; // Prevent changes if past deadline
     if (e.target.files.length > 0) {
       setFileObjects((prev) => ({
         ...prev,
@@ -84,8 +81,14 @@ const Phase2 = ({ onPhaseComplete }) => {
     }
   };
 
+  const handleFonctionnaireChange = (value) => {
+    if (isPastDeadline) return; // Prevent changes if past deadline
+    setIsFonctionnaire(value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isPastDeadline) return; // Prevent submission if past deadline
     setMessage('');
 
     const formData = new FormData();
@@ -106,7 +109,6 @@ const Phase2 = ({ onPhaseComplete }) => {
 
       if (response.status === 200) {
         setMessage('✅ Documents téléchargés avec succès');
-        // Reset fileObjects after successful upload
         setFileObjects({
           photo: null,
           cin: null,
@@ -115,9 +117,7 @@ const Phase2 = ({ onPhaseComplete }) => {
           autorisation: null,
           attestation: null,
         });
-        // Clear localStorage
         localStorage.removeItem('phase2FileObjects');
-        // Re-fetch existing files to update the UI
         const updatedResponse = await fetch('http://localhost:5000/vacataire-info', {
           method: 'GET',
           credentials: 'include',
@@ -133,7 +133,7 @@ const Phase2 = ({ onPhaseComplete }) => {
             attestation: extractFilename(updatedData.Attest_non_emploi),
           });
         }
-        onPhaseComplete(3); // Advance to Phase 3
+        onPhaseComplete(3);
       } else {
         setMessage('❌ Erreur lors du téléchargement des documents');
       }
@@ -154,7 +154,8 @@ const Phase2 = ({ onPhaseComplete }) => {
             name="photo"
             onChange={(e) => handleFileChange(e, 'photo')}
             accept="image/png, image/jpeg, image/jpg"
-            required={!existingFiles.photo} // Make required only if no existing file
+            required={!existingFiles.photo}
+            disabled={isPastDeadline}
           />
           {(fileObjects.photo || existingFiles.photo) && (
             <div className="file-name">
@@ -171,6 +172,7 @@ const Phase2 = ({ onPhaseComplete }) => {
             accept="application/pdf"
             onChange={(e) => handleFileChange(e, 'cin')}
             required={!existingFiles.cin}
+            disabled={isPastDeadline}
           />
           {(fileObjects.cin || existingFiles.cin) && (
             <div className="file-name">
@@ -187,6 +189,7 @@ const Phase2 = ({ onPhaseComplete }) => {
             type="file"
             onChange={(e) => handleFileChange(e, 'cv')}
             required={!existingFiles.cv}
+            disabled={isPastDeadline}
           />
           {(fileObjects.cv || existingFiles.cv) && (
             <div className="file-name">
@@ -203,6 +206,7 @@ const Phase2 = ({ onPhaseComplete }) => {
             accept="application/pdf"
             onChange={(e) => handleFileChange(e, 'diplome')}
             required={!existingFiles.diplome}
+            disabled={isPastDeadline}
           />
           {(fileObjects.diplome || existingFiles.diplome) && (
             <div className="file-name">
@@ -220,7 +224,8 @@ const Phase2 = ({ onPhaseComplete }) => {
                 type="radio"
                 name="fonctionnaire"
                 checked={isFonctionnaire === true}
-                onChange={() => setIsFonctionnaire(true)}
+                onChange={() => handleFonctionnaireChange(true)}
+                disabled={isPastDeadline}
               /> Oui
             </label>
             <label>
@@ -228,7 +233,8 @@ const Phase2 = ({ onPhaseComplete }) => {
                 type="radio"
                 name="fonctionnaire"
                 checked={isFonctionnaire === false}
-                onChange={() => setIsFonctionnaire(false)}
+                onChange={() => handleFonctionnaireChange(false)}
+                disabled={isPastDeadline}
               /> Non
             </label>
           </div>
@@ -243,6 +249,7 @@ const Phase2 = ({ onPhaseComplete }) => {
               accept="application/pdf"
               onChange={(e) => handleFileChange(e, isFonctionnaire ? 'autorisation' : 'attestation')}
               required={!existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']}
+              disabled={isPastDeadline}
             />
             {(fileObjects[isFonctionnaire ? 'autorisation' : 'attestation'] || existingFiles[isFonctionnaire ? 'autorisation' : 'attestation']) && (
               <div className="file-name">
@@ -257,8 +264,8 @@ const Phase2 = ({ onPhaseComplete }) => {
         {message && <div className="error-global">{message}</div>}
 
         <div className="buttons">
-          <button type="button" onClick={() => {
-            // Clear localStorage and reset fileObjects on cancel
+          <button type="button" disabled={isPastDeadline} onClick={() => {
+            if (isPastDeadline) return;
             localStorage.removeItem('phase2FileObjects');
             setFileObjects({
               photo: null,
@@ -271,7 +278,7 @@ const Phase2 = ({ onPhaseComplete }) => {
           }}>
             Annuler
           </button>
-          <button type="submit">Soumettre</button>
+          <button type="submit" disabled={isPastDeadline}>Soumettre</button>
         </div>
       </form>
     </>
