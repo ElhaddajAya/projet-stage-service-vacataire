@@ -27,10 +27,10 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
 }
 
-.personal-info-container:hover {
-  transform: translateY(-5px); /* Légère élévation au survol */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
-}
+/* .personal-info-container:hover {
+  transform: translateY(-5px); Légère élévation au survol
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);  Ombre plus prononcée au survol 
+} */
 
 .info-row {
   display: flex;

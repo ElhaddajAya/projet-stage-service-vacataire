@@ -619,6 +619,71 @@ form input[type="password"]:focus {
   border: 1px solid #e5e7eb;
 }
 
+/* Ajouter ou remplacer dans global.css */
+.info-row {
+  display: flex;
+  justify-content: space-between; /* Aligner label à gauche, valeur à droite */
+  align-items: center; /* Alignement vertical centré */
+  margin-bottom: 20px; /* Espace entre les lignes */
+  font-size: 16px;
+  color: #555;
+  padding: 10px 0; /* Espacement vertical interne */
+  border-bottom: 1px solid #eee; /* Ligne de séparation subtile */
+  transition: background-color 0.2s ease; /* Transition pour effet au survol */
+}
+
+.info-row:last-child {
+  border-bottom: none; /* Pas de bordure pour la dernière ligne */
+}
+
+.info-row:hover {
+  background-color: #f7f7f7; /* Légère couleur de fond au survol */
+}
+
+.info-label {
+  font-weight: 600; /* Poids pour les labels */
+  color: #333;
+  width: 180px; /* Largeur fixe pour les labels */
+  display: inline-block; /* Assurer un bon alignement */
+}
+
+.info-value {
+  color: #000;
+  font-weight: 400; /* Poids normal pour les valeurs */
+  text-align: right; /* Alignement à droite */
+  flex: 1; /* Prend tout l'espace restant */
+}
+
+/* Styles spécifiques pour les liens dans .info-value */
+.info-value a {
+  color: #007bff; /* Couleur bleue pour les liens */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.info-value a:hover {
+  color: #0056b3; /* Couleur plus foncée au survol */
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .info-row {
+    flex-direction: column; /* Passer en colonne sur mobile */
+    align-items: flex-start; /* Aligner à gauche */
+    padding: 8px 0; /* Réduire l'espacement */
+  }
+
+  .info-label {
+    width: auto; /* Pas de largeur fixe sur mobile */
+    margin-bottom: 5px; /* Espacement entre label et valeur */
+  }
+
+  .info-value {
+    text-align: left; /* Aligner à gauche sur mobile */
+  }
+}
+
 .details-section h2 {
   font-size: 1.5rem;
   font-weight: 600;
