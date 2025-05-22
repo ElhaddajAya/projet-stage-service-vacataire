@@ -382,7 +382,7 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-valider {
   background-color: #2ecc71;
   color: white;
-  border: 0.5px solid #252525 !important;
+  border: 0.5px solid #0a853d !important;
 }
 
 .table-vacataires td .btn-valider:hover:not(:disabled) {
@@ -421,7 +421,6 @@ form input[type="password"]:focus {
 .btn-valider {
   background-color: #2ecc71;
   color: white;
-  border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -444,7 +443,7 @@ form input[type="password"]:focus {
 .btn-etude {
   background-color: #3498db;
   color: white;
-  border: 0.5px solid #252525;
+  border: 0.5px solid #065b94!important;
   padding: 0.3rem 1rem;
   border-radius: 4px;
   font-size: 0.96rem;
