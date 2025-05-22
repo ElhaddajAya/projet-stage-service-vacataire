@@ -47,13 +47,45 @@ const getFiliereId = (filiereNom, callback) => {
   });
 };
 
+// Vérifier si le vacataire existe déjà dans la base de données
+const checkVacataireExists = (nom, callback) => {
+  const query = "SELECT ID_vacat FROM vacataire WHERE Nom = ?";
+  db.query(query, [nom], (err, results) => {
+    if (err) {
+      console.error(`❌ Erreur lors de la vérification du vacataire ${nom}:`, err);
+      callback(null);
+      return;
+    }
+
+    if (results.length > 0) {
+      callback(results[0].ID_vacat); // Retourner l'ID du vacataire existant
+    } else {
+      callback(null); // Le vacataire n'existe pas
+    }
+  });
+};
+
+// Vérifier si une entrée existe déjà dans la table enseigner pour ce vacataire et cette filière
+const checkEnseignerExists = (vacataireId, filiereId, callback) => {
+  const query = "SELECT * FROM enseigner WHERE ID_vacat = ? AND ID_fil = ?";
+  db.query(query, [vacataireId, filiereId], (err, results) => {
+    if (err) {
+      console.error(`❌ Erreur lors de la vérification de l'entrée dans enseigner pour vacataire ${vacataireId} et filière ${filiereId}:`, err);
+      callback(false);
+      return;
+    }
+
+    callback(results.length > 0); // Retourne true si l'entrée existe, false sinon
+  });
+};
+
 // Fonction d'insertion des informations d'enseignement
 const insertEnseignement = (vacataireId, filiereId, semestre, semaines, heures, matiere) => {
   // Vérifier et nettoyer les valeurs
   semaines = semaines || 0;  // Valeur par défaut si null ou undefined
   heures = heures || 0;      // Valeur par défaut si null ou undefined
   matiere = matiere || "Inconnue";  // Valeur par défaut pour la matière
-  semestre = semestre || "Inconnu"; // Valeur par défaut pour le semestres
+  semestre = semestre || "Inconnu"; // Valeur par défaut pour le semestre
 
   console.log(`📝 Données enseignement :`, { vacataireId, filiereId, semestre, semaines, heures, matiere });
 
@@ -71,12 +103,11 @@ const insertEnseignement = (vacataireId, filiereId, semestre, semaines, heures, 
   });
 };
 
-// Fonction d'insertion des vacataires
-const insertVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) => {
+// Fonction d'insertion d'un nouveau vacataire
+const insertNewVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) => {
   const query = `
     INSERT INTO vacataire (Nom)
-    VALUES (?) 
-    ON DUPLICATE KEY UPDATE Nom = Nom;
+    VALUES (?)
   `;
 
   db.query(query, [nom], (err, result) => {
@@ -86,31 +117,44 @@ const insertVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) =
     }
 
     const vacataireId = result.insertId;
+    console.log(`✅ Nouveau vacataire inséré avec ID ${vacataireId}`);
 
-    // Si l'ID n'est pas retourné, récupérer l'ID du vacataire existant
-    if (!vacataireId) {
-      const getIdQuery = "SELECT ID_vacat FROM vacataire WHERE Nom = ?";
-      db.query(getIdQuery, [nom], (err, results) => {
-        if (err || results.length === 0) {
-          console.error(`❌ Erreur lors de la récupération de l'ID pour ${nom}:`, err || "Aucun résultat");
-          return;
-        }
+    // Récupérer l'ID de la filière et insérer les informations d'enseignement
+    getFiliereId(filiereNom, (filiereId) => {
+      if (filiereId) {
+        insertEnseignement(vacataireId, filiereId, semestre, semaines, heures, matiere);
+      }
+    });
+  });
+};
 
-        // Utiliser l'ID récupéré pour l'insertion dans enseigner
-        const vacataireIdFromDB = results[0].ID_vacat;
-        getFiliereId(filiereNom, (filiereId) => {
-          if (filiereId) {
-            insertEnseignement(vacataireIdFromDB, filiereId, semestre, semaines, heures, matiere);
+// Fonction principale pour traiter chaque ligne du fichier Excel
+const processVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) => {
+  // Étape 1 : Vérifier si le vacataire existe déjà
+  checkVacataireExists(nom, (vacataireId) => {
+    if (vacataireId) {
+      // Le vacataire existe déjà
+      console.log(`ℹ️ Vacataire ${nom} existe déjà avec ID ${vacataireId}`);
+
+      // Étape 2 : Récupérer l'ID de la filière
+      getFiliereId(filiereNom, (filiereId) => {
+        if (!filiereId) return; // Sortir si la filière n'existe pas
+
+        // Étape 3 : Vérifier si une entrée existe déjà pour cette combinaison vacataire/filière
+        checkEnseignerExists(vacataireId, filiereId, (exists) => {
+          if (exists) {
+            console.log(`⚠️ Entrée existante dans 'enseigner' pour vacataire ID ${vacataireId} et filière ID ${filiereId}. Aucune action effectuée.`);
+          } else {
+            // Insérer une nouvelle entrée dans enseigner pour la nouvelle filière
+            console.log(`📝 Nouvelle filière détectée pour vacataire ${nom}. Ajout dans 'enseigner'.`);
+            insertEnseignement(vacataireId, filiereId, semestre, semaines, heures, matiere);
           }
         });
       });
     } else {
-      // Récupérer l'ID de la filière et insérer les informations d'enseignement
-      getFiliereId(filiereNom, (filiereId) => {
-        if (filiereId) {
-          insertEnseignement(vacataireId, filiereId, semestre, semaines, heures, matiere);
-        }
-      });
+      // Le vacataire n'existe pas, insérer un nouveau vacataire
+      console.log(`📝 Vacataire ${nom} n'existe pas. Création d'un nouveau vacataire.`);
+      insertNewVacataire(nom, filiereNom, semestre, semaines, heures, matiere);
     }
   });
 };
@@ -129,7 +173,7 @@ data.forEach((row) => {
 
   console.log(`📝 Données nettoyées :`, { nom, filiere, semestre, semaines, heures, matiere });
 
-  insertVacataire(nom, filiere, semestre, semaines, heures, matiere);
+  processVacataire(nom, filiere, semestre, semaines, heures, matiere);
 });
 
 // Fermer la connexion après les opérations
@@ -137,4 +181,4 @@ setTimeout(() => {
   db.end(() => {
     console.log('🔗 Connexion fermée.');
   });
-}, 3000);
+}, 5000);

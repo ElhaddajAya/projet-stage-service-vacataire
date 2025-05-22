@@ -1100,3 +1100,134 @@ form input[type="password"]:focus {
 .refused-row:hover {
   background-color: #f5c6cb !important; /* Slightly darker red on hover */
 }
+
+/* Conteneur du formulaire pour le délai */
+.delai-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px; /* Largeur maximale pour le formulaire */
+  margin: 0 auto;
+}
+
+/* Conteneur interne pour l'input et le message */
+.delai-form-container {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex; /* Utiliser flex pour centrer les enfants */
+  flex-direction: column;
+  align-items: center; /* Centrer horizontalement les enfants */
+  margin-bottom: 20px; /* Espacement avant le bouton */
+}
+
+/* Ajuster form-group pour centrer son contenu */
+.form-group {
+  display: flex;
+  flex-direction: column; /* Empiler le label et l'input verticalement */
+  align-items: center; /* Centrer les éléments horizontalement */
+  width: 100%;
+  margin-bottom: 0; /* Pas de marge inférieure, gérée par delai-message */
+}
+
+/* Style pour le label */
+.delai-label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center; /* S'assurer que le label est centré */
+}
+
+/* Style pour l'input datetime-local */
+.delai-input {
+  width: 100%;
+  max-width: 300px; /* Largeur fixe pour l'input */
+  padding: 10px;
+  border: 1.5px solid #333;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #f9fafb;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: block; /* Assurer que l'input est un bloc */
+  margin: 0 auto; /* Centrer l'input dans son conteneur */
+}
+
+/* Effet de focus sur l'input */
+.delai-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/* Style pour le message */
+.delai-message {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-align: center;
+  width: 100%;
+  max-width: 300px; /* Même largeur que l'input pour l'alignement */
+}
+
+/* Style conditionnel pour le message de succès */
+.delai-message:where(:not(:empty)) {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Style conditionnel pour le message d'erreur */
+.delai-message:where(:not(:empty):not(:contains("succès"))) {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Style pour le bouton de soumission */
+.btn-submit {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .delai-form-container {
+    padding: 15px;
+  }
+
+  .delai-input {
+    max-width: 100%; /* Pleine largeur sur mobile */
+  }
+
+  .delai-label {
+    font-size: 1rem;
+  }
+
+  .delai-message {
+    font-size: 0.85rem;
+    max-width: 100%; /* Ajuster la largeur du message sur mobile */
+  }
+
+  .btn-submit {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}

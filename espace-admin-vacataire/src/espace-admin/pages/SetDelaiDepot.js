@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from '../../components/Header'; // Corrected path if Header is in src/components
-import Sidebar from '../components/Sidebar'; // Updated path to match the correct directory
+import Header from '../../components/Header';
+import Sidebar from '../components/Sidebar';
 import '../../styles/global.css';
 
 const SetDelaiDepot = () => {
@@ -28,9 +28,9 @@ const SetDelaiDepot = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/set-delai-depot', { delai_depot: delaiDepot }, { withCredentials: true });
-      setMessage('✅ Délai de dépôt mis à jour avec succès');
+      setMessage('Délai de dépôt mis à jour avec succès');
     } catch (err) {
-      setMessage('❌ Erreur lors de la mise à jour du délai de dépôt');
+      setMessage('Erreur lors de la mise à jour du délai de dépôt');
       console.error(err);
     }
   };
@@ -47,19 +47,22 @@ const SetDelaiDepot = () => {
         <Sidebar />
         <div className="page-container">
           <h1 className="page-title">Définir le Délai de Dépôt des Documents</h1>
-          <form className="form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Délai de dépôt (date et heure)</label>
-              <input
-                type="datetime-local"
-                value={delaiDepot}
-                onChange={(e) => setDelaiDepot(e.target.value)}
-                required
-              />
-            </div>
-            {message && <div className="error-global">{message}</div>}
-            <div className="buttons">
-              <button type="submit">Mettre à jour</button>
+          <form className="delai-form" onSubmit={handleSubmit}>
+            <div className="delai-form-container">
+              <div className="form-group">
+                <label className="delai-label">Délai de dépôt (date et heure)</label>
+                <input
+                  type="datetime-local"
+                  className="delai-input"
+                  value={delaiDepot}
+                  onChange={(e) => setDelaiDepot(e.target.value)}
+                  required
+                />
+              </div>
+              {message && <div className="delai-message">{message}</div>}
+              <div className="buttons">
+                <button type="submit" className="btn-submit">Mettre à jour</button>
+              </div>
             </div>
           </form>
         </div>
