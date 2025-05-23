@@ -12,6 +12,7 @@ import AdminInfosPersonnelles from './espace-admin/pages/AdminInfosPersonnelles'
 import AdministrateurList from './espace-admin/pages/AdministrateurList';
 import AddAdministrateur from './espace-admin/pages/AddAdministrateur'; // Importer la nouvelle page
 import EditAdminInfos from './espace-admin/pages/EditAdminInfos'; // Importer la nouvelle page
+import EditVacatairePassword from './espace-vacataire/pages/EditVacatairePassword';
 
 // Component to handle dynamic titles
 const TitleUpdater = () => {
@@ -50,7 +51,7 @@ function App() {
         <Route path="/espace-admin/administrateurs" element={<AdministrateurList />} />
         <Route path="/espace-admin/add-administrateur" element={<AddAdministrateur />} /> 
         <Route path="/espace-admin/edit-infos" element={<EditAdminInfos />} />
-      </Routes>
+        <Route path="/espace-vacataire/edit-password" element={<EditVacatairePassword />} /></Routes>
     </Router>
   );
 }
