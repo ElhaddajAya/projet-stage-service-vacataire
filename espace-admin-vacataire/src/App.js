@@ -10,6 +10,7 @@ import './styles/global.css';
 import SetDelaiDepot from './espace-admin/pages/SetDelaiDepot';
 
 import AdministrateurList from './espace-admin/pages/AdministrateurList';
+import AddAdministrateur from './espace-admin/pages/AddAdministrateur'; // Importer la nouvelle page
 
 
 // Component to handle dynamic titles
@@ -47,6 +48,8 @@ function App() {
         <Route path="/espace-admin/set-delai-depot" element={<SetDelaiDepot />} />
 
         <Route path="/espace-admin/administrateurs" element={<AdministrateurList />} />
+        <Route path="/espace-admin/add-administrateur" element={<AddAdministrateur />} /> 
+        
       </Routes>
     </Router>
   );

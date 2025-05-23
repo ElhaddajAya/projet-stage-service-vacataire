@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Importer useNavigate
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import '../../styles/global.css';
@@ -12,6 +13,7 @@ const AdministrateurList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const adminsPerPage = 5;
+  const navigate = useNavigate(); // Initialiser useNavigate
 
   // Fetch administrateurs from the backend
   const fetchAdministrateurs = async () => {
@@ -71,6 +73,10 @@ const AdministrateurList = () => {
     setSearchTerm(event.target.value);
   };
 
+  const handleAddAdministrateur = () => {
+    navigate('/espace-admin/add-administrateur'); // Rediriger vers la page d'ajout
+  };
+
   return (
     <div>
       <Header />
@@ -79,35 +85,40 @@ const AdministrateurList = () => {
         <div className="table-container">
           <h1 className="page-title">Liste des Administrateurs</h1>
 
-          {/* Barre de recherche avec icône à droite */}
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Rechercher un administrateur..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="search-bar"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                style={{
-                  position: 'absolute',
-                  right: '40px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                ✕
-              </button>
-            )}
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          {/* Barre de recherche et bouton Ajouter */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Rechercher un administrateur..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="search-bar"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  style={{
+                    position: 'absolute',
+                    right: '40px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  ✕
+                </button>
+              )}
+              <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            </div>
+            <button className="btn-add" onClick={handleAddAdministrateur}>
+              Ajouter
+            </button>
           </div>
 
-          <table className="table-vacataires"> {/* Réutiliser table-vacataires pour table-administrateurs */}
+          <table className="table-vacataires">
             <thead>
               <tr>
                 <th>N/O</th>

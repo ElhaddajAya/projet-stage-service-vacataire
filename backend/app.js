@@ -467,5 +467,33 @@ app.get('/administrateurs', (req, res) => {
   });
 });
 
+// ... (autres imports et configurations existantes)
+
+// Route to add a new administrator
+app.post('/administrateurs', (req, res) => {
+  console.log('Session data:', req.session);
+  if (!req.session.userId || req.session.role !== 'superadmin') {
+    console.log('Access denied: User not authenticated or not a superadmin', { userId: req.session.userId, role: req.session.role });
+    return res.status(403).json({ message: 'Accès réservé aux superadmins' });
+  }
+
+  const { nom, prenom, username, email, mdp, Role } = req.body;
+  if (!nom || !prenom || !username || !email || !mdp || !Role) {
+    return res.status(400).json({ message: 'Tous les champs sont requis' });
+  }
+
+  const query = 'INSERT INTO admin (nom, prenom, username, email, mdp, Role) VALUES (?, ?, ?, ?, ?, ?)';
+  db.query(query, [nom, prenom, username, email, mdp, Role], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de l\'ajout de l\'administrateur:', err);
+      return res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'administrateur' });
+    }
+    console.log('Administrateur ajouté:', results);
+    res.status(201).json({ message: 'Administrateur ajouté avec succès', id: results.insertId });
+  });
+});
+
+// ... (reste du code existant)
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`));
