@@ -483,7 +483,7 @@ app.get('/administrateurs', (req, res) => {
     return res.status(403).json({ message: 'Accès réservé aux administrateurs ou superadmins' });
   }
 
-  const query = 'SELECT ID_admin, nom, prenom, username, email, Role, isSuspended FROM admin';
+  const query = 'SELECT ID_admin, nom, prenom, username, email, Role, isSuspended FROM admin WHERE Role != "superadmin"';
   db.query(query, (err, results) => {
     if (err) {
       console.error('Erreur lors de la récupération des administrateurs:', err);
@@ -512,8 +512,8 @@ app.post('/add-administrateur', (req, res) => {
     return res.status(400).json({ message: 'Tous les champs sont requis' });
   }
 
-  const query = 'INSERT INTO admin (nom, prenom, username, email, mdp, Role) VALUES (?, ?, ?, ?, ?, ?)';
-  db.query(query, [nom, prenom, username, email, mdp, Role], (err, results) => {
+  const query = 'INSERT INTO admin (nom, prenom, email, Role) VALUES (?, ?, ?, ?, ?, ?)';
+  db.query(query, [nom, prenom, email, Role], (err, results) => {
     if (err) {
       console.error('Erreur lors de l\'ajout de l\'administrateur:', err);
       return res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'administrateur' });
@@ -532,7 +532,7 @@ app.delete('/administrateurs/:id', (req, res) => {
   }
 
   const adminId = req.params.id;
-  const query = 'DELETE FROM admin WHERE ID_admin = ?';
+  const query = 'DELETE FROM admin WHERE ID_admin = ? AND Role !== "superadmin"';
   db.query(query, [adminId], (err, results) => {
     if (err) {
       console.error('Erreur lors de la suppression de l\'administrateur:', err);
