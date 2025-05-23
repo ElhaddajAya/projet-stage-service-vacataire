@@ -470,7 +470,7 @@ app.get('/administrateurs', (req, res) => {
 // ... (autres imports et configurations existantes)
 
 // Route to add a new administrator
-app.post('/administrateurs', (req, res) => {
+app.post('/add-administrateur', (req, res) => {
   console.log('Session data:', req.session);
   if (!req.session.userId || req.session.role !== 'superadmin') {
     console.log('Access denied: User not authenticated or not a superadmin', { userId: req.session.userId, role: req.session.role });

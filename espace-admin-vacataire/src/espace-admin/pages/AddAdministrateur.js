@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
-import '../../style/addAdministrateur.css';
+import '../../styles/global.css';
+import '../../style/phase1.css';
 
 const AddAdministrateur = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const AddAdministrateur = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/administrateurs', formData, {
+      await axios.post('http://localhost:5000/add-administrateur', formData, {
         withCredentials: true,
       });
       navigate('/espace-admin/administrateurs');
@@ -39,79 +40,56 @@ const AddAdministrateur = () => {
       <Header />
       <Sidebar />
       <main className="page-container">
-        <div className="table-container">
-          <h1 className="page-title">Ajouter un Administrateur</h1>
-          {error && <div className="admin-error-message">{error}</div>}
-          <form onSubmit={handleSubmit} className="admin-form-container">
+        <h1 className="page-title">Ajouter un Administrateur</h1>
+        {error && <div className="error-global">{error}</div>}
+        <div className="content">
+          <form onSubmit={handleSubmit} className="form">
             <div className="admin-form-row">
-              <div className="admin-form-group">
+              <div className="form-group">
                 <label>Nom</label>
                 <input
                   type="text"
                   name="nom"
                   value={formData.nom}
                   onChange={handleChange}
-                  placeholder="Entrez le nom"
+                  placeholder="Entrez votre nom"
                   required
                 />
               </div>
-              <div className="admin-form-group">
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="text"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Entrez votre email"
+                  required
+                />
+              </div>
+            </div>
+            <div className="admin-form-row">
+              <div className="form-group">
                 <label>Prénom</label>
                 <input
                   type="text"
                   name="prenom"
                   value={formData.prenom}
                   onChange={handleChange}
-                  placeholder="Entrez le prénom"
+                  placeholder="Entrez votre prénom"
                   required
                 />
               </div>
-            </div>
-            <div className="admin-form-row">
-              <div className="admin-form-group">
-                <label>Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  placeholder="Entrez le username"
-                  required
-                />
-              </div>
-              <div className="admin-form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Entrez l'email"
-                  required
-                />
+              <div className="form-group">
+                <label>Rôle</label>
+                <select name="Role" value={formData.Role} onChange={handleChange} required>
+                  <option value="admin">Admin</option>
+                  <option value="superadmin">Superadmin</option>
+                  <option value="comptable">Comptable</option>
+                </select>
               </div>
             </div>
-            <div className="admin-form-group">
-              <label>Mot de passe</label>
-              <input
-                type="password"
-                name="mdp"
-                value={formData.mdp}
-                onChange={handleChange}
-                placeholder="Entrez le mot de passe"
-                required
-              />
-            </div>
-            <div className="admin-form-group">
-              <label>Rôle</label>
-              <select name="Role" value={formData.Role} onChange={handleChange} required>
-                <option value="admin">Admin</option>
-                <option value="superadmin">Superadmin</option>
-                <option value="comptable">Comptable</option>
-              </select>
-            </div>
-            <div className="admin-form-actions">
-              <button type="submit" className="admin-btn-valider">Ajouter</button>
+            <div className="buttons">
               <button
                 type="button"
                 className="admin-btn-annuler"
@@ -119,6 +97,7 @@ const AddAdministrateur = () => {
               >
                 Annuler
               </button>
+              <button type="submit" className="admin-btn-valider">Ajouter</button>
             </div>
           </form>
         </div>

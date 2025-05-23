@@ -81,7 +81,7 @@ const Sidebar = () => {
           </li>
           {userData.role === 'superadmin' && (
             <li onClick={() => navigate('/espace-admin/administrateurs')}>
-              <a href="#"><i className="fas fa-user-shield"></i> Administrateurs</a>
+              <a href="#"><i className="fas fa-users"></i> Administrateurs</a>
             </li>
           )}
           {userData.role === 'superadmin' && (
