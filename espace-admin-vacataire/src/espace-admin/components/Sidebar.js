@@ -21,11 +21,10 @@ const Sidebar = () => {
 
         if (response.ok && data) {
           console.log('User data:', data); // Log pour débogage
-
           setUserData({
             nom: data.nom || 'Utilisateur',
             prenom: data.prenom || '',
-            role: data.Role || '', // Récupérer le rôle spécifique
+            role: data.Role || '', // Utiliser 'Role' pour correspondre à la colonne de la base
           });
         } else {
           console.error('Utilisateur non authentifié ou erreur de données');
@@ -47,7 +46,6 @@ const Sidebar = () => {
       });
 
       if (response.ok) {
-        // Redirect to login page after logout
         navigate('/login');
       } else {
         console.error('Erreur lors de la déconnexion');
@@ -82,8 +80,8 @@ const Sidebar = () => {
             <a href="#"><i className="fas fa-users-line"></i> Vacataires</a>
           </li>
           {userData.role === 'superadmin' && (
-            <li>
-              <a href="#"><i className="fas fa-users"></i> Administrateurs</a>
+            <li onClick={() => navigate('/espace-admin/administrateurs')}>
+              <a href="#"><i className="fas fa-user-shield"></i> Administrateurs</a>
             </li>
           )}
           {userData.role === 'superadmin' && (
@@ -96,7 +94,7 @@ const Sidebar = () => {
           )}
           <li onClick={handleLogout}>
             <a href="#"><i className="fas fa-sign-out-alt"></i> Déconnexion</a>
-          </li> 
+          </li>
         </ul>
       </div>
     </>

@@ -441,5 +441,31 @@ app.post('/set-delai-depot', (req, res) => {
   });
 });
 
+
+
+
+// Route to fetch all administrators
+app.get('/administrateurs', (req, res) => {
+  console.log('Session data:', req.session);
+  if (!req.session.userId || !['superadmin', 'admin'].includes(req.session.role)) {
+    console.log('Access denied: User not authenticated or not an admin/superadmin', { userId: req.session.userId, role: req.session.role });
+    return res.status(403).json({ message: 'Accès réservé aux administrateurs ou superadmins' });
+  }
+
+  const query = 'SELECT ID_admin, nom, prenom, username, email, Role FROM admin'; // Utiliser 'Role' au lieu de 'role'
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des administrateurs:', err);
+      return res.status(500).send('Erreur lors de la récupération des administrateurs');
+    }
+    console.log('Administrateurs fetched:', results);
+    if (results.length === 0) {
+      console.log('No administrators found in the database');
+      return res.status(200).json([]);
+    }
+    res.json(results);
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`));

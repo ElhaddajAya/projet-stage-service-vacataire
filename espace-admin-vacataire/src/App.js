@@ -9,6 +9,8 @@ import Documents from './espace-vacataire/pages/Documents';
 import './styles/global.css';
 import SetDelaiDepot from './espace-admin/pages/SetDelaiDepot';
 
+import AdministrateurList from './espace-admin/pages/AdministrateurList';
+
 
 // Component to handle dynamic titles
 const TitleUpdater = () => {
@@ -43,6 +45,8 @@ function App() {
         <Route path="/espace-vacataire/infos-personnelles" element={<InfosPersonnelles />} />
         <Route path="/espace-vacataire/documents" element={<Documents />} />
         <Route path="/espace-admin/set-delai-depot" element={<SetDelaiDepot />} />
+
+        <Route path="/espace-admin/administrateurs" element={<AdministrateurList />} />
       </Routes>
     </Router>
   );
