@@ -388,7 +388,7 @@ app.post('/upload-documents', upload.fields([
 
     const existingData = results[0];
     const updateFields = { ...existingData, Fonctionnaire: isFonctionnaire === 'true' ? 1 : 0 };
-    if (existingData.Etat_dossier === 'En attente') updateFields.Etat_dossier = 'En cours';
+    if (existingData.Etat_dossier === 'En attente' || existingData.Etat_dossier === 'Refusé') updateFields.Etat_dossier = 'En cours';
 
     const oldFilesToDelete = [];
     if (photo) { updateFields.Photo = photo[0].path; if (existingData.Photo) oldFilesToDelete.push(existingData.Photo); }
@@ -398,6 +398,20 @@ app.post('/upload-documents', upload.fields([
     if (isFonctionnaire === 'true' && autorisation) { updateFields.Autorisation_fichier = autorisation[0].path; if (existingData.Autorisation_fichier) oldFilesToDelete.push(existingData.Autorisation_fichier); }
     if (isFonctionnaire === 'false' && attestation) { updateFields.Attest_non_emploi = attestation[0].path; if (existingData.Attest_non_emploi) oldFilesToDelete.push(existingData.Attest_non_emploi); }
 
+    // Ensure Refus_reason is a JSON string if it exists
+    if (updateFields.Refus_reason) {
+      try {
+        updateFields.Refus_reason = JSON.stringify(updateFields.Refus_reason);
+      } catch (stringifyErr) {
+        console.error('Error stringifying Refus_reason:', stringifyErr);
+        updateFields.Refus_reason = null; // Fallback to null if stringification fails
+      }
+    }
+
+    // Log the updateFields for debugging
+    console.log('Update fields:', updateFields);
+
+    // Remove ID_vacat from updateFields to avoid primary key conflict
     delete updateFields.ID_vacat;
 
     const deleteOldFiles = async () => {
@@ -408,11 +422,22 @@ app.post('/upload-documents', upload.fields([
 
     const updateQuery = 'UPDATE vacataire SET ? WHERE ID_vacat = ?';
     db.query(updateQuery, [updateFields, vacataireId], (err, results) => {
-      if (err) return res.status(500).json({ message: 'Erreur serveur' });
+      if (err) {
+        console.error('Database update error:', err.code, err.sqlMessage);
+        return res.status(500).json({ message: `Erreur lors de la mise à jour de la base de données: ${err.sqlMessage || err.message}` });
+      }
       if (results.affectedRows === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
       deleteOldFiles().catch(console.error);
       res.json({ message: 'Documents téléchargés avec succès' });
     });
+
+    // Update Etat_dossier
+    if (existingData.Etat_dossier === 'En attente' || existingData.Etat_dossier === 'Refusé') {
+      const updateDossierQuery = 'UPDATE vacataire SET Etat_dossier = ? WHERE ID_vacat = ?';
+      db.query(updateDossierQuery, ['En cours', vacataireId], (err) => {
+        if (err) console.error('Erreur lors de la mise à jour de l\'état du dossier:', err);
+      });
+    }
   });
 });
 

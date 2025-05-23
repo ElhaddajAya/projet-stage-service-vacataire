@@ -9,7 +9,7 @@ const extractFilename = (path) => {
   return baseName.split('.')[0];
 };
 
-const Phase2 = ({ onPhaseComplete, isPastDeadline }) => {
+const Phase2 = ({ onPhaseComplete, isPastDeadline, dossierStatus, onUpdate }) => {
   const [fileObjects, setFileObjects] = useState(() => {
     const savedFiles = localStorage.getItem('phase2FileObjects');
     return savedFiles ? JSON.parse(savedFiles) : {
@@ -56,10 +56,12 @@ const Phase2 = ({ onPhaseComplete, isPastDeadline }) => {
           });
           setIsFonctionnaire(data.Fonctionnaire !== null ? !!data.Fonctionnaire : null);
         } else {
-          console.error('Erreur lors de la récupération des données');
+          console.error('Erreur lors de la récupération des données:', response.status, response.statusText);
+          setMessage(`❌ Erreur lors de la récupération des données: ${response.statusText}`);
         }
       } catch (err) {
-        console.error('Erreur réseau', err);
+        console.error('Erreur réseau:', err);
+        setMessage('❌ Erreur réseau lors de la récupération des données');
       }
     };
 
@@ -67,7 +69,7 @@ const Phase2 = ({ onPhaseComplete, isPastDeadline }) => {
   }, []);
 
   const handleFileChange = (e, fileType) => {
-    if (isPastDeadline) return; // Prevent changes if past deadline
+    if (isPastDeadline) return;
     if (e.target.files.length > 0) {
       setFileObjects((prev) => ({
         ...prev,
@@ -82,22 +84,58 @@ const Phase2 = ({ onPhaseComplete, isPastDeadline }) => {
   };
 
   const handleFonctionnaireChange = (value) => {
-    if (isPastDeadline) return; // Prevent changes if past deadline
+    if (isPastDeadline) return;
     setIsFonctionnaire(value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isPastDeadline) return; // Prevent submission if past deadline
+    if (isPastDeadline) {
+      setMessage('❌ Le délai de dépôt est dépassé');
+      return;
+    }
     setMessage('');
+
+    // Validate required fields
+    if (!fileObjects.photo && !existingFiles.photo) {
+      setMessage('❌ Veuillez sélectionner une photo');
+      return;
+    }
+    if (!fileObjects.cin && !existingFiles.cin) {
+      setMessage('❌ Veuillez sélectionner un fichier CIN');
+      return;
+    }
+    if (!fileObjects.cv && !existingFiles.cv) {
+      setMessage('❌ Veuillez sélectionner un fichier CV');
+      return;
+    }
+    if (!fileObjects.diplome && !existingFiles.diplome) {
+      setMessage('❌ Veuillez sélectionner un fichier Diplômes');
+      return;
+    }
+    if (isFonctionnaire === null) {
+      setMessage('❌ Veuillez indiquer si vous êtes fonctionnaire');
+      return;
+    }
+    if (isFonctionnaire && !fileObjects.autorisation && !existingFiles.autorisation) {
+      setMessage('❌ Veuillez sélectionner un fichier Autorisation');
+      return;
+    }
+    if (!isFonctionnaire && !fileObjects.attestation && !existingFiles.attestation) {
+      setMessage('❌ Veuillez sélectionner une Attestation de non emploi');
+      return;
+    }
 
     const formData = new FormData();
     Object.keys(fileObjects).forEach((key) => {
       if (fileObjects[key]) {
         formData.append(key, fileObjects[key]);
+        console.log(`Added ${key}: ${fileObjects[key].name}`);
       }
     });
-    formData.append('isFonctionnaire', isFonctionnaire !== null ? isFonctionnaire : false);
+    // Send isFonctionnaire as a string to match backend expectation
+    formData.append('isFonctionnaire', String(isFonctionnaire));
+    console.log('isFonctionnaire:', String(isFonctionnaire));
 
     try {
       const response = await axios.post('http://localhost:5000/upload-documents', formData, {
@@ -133,13 +171,21 @@ const Phase2 = ({ onPhaseComplete, isPastDeadline }) => {
             attestation: extractFilename(updatedData.Attest_non_emploi),
           });
         }
+        onUpdate(); // Trigger parent to re-fetch data
+        // if (dossierStatus === 'Refusé') {
+        //   window.location.reload();
+        // } else {
+        //   onPhaseComplete(3);
+        // }
         onPhaseComplete(3);
+
       } else {
-        setMessage('❌ Erreur lors du téléchargement des documents');
+        setMessage(`❌ Erreur lors du téléchargement: ${response.status} - ${response.statusText}`);
+        console.error('Server response:', response.data);
       }
     } catch (err) {
-      setMessage('❌ Erreur lors du téléchargement des documents');
-      console.error(err);
+      setMessage(`❌ Erreur lors du téléchargement: ${err.response?.data?.message || err.message}`);
+      console.error('Error details:', err.response ? err.response.data : err.message);
     }
   };
 

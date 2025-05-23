@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../../style/phase1.css';
 import { useNavigate } from "react-router-dom";
 
-const Phase1 = ({ onPhaseComplete, isPastDeadline }) => {
+const Phase1 = ({ onPhaseComplete, isPastDeadline, onUpdate }) => {
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -68,6 +68,7 @@ const Phase1 = ({ onPhaseComplete, isPastDeadline }) => {
 
       if (response.status === 200) {
         setMessage('✅ Informations mises à jour avec succès');
+        onUpdate(); // Trigger parent to re-fetch data
         onPhaseComplete(2);
       } else {
         setMessage('❌ Erreur lors de la mise à jour');

@@ -822,12 +822,32 @@ form input[type="password"]:focus {
   line-height: 1.5; /* Hauteur de ligne pour une meilleure lisibilité */
 }
 
+.message-bar-delai {
+  background-color: #f5e0b5; 
+  border: 1px solid #df9503; /* Ajout d'une bordure complète pour un look plus "encadré" */
+  border-left: 4px solid #df9503; /* Conserver la bordure gauche plus épaisse pour l'accentuation */
+  color: #875c04;
+  padding: 1rem 1.5rem; /* Légèrement plus de padding horizontal pour l'élégance */
+  margin-bottom: 2rem; /* Réduire légèrement la marge pour une meilleure intégration */
+  border-radius: 4px; /* Coins arrondis pour une apparence plus moderne */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre subtile pour un effet "flottant" */
+  display: flex;
+  flex-wrap: wrap; /* Permettre au contenu de passer à la ligne si nécessaire */
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Espacement entre les éléments enfants */
+  font-size: 1rem; /* Taille de police cohérente */
+  line-height: 1.5; /* Hauteur de ligne pour une meilleure lisibilité */
+}
+
+.message-bar-delai #textMsgBar,
 .message-bar #textMsgBar {
   font-weight: bold;
   padding-right: 5px;
   flex-shrink: 0; /* Empêche le rétrécissement excessif */
 }
 
+.message-bar-delai span,
 .message-bar span {
   flex-shrink: 1; /* Permet aux spans de s'ajuster si nécessaire */
   text-align: center; /* Assure que chaque span est centré */
