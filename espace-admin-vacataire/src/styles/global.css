@@ -72,7 +72,7 @@ header h1 {
 .login-form {
   background-color: white;
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: none;
   width: 100%;
@@ -383,14 +383,17 @@ form input[type="password"]:focus {
   background-color: #2ecc71;
   color: white;
   border: 0.3px solid #27ae60 !important;
+  border-radius: 4px;
 }
 
 .table-vacataires td .btn-valider:hover:not(:disabled) {
   background-color: #27ae60 !important; /* Force darker green */
+  border-radius: 4px;
 }
 
 .table-vacataires td .btn-valider:disabled {
   background-color: #95d5b2;
+  border-radius: 4px;
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -400,17 +403,20 @@ form input[type="password"]:focus {
   color: white;
   padding: 0.67rem 1.4rem;
   border: 0.3px solid #2980b9 !important;
+  border-radius: 4px;
   margin-left: 20px;
 }
 
 .table-vacataires td .btn-etude:hover {
   background-color: #2980b9 !important; /* Force darker blue */
+  border-radius: 4px;
 }
 
 .table-vacataires td .btn-refuser {
   background-color: #e74c3c;
   color: white;
   border: 0.3px solid #c0392b !important;
+  border-radius: 4px;
 }
 
 .table-vacataires td .btn-refuser:hover {
@@ -433,10 +439,12 @@ form input[type="password"]:focus {
 
 .btn-valider:hover:not(:disabled) {
   background-color: #27ae60;
+  border-radius: 4px;
 }
 
 .btn-valider:disabled {
   background-color: #95d5b2;
+  border-radius: 4px;
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -519,7 +527,7 @@ form input[type="password"]:focus {
   border: 1.5px solid #4b5563;
   background-color: white;
   padding: 0.4rem 0.75rem;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   color: #4b5563;
   font-weight: 500;
@@ -583,7 +591,7 @@ form input[type="password"]:focus {
   font-weight: 500;
   transition: all 0.2s;
   background-color: #ffffff;
-  border: 1px solid #252525;
+  border: 0.3px solid #252525;
   color: #222;
   cursor: pointer;
   font-size: 1rem;
@@ -595,7 +603,7 @@ form input[type="password"]:focus {
 
 /* Etude Dossier Page */
 .vacataire-details {
-  max-width: 1300px; /* Increased from 1200px to 1400px */
+  max-width: 1500px; /* Increased from 1200px to 1400px */
   margin: 0 auto;
   padding: 30px; /* Slightly increased padding for better spacing */
   background-color: #fff;
@@ -746,7 +754,7 @@ form input[type="password"]:focus {
 .btn-retour {
   background-color: #ffffff;
   color: #222;
-  border: 0.5px solid #444;
+  border: 0.3px solid #444;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -803,7 +811,7 @@ form input[type="password"]:focus {
   color: #b91c1c;
   padding: 1rem 1.5rem; /* Légèrement plus de padding horizontal pour l'élégance */
   margin-bottom: 2rem; /* Réduire légèrement la marge pour une meilleure intégration */
-  border-radius: 6px; /* Coins arrondis pour une apparence plus moderne */
+  border-radius: 4px; /* Coins arrondis pour une apparence plus moderne */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre subtile pour un effet "flottant" */
   display: flex;
   flex-wrap: wrap; /* Permettre au contenu de passer à la ligne si nécessaire */
@@ -928,7 +936,7 @@ form input[type="password"]:focus {
   width: 100%;
   padding: 10px;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1rem;
   color: #2d3748;
   resize: vertical;
@@ -953,7 +961,7 @@ form input[type="password"]:focus {
 .btn-annuler {
   padding: 10px 20px;   
   border: 0.3px solid #222;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -978,6 +986,7 @@ form input[type="password"]:focus {
 .btn-annuler {
   background-color: #ffffff;
   border: 0.3px solid #222;
+  border-radius: 4px;
   color: #222;
 }
 
@@ -1093,13 +1102,13 @@ form input[type="password"]:focus {
 }
 
 .refused-row {
-  background-color: #f8d7da!important; /* Slight red background */
+  background-color: #f8d7daac!important; /* Slight red background */
   transition: background-color 0.3s ease; /* Smooth transition for visual feedback */
 }
 
 /* Optional: Add hover effect to distinguish rows */
 .refused-row:hover {
-  background-color: #f5c6cb !important; /* Slightly darker red on hover */
+  background-color: #f8d7da !important; /* Slightly darker red on hover */
 }
 
 
@@ -1226,6 +1235,7 @@ form input[type="password"]:focus {
   margin-right: 15px;
   background-color: #e74c3c;
   border: 0.3px solid #c0392b;
+  border-radius: 4px;
 }
 
 .delete-btn:hover {
@@ -1234,7 +1244,7 @@ form input[type="password"]:focus {
 /* Styles pour les boutons d'action (déjà existant pour delete-btn) */
 .action-btn {
   padding: 10px 20px;   
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -1243,6 +1253,7 @@ form input[type="password"]:focus {
 .suspend-btn {
   border: 0.3px solid #ad6d00;
   background-color: #f59e0b;
+  border-radius: 4px;
 }
 
 .suspend-btn:hover {
@@ -1251,6 +1262,7 @@ form input[type="password"]:focus {
 
 .activate-btn {
   border: 0.3px solid #27ae60;
+  border-radius: 4px;
   background-color: #2ecc71;
 }
 
