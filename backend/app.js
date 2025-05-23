@@ -299,6 +299,18 @@ app.put('/update-vacataire', (req, res) => {
   });
 });
 
+// Route to update vacataire password
+app.put('/update-vacataire-password', (req, res) => {
+  const vacataireId = req.session.userId;
+  const { mdp } = req.body;
+  if (!vacataireId) return res.status(401).json({ message: 'Utilisateur non connecté' });
+  const query = 'UPDATE vacataire SET mdp = ? WHERE ID_vacat = ?';
+  db.query(query, [mdp, vacataireId], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Erreur serveur' });
+    res.json({ message: 'Mot de passe mis à jour avec succès' });
+  });
+});
+
 // Route to update admin info
 app.put('/update-admin', (req, res) => {
   const adminId = req.session.userId;

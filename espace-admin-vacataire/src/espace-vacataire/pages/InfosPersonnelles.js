@@ -4,6 +4,7 @@ import axios from 'axios';
 import Header from '../../components/Header';
 import Sidebar from '../components/Sidebar'; // Ajusté pour correspondre à la structure
 import '../../style/infos-personnelles.css';
+import EditVacatairePassword from './EditVacatairePassword';
 
 const InfosPersonnelles = () => {
   const [userData, setUserData] = useState({ nom: '', prenom: '', dateNaiss: '', email: '', numeroTele: '', cin: '' });
@@ -88,6 +89,11 @@ const InfosPersonnelles = () => {
           <div className="info-row">
             <span className="info-label">CIN :</span>
             <span className="info-value">{userData.cin}</span>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <button className="btn-update-infos" onClick={() => navigate('/espace-vacataire/edit-password')}>
+              Modifier le Mot de Passe
+            </button>
           </div>
         </div>
       </main>
