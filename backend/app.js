@@ -248,36 +248,6 @@ app.get('/vacataires', (req, res) => {
   });
 });
 
-// // Route for login
-// app.post('/login', (req, res) => {
-//   const { username, password } = req.body;
-//   if (!username || !password) return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
-
-//   const vacataireQuery = 'SELECT ID_vacat, Nom FROM vacataire WHERE username = ? AND mdp = ?';
-//   db.query(vacataireQuery, [username, password], (err, vacataireResults) => {
-//     if (err) return res.status(500).json({ message: 'Erreur serveur' });
-//     if (vacataireResults.length > 0) {
-//       const vacataire = vacataireResults[0];
-//       req.session.userId = vacataire.ID_vacat;
-//       req.session.nom = vacataire.Nom;
-//       req.session.role = 'vacataire';
-//       return res.json({ message: 'Connexion réussie', user: { id: vacataire.ID_vacat, nom: vacataire.Nom, role: 'vacataire' } });
-//     }
-
-//     const adminQuery = 'SELECT ID_admin, Nom, Role FROM admin WHERE username = ? AND mdp = ?';
-//     db.query(adminQuery, [username, password], (err, adminResults) => {
-//       if (err) return res.status(500).json({ message: 'Erreur serveur' });
-//       if (adminResults.length > 0) {
-//         const admin = adminResults[0];
-//         req.session.userId = admin.ID_admin;
-//         req.session.nom = admin.Nom;
-//         req.session.role = admin.Role; // Stocker le rôle spécifique (superadmin, admin, comptable)
-//         return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: admin.Role } });
-//       }
-//       return res.status(401).json({ message: 'Identifiants incorrects' });
-//     });
-//   });
-// });
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
@@ -474,7 +444,6 @@ app.post('/set-delai-depot', (req, res) => {
 });
 
 
-
 // Route to fetch all administrators
 app.get('/administrateurs', (req, res) => {
   console.log('Session data:', req.session);
@@ -498,7 +467,6 @@ app.get('/administrateurs', (req, res) => {
   });
 });
 
-
 // Route to add a new administrator
 app.post('/add-administrateur', (req, res) => {
   console.log('Session data:', req.session);
@@ -507,23 +475,61 @@ app.post('/add-administrateur', (req, res) => {
     return res.status(403).json({ message: 'Accès réservé aux superadmins' });
   }
 
-  const { nom, prenom, username, email, mdp, Role } = req.body;
-  if (!nom || !prenom || !username || !email || !mdp || !Role) {
+  const { nom, prenom, email, Role } = req.body;
+  if (!nom || !prenom || !email || !Role) {
     return res.status(400).json({ message: 'Tous les champs sont requis' });
   }
 
-  const query = 'INSERT INTO admin (nom, prenom, email, Role) VALUES (?, ?, ?, ?, ?, ?)';
-  db.query(query, [nom, prenom, email, Role], (err, results) => {
+  // Generate username (e.g., nom.prenom in lowercase)
+  const username = `${nom.toLowerCase()}.${prenom.toLowerCase()}`;
+  // Generate random password (12 characters)
+  const generatePassword = () => {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+  };
+  const mdp = generatePassword();
+
+  const query = 'INSERT INTO admin (nom, prenom, username, email, mdp, Role) VALUES (?, ?, ?, ?, ?, ?)';
+  db.query(query, [nom, prenom, username, email, mdp, Role], async (err, results) => {
     if (err) {
       console.error('Erreur lors de l\'ajout de l\'administrateur:', err);
       return res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'administrateur' });
     }
     console.log('Administrateur ajouté:', results);
+
+    // Send email with username and password
+    if (email && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Vos identifiants de connexion',
+        text: `Bonjour,\n\nVotre compte administrateur a été créé avec succès.\n\nIdentifiant : ${username}\nMot de passe : ${mdp}\n\nVeuillez vous connecter à l'application pour changer votre mot de passe.\n\nCordialement,\nÉcole Supérieure de Technologie de Salé`,
+        attachments: [
+          {
+            filename: 'logo.jpg',
+            path: './public/logo.jpg',
+            cid: 'estLogo'
+          }
+        ]
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully to:', email);
+      } catch (emailError) {
+        console.error('Error sending email:', emailError);
+      }
+    } else {
+      console.warn('Email not sent: Missing EMAIL_USER, EMAIL_PASS, or email address');
+    }
+
     res.status(201).json({ message: 'Administrateur ajouté avec succès', id: results.insertId });
   });
 });
-
-
 
 // Route to delete an administrator
 app.delete('/administrateurs/:id', (req, res) => {
@@ -532,7 +538,7 @@ app.delete('/administrateurs/:id', (req, res) => {
   }
 
   const adminId = req.params.id;
-  const query = 'DELETE FROM admin WHERE ID_admin = ? AND Role !== "superadmin"';
+  const query = 'DELETE FROM admin WHERE ID_admin = ? AND Role != "superadmin"';
   db.query(query, [adminId], (err, results) => {
     if (err) {
       console.error('Erreur lors de la suppression de l\'administrateur:', err);
@@ -544,7 +550,6 @@ app.delete('/administrateurs/:id', (req, res) => {
     res.json({ message: 'Administrateur supprimé avec succès' });
   });
 });
-
 
 // Route to suspend or activate an administrator's permissions
 app.put('/administrateurs/:id/suspend', (req, res) => {
