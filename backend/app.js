@@ -493,7 +493,27 @@ app.post('/administrateurs', (req, res) => {
   });
 });
 
-// ... (reste du code existant)
+
+
+// Route to delete an administrator
+app.delete('/administrateurs/:id', (req, res) => {
+  if (!req.session.userId || req.session.role !== 'superadmin') {
+    return res.status(403).json({ message: 'Accès réservé aux superadmins' });
+  }
+
+  const adminId = req.params.id;
+  const query = 'DELETE FROM admin WHERE ID_admin = ?';
+  db.query(query, [adminId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la suppression de l\'administrateur:', err);
+      return res.status(500).json({ message: 'Erreur lors de la suppression' });
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Administrateur non trouvé' });
+    }
+    res.json({ message: 'Administrateur supprimé avec succès' });
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`));

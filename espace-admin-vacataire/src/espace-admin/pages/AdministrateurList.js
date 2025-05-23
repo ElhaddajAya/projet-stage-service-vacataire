@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Importer useNavigate
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import '../../styles/global.css';
@@ -13,9 +13,8 @@ const AdministrateurList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const adminsPerPage = 5;
-  const navigate = useNavigate(); // Initialiser useNavigate
+  const navigate = useNavigate();
 
-  // Fetch administrateurs from the backend
   const fetchAdministrateurs = async () => {
     try {
       const response = await axios.get('http://localhost:5000/administrateurs', {
@@ -32,7 +31,6 @@ const AdministrateurList = () => {
     fetchAdministrateurs();
   }, []);
 
-  // Handle search
   useEffect(() => {
     const filtered = administrateurs.filter((admin) => {
       const nom = admin.nom || '';
@@ -46,27 +44,20 @@ const AdministrateurList = () => {
       );
     });
     setFilteredAdministrateurs(filtered);
-    setCurrentPage(1); // Reset to first page when search changes
+    setCurrentPage(1);
   }, [searchTerm, administrateurs]);
 
-  // Calculate the administrateurs to display on the current page
   const indexOfLastAdmin = currentPage * adminsPerPage;
   const indexOfFirstAdmin = indexOfLastAdmin - adminsPerPage;
   const currentAdmins = filteredAdministrateurs.slice(indexOfFirstAdmin, indexOfLastAdmin);
-
-  // Calculate total pages
   const totalPages = Math.ceil(filteredAdministrateurs.length / adminsPerPage);
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const handleSearch = (event) => {
@@ -74,7 +65,22 @@ const AdministrateurList = () => {
   };
 
   const handleAddAdministrateur = () => {
-    navigate('/espace-admin/add-administrateur'); // Rediriger vers la page d'ajout
+    navigate('/espace-admin/add-administrateur');
+  };
+
+  const handleDelete = async (adminId) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet administrateur ?')) {
+      try {
+        await axios.delete(`http://localhost:5000/administrateurs/${adminId}`, {
+          withCredentials: true,
+        });
+        setAdministrateurs(administrateurs.filter((admin) => admin.ID_admin !== adminId));
+        setFilteredAdministrateurs(filteredAdministrateurs.filter((admin) => admin.ID_admin !== adminId));
+      } catch (error) {
+        console.error('Erreur lors de la suppression:', error);
+        alert('Erreur lors de la suppression. Vérifiez vos autorisations.');
+      }
+    }
   };
 
   return (
@@ -85,7 +91,6 @@ const AdministrateurList = () => {
         <div className="table-container">
           <h1 className="page-title">Liste des Administrateurs</h1>
 
-          {/* Barre de recherche et bouton Ajouter */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <div className="search-container">
               <input
@@ -124,6 +129,7 @@ const AdministrateurList = () => {
                 <th>N/O</th>
                 <th>Nom Complet</th>
                 <th>Rôle</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -134,12 +140,19 @@ const AdministrateurList = () => {
                     {`${admin.nom || ''} ${admin.prenom || ''}`}
                   </td>
                   <td title={admin.Role || 'Administrateur'}>{admin.Role || 'Administrateur'}</td>
+                  <td>
+                    <button
+                      className="action-btn delete-btn"
+                      onClick={() => handleDelete(admin.ID_admin)}
+                    >
+                      Supprimer
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          {/* Pagination */}
           <div className="pagination">
             <button
               className="pagination-btn"
