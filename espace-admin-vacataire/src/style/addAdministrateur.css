@@ -1,0 +1,134 @@
+/* Style pour le conteneur du formulaire */
+.admin-form-container {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  border: 1px solid #e5e7eb;
+}
+
+/* Style pour une ligne de formulaire (deux champs côte à côte) */
+.admin-form-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Style pour chaque groupe de champ */
+.admin-form-group {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Style pour les labels */
+.admin-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Style pour les inputs et select */
+.admin-form-group input,
+.admin-form-group select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #374151;
+  background-color: #f9fafb;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Placeholder style */
+.admin-form-group input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Animation au focus */
+.admin-form-group input:focus,
+.admin-form-group select:focus {
+  outline: none;
+  border-color: #848986;
+  box-shadow: 0 0 0 3px rgba(79, 84, 81, 0.1);
+}
+
+/* Style pour le select */
+.admin-form-group select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBmaWxsPSIjNjA2NzdlIiBkPSJNMTIgNEw4IDhsLTQtNCAwIDAtOCAwIDggOHoiLz4KPC9zdmc+');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+  padding-right: 2rem;
+}
+
+/* Conteneur pour les boutons */
+.admin-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Style pour le bouton Ajouter */
+.admin-btn-valider {
+  background-color: #2ecc71;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.admin-btn-valider:hover {
+  /* background-color: #27ae60; */
+  transform: translateY(-1px);
+}
+
+.admin-btn-valider:active {
+  transform: translateY(0);
+}
+
+/* Style pour le bouton Annuler */
+.admin-btn-annuler {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.75rem 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.admin-btn-annuler:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-1px);
+  color: white;
+}
+
+.admin-btn-annuler:active {
+  transform: translateY(0);
+}
+
+/* Style pour le message d'erreur */
+.admin-error-message {
+  color: #dc2626;
+  background-color: #fef2f2;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+

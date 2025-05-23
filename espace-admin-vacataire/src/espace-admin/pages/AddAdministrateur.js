@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
-import '../../styles/global.css';
+import '../../style/addAdministrateur.css';
 
 const AddAdministrateur = () => {
   const [formData, setFormData] = useState({
@@ -41,10 +41,10 @@ const AddAdministrateur = () => {
       <main className="page-container">
         <div className="table-container">
           <h1 className="page-title">Ajouter un Administrateur</h1>
-          {error && <div className="error-message">{error}</div>}
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-row">
-              <div className="form-group">
+          {error && <div className="admin-error-message">{error}</div>}
+          <form onSubmit={handleSubmit} className="admin-form-container">
+            <div className="admin-form-row">
+              <div className="admin-form-group">
                 <label>Nom</label>
                 <input
                   type="text"
@@ -55,7 +55,7 @@ const AddAdministrateur = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="admin-form-group">
                 <label>Prénom</label>
                 <input
                   type="text"
@@ -67,8 +67,8 @@ const AddAdministrateur = () => {
                 />
               </div>
             </div>
-            <div className="form-row">
-              <div className="form-group">
+            <div className="admin-form-row">
+              <div className="admin-form-group">
                 <label>Username</label>
                 <input
                   type="text"
@@ -79,7 +79,7 @@ const AddAdministrateur = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="admin-form-group">
                 <label>Email</label>
                 <input
                   type="email"
@@ -91,7 +91,7 @@ const AddAdministrateur = () => {
                 />
               </div>
             </div>
-            <div className="form-group">
+            <div className="admin-form-group">
               <label>Mot de passe</label>
               <input
                 type="password"
@@ -102,7 +102,7 @@ const AddAdministrateur = () => {
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="admin-form-group">
               <label>Rôle</label>
               <select name="Role" value={formData.Role} onChange={handleChange} required>
                 <option value="admin">Admin</option>
@@ -110,11 +110,11 @@ const AddAdministrateur = () => {
                 <option value="comptable">Comptable</option>
               </select>
             </div>
-            <div className="form-actions">
-              <button type="submit" className="btn-valider">Ajouter</button>
+            <div className="admin-form-actions">
+              <button type="submit" className="admin-btn-valider">Ajouter</button>
               <button
                 type="button"
-                className="btn-annuler"
+                className="admin-btn-annuler"
                 onClick={() => navigate('/espace-admin/administrateurs')}
               >
                 Annuler
