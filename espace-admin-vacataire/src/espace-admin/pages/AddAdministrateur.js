@@ -10,9 +10,7 @@ const AddAdministrateur = () => {
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
-    username: '',
     email: '',
-    mdp: '',
     Role: 'admin',
   });
   const [error, setError] = useState('');
