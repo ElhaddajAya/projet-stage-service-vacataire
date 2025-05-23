@@ -210,7 +210,7 @@ header h1 {
   padding: 8px;
   background-color: #f8d7da;
   border-radius: 4px;
-  border: 1px solid #f5c6cb;
+  border: 0.6px solid #f5c6cb;
 }
 
 /* Remove input type text or email or number focus border */
@@ -382,7 +382,7 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-valider {
   background-color: #2ecc71;
   color: white;
-  border: 0.5px solid #0a853d !important;
+  border: 0.3px solid #27ae60 !important;
 }
 
 .table-vacataires td .btn-valider:hover:not(:disabled) {
@@ -392,14 +392,14 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-valider:disabled {
   background-color: #95d5b2;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .table-vacataires td .btn-etude {
   background-color: #3498db;
   color: white;
   padding: 0.67rem 1.4rem;
-  border: 0.5px solid #252525;
+  border: 0.3px solid #2980b9 !important;
   margin-left: 20px;
 }
 
@@ -410,7 +410,7 @@ form input[type="password"]:focus {
 .table-vacataires td .btn-refuser {
   background-color: #e74c3c;
   color: white;
-  border: 0.5px solid #252525 !important;
+  border: 0.3px solid #c0392b !important;
 }
 
 .table-vacataires td .btn-refuser:hover {
@@ -421,6 +421,7 @@ form input[type="password"]:focus {
 .btn-valider {
   background-color: #2ecc71;
   color: white;
+  border: 0.3px solid #27ae60!important;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -437,13 +438,13 @@ form input[type="password"]:focus {
 .btn-valider:disabled {
   background-color: #95d5b2;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .btn-etude {
   background-color: #3498db;
   color: white;
-  border: 0.5px solid #065b94!important;
+  border: 0.3px solid #2980b9!important;
   padding: 0.3rem 1rem;
   border-radius: 4px;
   font-size: 0.96rem;
@@ -459,7 +460,7 @@ form input[type="password"]:focus {
 .btn-refuser {
   background-color: #e74c3c;
   color: white;
-  border: none;
+  border: 0.3px solid #c0392b!important;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -761,7 +762,7 @@ form input[type="password"]:focus {
 .btn-refuser {
   background-color: #e74c3c;
   color: white;
-  border: 0.5px solid #252525;
+  border: 0.3px solid #c0392b;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -951,7 +952,7 @@ form input[type="password"]:focus {
 .btn-valider,
 .btn-annuler {
   padding: 10px 20px;   
-  border: 0.5px solid #252525;
+  border: 0.3px solid #222;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 500;
@@ -959,28 +960,29 @@ form input[type="password"]:focus {
 }
 
 .btn-valider {
-  background-color: #48bb78;
+  background-color: #2ecc71;
   color: white;
 }
 
 .btn-valider:hover {
-  background-color: #38a169;
+  background-color: #27ae60;
 }
 
 .btn-valider:disabled {
-  background-color: #a0aec0;
+  background-color: #27ae60;
   cursor: not-allowed;
   transform: none;
+  opacity: 0.7;
 }
 
 .btn-annuler {
   background-color: #ffffff;
-  border: 1px solid #252525;
+  border: 0.3px solid #222;
   color: #222;
 }
 
 .btn-annuler:hover {
-  background-color: #d1d5db !important;	
+  background-color: #222222a4 !important;	
 }
 
 @keyframes fadeIn {
@@ -1194,7 +1196,7 @@ form input[type="password"]:focus {
   color: white;
   padding: 0.5rem 1.2rem;
   border-radius: 4px;
-  border: 0.5px solid #1a202c;
+  border: 0.3px solid #1a202c;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -1202,7 +1204,7 @@ form input[type="password"]:focus {
 }
 
 .btn-add:hover {
-  border:  0.5px solid #374151 !important;
+  border:  0.3px solid #374151 !important;
 }
 
 /* add style pour actions delete */
@@ -1222,12 +1224,12 @@ form input[type="password"]:focus {
 
 .delete-btn {
   margin-right: 15px;
-  background-color: #dc2626;
-  border: 0.5px solid #8f0404;
+  background-color: #e74c3c;
+  border: 0.3px solid #c0392b;
 }
 
 .delete-btn:hover {
-  background-color: #b91c1c!important; /* Force darker red */
+  background-color: #c0392b!important; /* Force darker red */
 }
 /* Styles pour les boutons d'action (déjà existant pour delete-btn) */
 .action-btn {
@@ -1239,21 +1241,21 @@ form input[type="password"]:focus {
 }
 
 .suspend-btn {
-  border: 0.5px solid #ad6d00;
+  border: 0.3px solid #ad6d00;
   background-color: #f59e0b;
 }
 
 .suspend-btn:hover {
-  background-color: #d97706!important;
+  background-color: #ad6d00!important;
 }
 
 .activate-btn {
-  border: 0.5px solid #09753b;
-  background-color: #48bb78;
+  border: 0.3px solid #27ae60;
+  background-color: #2ecc71;
 }
 
 .activate-btn:hover {
-  background-color: #38a169!important;
+  background-color: #27ae60!important;
 }
 
 .form select {
