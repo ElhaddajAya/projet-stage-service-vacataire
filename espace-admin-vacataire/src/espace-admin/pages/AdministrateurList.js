@@ -83,6 +83,29 @@ const AdministrateurList = () => {
     }
   };
 
+  const handleSuspend = async (adminId, isSuspended) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/administrateurs/${adminId}/suspend`,
+        { isSuspended: !isSuspended },
+        { withCredentials: true }
+      );
+      setAdministrateurs(
+        administrateurs.map((admin) =>
+          admin.ID_admin === adminId ? { ...admin, isSuspended: !isSuspended } : admin
+        )
+      );
+      setFilteredAdministrateurs(
+        filteredAdministrateurs.map((admin) =>
+          admin.ID_admin === adminId ? { ...admin, isSuspended: !isSuspended } : admin
+        )
+      );
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la suspension:', error);
+      alert('Erreur lors de la mise à jour. Vérifiez vos autorisations.');
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -91,44 +114,56 @@ const AdministrateurList = () => {
         <div className="table-container">
           <h1 className="page-title">Liste des Administrateurs</h1>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Rechercher un administrateur..."
-                value={searchTerm}
-                onChange={handleSearch}
-                className="search-bar"
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  style={{
-                    position: 'absolute',
-                    right: '40px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ✕
-                </button>
-              )}
-              <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <div style={{ position: 'relative', marginBottom: '0.6rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="search-container">
+                <input
+                  type="text"
+                  placeholder="Rechercher un administrateur..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="search-bar"
+                />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    style={{
+                      position: 'absolute',
+                      right: '40px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ✕
+                  </button>
+                )}
+                <FontAwesomeIcon icon={faSearch} className="search-icon" />
+              </div>
             </div>
-            <button className="btn-add" onClick={handleAddAdministrateur}>
+            <button
+              className="btn-add"
+              onClick={handleAddAdministrateur}
+              style={{
+                position: 'absolute',
+                right: '0',
+                top: '50%',
+                transform: 'translateY(-50%)',
+              }}
+            >
               Ajouter
             </button>
           </div>
 
-          <table className="table-vacataires">
+          <table className="table-administrateurs">
             <thead>
               <tr>
                 <th>N/O</th>
                 <th>Nom Complet</th>
                 <th>Rôle</th>
+                <th>Statut</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -140,12 +175,19 @@ const AdministrateurList = () => {
                     {`${admin.nom || ''} ${admin.prenom || ''}`}
                   </td>
                   <td title={admin.Role || 'Administrateur'}>{admin.Role || 'Administrateur'}</td>
+                  <td>{admin.isSuspended ? 'Suspendu' : 'Actif'}</td>
                   <td>
                     <button
                       className="action-btn delete-btn"
                       onClick={() => handleDelete(admin.ID_admin)}
                     >
                       Supprimer
+                    </button>
+                    <button
+                      className={`action-btn ${admin.isSuspended ? 'activate-btn' : 'suspend-btn'}`}
+                      onClick={() => handleSuspend(admin.ID_admin, admin.isSuspended)}
+                    >
+                      {admin.isSuspended ? 'Activer' : 'Suspendre'}
                     </button>
                   </td>
                 </tr>

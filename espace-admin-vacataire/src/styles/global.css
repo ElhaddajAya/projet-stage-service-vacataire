@@ -1100,14 +1100,102 @@ form input[type="password"]:focus {
   background-color: #f5c6cb !important; /* Slightly darker red on hover */
 }
 
+
+/* Administrateurs table */
+.table-administrateurs {
+  width: 100%;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  table-layout: fixed; /* Ensures columns respect defined widths */
+}
+
+.table-administrateurs thead tr {
+  background-color: #f9fafb;
+}
+
+.table-administrateurs th,
+.table-administrateurs td {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #374151;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-administrateurs th {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #1f2937;
+}
+
+.table-administrateurs tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.table-administrateurs td {
+  font-weight: 400;
+}
+
+/* Define specific column widths */
+.table-administrateurs th:nth-child(1),
+.table-administrateurs td:nth-child(1) { /* ID column */
+  width: 6%;
+  max-width: 6%;
+}
+
+.table-administrateurs th:nth-child(2),
+.table-administrateurs td:nth-child(2) { /* Nom Complet column */
+  width: 20%;
+  max-width: 20%;
+}
+
+.table-administrateurs th:nth-child(3),
+.table-administrateurs td:nth-child(3) { /* Département column */
+  width: 15%;
+  max-width: 15%;
+}
+
+.table-administrateurs th:nth-child(4),
+.table-administrateurs td:nth-child(4) { /* État de Dossier column */
+  width: 15%;
+  max-width: 15%;
+}
+
+.table-administrateurs th:nth-child(5),
+.table-administrateurs td:nth-child(5) { /* Action column */
+  width: 25%;
+  max-width: 25%;
+}
+
+/* Ajouter ellipsis sur les boutons de la colonne Action lorsque la sidebar est active */
+#check:checked ~ .page-container .table-administrateurs td:nth-child(5) button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 45%; /* Réduire la largeur des boutons pour qu'ils tiennent dans la colonne */
+  box-sizing: border-box;
+}
+
+/* Ajuster la marge entre les boutons pour un meilleur espacement */
+#check:checked ~ .page-container .table-administrateurs td:nth-child(5) .btn-etude {
+  margin-left: 10px; /* Réduire la marge pour éviter un débordement */
+}
+
 /* Style pour le bouton Ajouter (inchangé, reste spécifique à autre contexte) */
 .btn-add {
   background-color: #1f2937;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.2rem;
   border-radius: 4px;
   border: 0.5px solid #1a202c;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -1120,34 +1208,53 @@ form input[type="password"]:focus {
 /* add style pour actions delete */
 /* Styles pour le bouton d'action de suppression */
 .action-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.9rem;
   border-radius: 4px;
+  width: 118px;
   border: none;
   color: white;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  margin-right: 0.5rem;
+  /* margin-right: 0.5rem; */
   transition: background-color 0.2s ease;
 }
 
 .delete-btn {
+  margin-right: 15px;
   background-color: #dc2626;
+  border: 0.5px solid #8f0404;
 }
 
 .delete-btn:hover {
-  background-color: #b91c1c;
+  background-color: #b91c1c!important; /* Force darker red */
+}
+/* Styles pour les boutons d'action (déjà existant pour delete-btn) */
+.action-btn {
+  padding: 10px 20px;   
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-/* .form-card {
-  width: 100%;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-} */
+.suspend-btn {
+  border: 0.5px solid #ad6d00;
+  background-color: #f59e0b;
+}
+
+.suspend-btn:hover {
+  background-color: #d97706!important;
+}
+
+.activate-btn {
+  border: 0.5px solid #09753b;
+  background-color: #48bb78;
+}
+
+.activate-btn:hover {
+  background-color: #38a169!important;
+}
 
 .form select {
   border: 1.5px solid #333;
@@ -1163,3 +1270,4 @@ form input[type="password"]:focus {
 .form select:focus {
   outline: none;
 }
+

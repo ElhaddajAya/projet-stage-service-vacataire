@@ -248,7 +248,36 @@ app.get('/vacataires', (req, res) => {
   });
 });
 
-// Route for login
+// // Route for login
+// app.post('/login', (req, res) => {
+//   const { username, password } = req.body;
+//   if (!username || !password) return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
+
+//   const vacataireQuery = 'SELECT ID_vacat, Nom FROM vacataire WHERE username = ? AND mdp = ?';
+//   db.query(vacataireQuery, [username, password], (err, vacataireResults) => {
+//     if (err) return res.status(500).json({ message: 'Erreur serveur' });
+//     if (vacataireResults.length > 0) {
+//       const vacataire = vacataireResults[0];
+//       req.session.userId = vacataire.ID_vacat;
+//       req.session.nom = vacataire.Nom;
+//       req.session.role = 'vacataire';
+//       return res.json({ message: 'Connexion réussie', user: { id: vacataire.ID_vacat, nom: vacataire.Nom, role: 'vacataire' } });
+//     }
+
+//     const adminQuery = 'SELECT ID_admin, Nom, Role FROM admin WHERE username = ? AND mdp = ?';
+//     db.query(adminQuery, [username, password], (err, adminResults) => {
+//       if (err) return res.status(500).json({ message: 'Erreur serveur' });
+//       if (adminResults.length > 0) {
+//         const admin = adminResults[0];
+//         req.session.userId = admin.ID_admin;
+//         req.session.nom = admin.Nom;
+//         req.session.role = admin.Role; // Stocker le rôle spécifique (superadmin, admin, comptable)
+//         return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: admin.Role } });
+//       }
+//       return res.status(401).json({ message: 'Identifiants incorrects' });
+//     });
+//   });
+// });
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
@@ -264,14 +293,17 @@ app.post('/login', (req, res) => {
       return res.json({ message: 'Connexion réussie', user: { id: vacataire.ID_vacat, nom: vacataire.Nom, role: 'vacataire' } });
     }
 
-    const adminQuery = 'SELECT ID_admin, Nom, Role FROM admin WHERE username = ? AND mdp = ?';
+    const adminQuery = 'SELECT ID_admin, Nom, Role, isSuspended FROM admin WHERE username = ? AND mdp = ?';
     db.query(adminQuery, [username, password], (err, adminResults) => {
       if (err) return res.status(500).json({ message: 'Erreur serveur' });
       if (adminResults.length > 0) {
         const admin = adminResults[0];
+        if (admin.isSuspended) {
+          return res.status(403).json({ message: 'Votre compte est suspendu. Contactez un superadmin.' });
+        }
         req.session.userId = admin.ID_admin;
         req.session.nom = admin.Nom;
-        req.session.role = admin.Role; // Stocker le rôle spécifique (superadmin, admin, comptable)
+        req.session.role = admin.Role;
         return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: admin.Role } });
       }
       return res.status(401).json({ message: 'Identifiants incorrects' });
@@ -443,7 +475,6 @@ app.post('/set-delai-depot', (req, res) => {
 
 
 
-
 // Route to fetch all administrators
 app.get('/administrateurs', (req, res) => {
   console.log('Session data:', req.session);
@@ -452,7 +483,7 @@ app.get('/administrateurs', (req, res) => {
     return res.status(403).json({ message: 'Accès réservé aux administrateurs ou superadmins' });
   }
 
-  const query = 'SELECT ID_admin, nom, prenom, username, email, Role FROM admin'; // Utiliser 'Role' au lieu de 'role'
+  const query = 'SELECT ID_admin, nom, prenom, username, email, Role, isSuspended FROM admin';
   db.query(query, (err, results) => {
     if (err) {
       console.error('Erreur lors de la récupération des administrateurs:', err);
@@ -467,7 +498,6 @@ app.get('/administrateurs', (req, res) => {
   });
 });
 
-// ... (autres imports et configurations existantes)
 
 // Route to add a new administrator
 app.post('/add-administrateur', (req, res) => {
@@ -512,6 +542,33 @@ app.delete('/administrateurs/:id', (req, res) => {
       return res.status(404).json({ message: 'Administrateur non trouvé' });
     }
     res.json({ message: 'Administrateur supprimé avec succès' });
+  });
+});
+
+
+// Route to suspend or activate an administrator's permissions
+app.put('/administrateurs/:id/suspend', (req, res) => {
+  if (!req.session.userId || req.session.role !== 'superadmin') {
+    return res.status(403).json({ message: 'Accès réservé aux superadmins' });
+  }
+
+  const adminId = req.params.id;
+  const { isSuspended } = req.body;
+
+  if (typeof isSuspended !== 'boolean') {
+    return res.status(400).json({ message: 'isSuspended doit être un booléen' });
+  }
+
+  const query = 'UPDATE admin SET isSuspended = ? WHERE ID_admin = ?';
+  db.query(query, [isSuspended ? 1 : 0, adminId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la mise à jour de la suspension:', err);
+      return res.status(500).json({ message: 'Erreur lors de la mise à jour' });
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Administrateur non trouvé' });
+    }
+    res.json({ message: `Administrateur ${isSuspended ? 'suspendu' : 'activé'} avec succès` });
   });
 });
 
