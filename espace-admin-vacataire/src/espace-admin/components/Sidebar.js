@@ -73,8 +73,8 @@ const Sidebar = () => {
           <small>{userData.role}</small>
         </header>
         <ul>
-          <li>
-            <a href="#"><i className="fas fa-user"></i> Infos Personelles</a>
+          <li onClick={() => navigate('/espace-admin/infos-personnelles')}>
+            <a href="#"><i className="fas fa-user"></i> Infos Personnelles</a>
           </li>
           <li onClick={() => navigate('/espace-admin/vacataires')}>
             <a href="#"><i className="fas fa-users-line"></i> Vacataires</a>

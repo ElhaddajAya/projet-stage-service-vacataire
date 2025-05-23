@@ -299,6 +299,26 @@ app.put('/update-vacataire', (req, res) => {
   });
 });
 
+// Route to update admin info
+app.put('/update-admin', (req, res) => {
+  const adminId = req.session.userId;
+  const { nom, prenom, email, username, mdp } = req.body;
+  if (!adminId) return res.status(401).json({ message: 'Utilisateur non connecté' });
+
+  const updateFields = { nom, prenom, email, username };
+  if (mdp) updateFields.mdp = mdp;
+
+  const query = 'UPDATE admin SET ? WHERE ID_admin = ?';
+  db.query(query, [updateFields, adminId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la mise à jour des informations admin:', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+    if (results.affectedRows === 0) return res.status(404).json({ message: 'Admin non trouvé' });
+    res.json({ message: 'Informations mises à jour avec succès' });
+  });
+});
+
 // Route to fetch vacataire info
 app.get('/vacataire-info', (req, res) => {
   const vacataireId = req.session.userId;
@@ -442,7 +462,6 @@ app.post('/set-delai-depot', (req, res) => {
     res.json({ message: 'Délai de dépôt mis à jour avec succès' });
   });
 });
-
 
 // Route to fetch all administrators
 app.get('/administrateurs', (req, res) => {

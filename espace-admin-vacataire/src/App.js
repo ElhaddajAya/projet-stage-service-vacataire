@@ -8,10 +8,10 @@ import InfosPersonnelles from './espace-vacataire/pages/InfosPersonnelles';
 import Documents from './espace-vacataire/pages/Documents';
 import './styles/global.css';
 import SetDelaiDepot from './espace-admin/pages/SetDelaiDepot';
-
+import AdminInfosPersonnelles from './espace-admin/pages/AdminInfosPersonnelles';
 import AdministrateurList from './espace-admin/pages/AdministrateurList';
 import AddAdministrateur from './espace-admin/pages/AddAdministrateur'; // Importer la nouvelle page
-
+import EditAdminInfos from './espace-admin/pages/EditAdminInfos'; // Importer la nouvelle page
 
 // Component to handle dynamic titles
 const TitleUpdater = () => {
@@ -46,10 +46,10 @@ function App() {
         <Route path="/espace-vacataire/infos-personnelles" element={<InfosPersonnelles />} />
         <Route path="/espace-vacataire/documents" element={<Documents />} />
         <Route path="/espace-admin/set-delai-depot" element={<SetDelaiDepot />} />
-
+        <Route path="/espace-admin/infos-personnelles" element={<AdminInfosPersonnelles />} />
         <Route path="/espace-admin/administrateurs" element={<AdministrateurList />} />
         <Route path="/espace-admin/add-administrateur" element={<AddAdministrateur />} /> 
-        
+        <Route path="/espace-admin/edit-infos" element={<EditAdminInfos />} />
       </Routes>
     </Router>
   );
