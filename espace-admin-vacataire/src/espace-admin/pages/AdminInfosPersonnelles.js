@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Header from '../../components/Header';
+import Header from '../../espace-admin/components/Header';
 import Sidebar from '../components/Sidebar';
 import '../../style/infos-personnelles.css';
 

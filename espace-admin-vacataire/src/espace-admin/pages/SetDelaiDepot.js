@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/Header';
+import Header from '../../espace-admin/components/Header';
 import Sidebar from '../components/Sidebar';
 
 // Define custom styles directly in the component, no inheritance from global.css

@@ -603,7 +603,7 @@ form input[type="password"]:focus {
 
 /* Etude Dossier Page */
 .vacataire-details {
-  max-width: 1500px; /* Increased from 1200px to 1400px */
+  max-width: 1300px; /* Increased from 1200px to 1400px */
   margin: 0 auto;
   padding: 30px; /* Slightly increased padding for better spacing */
   background-color: #fff;
