@@ -1138,3 +1138,31 @@ border:  0.5px solid black;
 .delete-btn:hover {
   background-color: #b91c1c;
 }
+/* Styles pour les boutons d'action (déjà existant pour delete-btn) */
+.action-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.suspend-btn {
+  background-color: #f59e0b;
+}
+
+.suspend-btn:hover {
+  background-color: #d97706;
+}
+
+.activate-btn {
+  background-color: #10b981;
+}
+
+.activate-btn:hover {
+  background-color: #059669;
+}

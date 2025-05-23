@@ -83,6 +83,29 @@ const AdministrateurList = () => {
     }
   };
 
+  const handleSuspend = async (adminId, isSuspended) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/administrateurs/${adminId}/suspend`,
+        { isSuspended: !isSuspended },
+        { withCredentials: true }
+      );
+      setAdministrateurs(
+        administrateurs.map((admin) =>
+          admin.ID_admin === adminId ? { ...admin, isSuspended: !isSuspended } : admin
+        )
+      );
+      setFilteredAdministrateurs(
+        filteredAdministrateurs.map((admin) =>
+          admin.ID_admin === adminId ? { ...admin, isSuspended: !isSuspended } : admin
+        )
+      );
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la suspension:', error);
+      alert('Erreur lors de la mise à jour. Vérifiez vos autorisations.');
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -129,6 +152,7 @@ const AdministrateurList = () => {
                 <th>N/O</th>
                 <th>Nom Complet</th>
                 <th>Rôle</th>
+                <th>Statut</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -140,12 +164,19 @@ const AdministrateurList = () => {
                     {`${admin.nom || ''} ${admin.prenom || ''}`}
                   </td>
                   <td title={admin.Role || 'Administrateur'}>{admin.Role || 'Administrateur'}</td>
+                  <td>{admin.isSuspended ? 'Suspendu' : 'Actif'}</td>
                   <td>
                     <button
                       className="action-btn delete-btn"
                       onClick={() => handleDelete(admin.ID_admin)}
                     >
                       Supprimer
+                    </button>
+                    <button
+                      className={`action-btn ${admin.isSuspended ? 'activate-btn' : 'suspend-btn'}`}
+                      onClick={() => handleSuspend(admin.ID_admin, admin.isSuspended)}
+                    >
+                      {admin.isSuspended ? 'Activer' : 'Suspendre'}
                     </button>
                   </td>
                 </tr>
