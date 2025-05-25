@@ -149,7 +149,7 @@ const VacataireList = () => {
           <table className="table-vacataires">
             <thead>
               <tr>
-                <th>N/O</th> {/* Changed from ID to Numéro d'ordre */}
+                <th>N/O</th> {/* Sequential order number */}
                 <th>Nom Complet</th>
                 <th>État de Dossier</th>
                 <th>État de Virement</th>

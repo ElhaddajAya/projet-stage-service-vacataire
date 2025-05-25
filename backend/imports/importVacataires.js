@@ -79,7 +79,7 @@ const checkEnseignerExists = (vacataireId, filiereId, callback) => {
   });
 };
 
-// Fonction d'insertion des informations d'enseignement
+// Fonction d'insertion des informations d'enseignement (Table enseigner)
 const insertEnseignement = (vacataireId, filiereId, semestre, semaines, heures, matiere) => {
   // Vérifier et nettoyer les valeurs
   semaines = semaines || 0;  // Valeur par défaut si null ou undefined
@@ -128,25 +128,25 @@ const insertNewVacataire = (nom, filiereNom, semestre, semaines, heures, matiere
   });
 };
 
-// Fonction principale pour traiter chaque ligne du fichier Excel
+// Fonction principale pour traiter chaque ligne du fichier Excel !!!
 const processVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) => {
   // Étape 1 : Vérifier si le vacataire existe déjà
   checkVacataireExists(nom, (vacataireId) => {
     if (vacataireId) {
       // Le vacataire existe déjà
-      console.log(`ℹ️ Vacataire ${nom} existe déjà avec ID ${vacataireId}`);
+      console.log(`Vacataire ${nom} existe déjà avec ID ${vacataireId}`);
 
       // Étape 2 : Récupérer l'ID de la filière
       getFiliereId(filiereNom, (filiereId) => {
         if (!filiereId) return; // Sortir si la filière n'existe pas
 
-        // Étape 3 : Vérifier si une entrée existe déjà pour cette combinaison vacataire/filière
+        // Étape 3 : Vérifier si une entrée existe déjà pour cette combinaison vacataire-filière
         checkEnseignerExists(vacataireId, filiereId, (exists) => {
           if (exists) {
-            console.log(`⚠️ Entrée existante dans 'enseigner' pour vacataire ID ${vacataireId} et filière ID ${filiereId}. Aucune action effectuée.`);
+            console.log(`Entrée existante dans 'enseigner' pour vacataire ID ${vacataireId} et filière ID ${filiereId}. Aucune action effectuée.`);
           } else {
             // Insérer une nouvelle entrée dans enseigner pour la nouvelle filière
-            console.log(`📝 Nouvelle filière détectée pour vacataire ${nom}. Ajout dans 'enseigner'.`);
+            console.log(`Nouvelle filière détectée pour vacataire ${nom}. Ajout dans 'enseigner'.`);
             insertEnseignement(vacataireId, filiereId, semestre, semaines, heures, matiere);
           }
         });
@@ -160,13 +160,11 @@ const processVacataire = (nom, filiereNom, semestre, semaines, heures, matiere) 
 };
 
 // Parcourir les données et les insérer
-console.log(`🚀 Importation de ${data.length} vacataires...`);
+console.log(`Importation de ${data.length} vacataires...`);
 data.forEach((row) => {
   const nom = row.Nom;
   const filiere = row.filiere;
   const semestre = row.semestre;
-
-  // Correction pour les noms de colonnes
   const semaines = parseInt(row['nbr semaines'] || row['Nbr semaines'] || row['Nbr Semaines'] || row['nbr_semaines']) || 0;
   const heures = parseInt(row['nbr heures'] || row['Nbr heures'] || row['Nbr Heures'] || row['nbr_heures']) || 0;
   const matiere = row.Matiere;
@@ -179,6 +177,6 @@ data.forEach((row) => {
 // Fermer la connexion après les opérations
 setTimeout(() => {
   db.end(() => {
-    console.log('🔗 Connexion fermée.');
+    console.log('Connexion fermée.');
   });
 }, 5000);
