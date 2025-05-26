@@ -224,6 +224,7 @@ const EtudeDossier = () => {
                       <tr>
                         <th>Matière</th>
                         <th>Filière</th>
+                        <th>Département</th>
                         <th>Nombre d'heures</th>
                         <th>Semestre</th>
                         <th>Nombre de semaines</th>
@@ -234,6 +235,7 @@ const EtudeDossier = () => {
                         <tr key={index}>
                           <td>{enseignement.Matiere || 'N/A'}</td>
                           <td>{enseignement.Filiere || 'N/A'}</td>
+                          <td>{enseignement.Departement || 'N/A'}</td>
                           <td>{enseignement.Nombre_heures || 'N/A'}</td>
                           <td>{enseignement.Semestre || 'N/A'}</td>
                           <td>{enseignement.Nbr_semaines || 'N/A'}</td>

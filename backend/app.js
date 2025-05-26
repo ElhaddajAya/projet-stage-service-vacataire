@@ -61,9 +61,10 @@ app.get('/vacataire-details/:id', (req, res) => {
   `;
 
   const enseignementQuery = `
-    SELECT e.Matiere, e.Nbr_heurs AS Nombre_heures, e.Semestre, e.Nbr_semaines, f.Nom_fil AS Filiere
+    SELECT e.Matiere, e.Nbr_heurs AS Nombre_heures, e.Semestre, e.Nbr_semaines, f.Nom_fil AS Filiere, d.Nom_Dep AS Departement
     FROM enseigner e
     JOIN filiere f ON e.ID_fil = f.ID_fil
+    JOIN departement d ON f.ID_dep = d.ID_dep
     WHERE e.ID_vacat = ?
   `;
 
