@@ -77,11 +77,11 @@ const Sidebar = () => {
             <a href="#"><i className="fas fa-user"></i> Infos Personnelles</a>
           </li>
           <li onClick={() => navigate('/espace-admin/vacataires')}>
-            <a href="#"><i className="fas fa-users-line"></i> Vacataires</a>
+            <a href="#"><i className="fas fa-user-tie"></i> Vacataires</a>
           </li>
           {userData.role === 'superadmin' && (
             <li onClick={() => navigate('/espace-admin/administrateurs')}>
-              <a href="#"><i className="fas fa-users"></i> Administrateurs</a>
+              <a href="#"><i className="fas fa-user-shield"></i> Administrateurs</a>
             </li>
           )}
           {userData.role === 'superadmin' && (

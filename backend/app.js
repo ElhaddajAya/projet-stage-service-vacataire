@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const fs = require('fs').promises;
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
 
 dotenv.config();
 const app = express();
@@ -248,33 +249,53 @@ app.get('/vacataires', (req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
+// Route de connexion avec vérification du mot de passe haché
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  console.log('Login attempt - Received:', { username, password }); // Log des données reçues
   if (!username || !password) return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
 
-  const vacataireQuery = 'SELECT ID_vacat, Nom FROM vacataire WHERE username = ? AND mdp = ?';
-  db.query(vacataireQuery, [username, password], (err, vacataireResults) => {
-    if (err) return res.status(500).json({ message: 'Erreur serveur' });
-    if (vacataireResults.length > 0) {
-      const vacataire = vacataireResults[0];
-      req.session.userId = vacataire.ID_vacat;
-      req.session.nom = vacataire.Nom;
-      req.session.role = 'vacataire';
-      return res.json({ message: 'Connexion réussie', user: { id: vacataire.ID_vacat, nom: vacataire.Nom, role: 'vacataire' } });
+  const vacataireQuery = 'SELECT ID_vacat, Nom, mdp FROM vacataire WHERE username = ?';
+  db.query(vacataireQuery, [username], async (err, vacataireResults) => {
+    if (err) {
+      console.error('Erreur serveur (vacataire):', err);
+      return res.status(500).json({ message: 'Erreur serveur' });
     }
 
-    const adminQuery = 'SELECT ID_admin, Nom, Role, isSuspended FROM admin WHERE username = ? AND mdp = ?';
-    db.query(adminQuery, [username, password], (err, adminResults) => {
-      if (err) return res.status(500).json({ message: 'Erreur serveur' });
+    if (vacataireResults.length > 0) {
+      const vacataire = vacataireResults[0];
+      console.log('Vacataire found - Stored hash:', vacataire.mdp); // Log du hachage stocké
+      const match = await bcrypt.compare(password, vacataire.mdp);
+      console.log('Password match result:', match); // Log du résultat de la comparaison
+      if (match) {
+        req.session.userId = vacataire.ID_vacat;
+        req.session.nom = vacataire.Nom;
+        req.session.role = 'vacataire';
+        return res.json({ message: 'Connexion réussie', user: { id: vacataire.ID_vacat, nom: vacataire.Nom, role: 'vacataire' } });
+      }
+    }
+
+    const adminQuery = 'SELECT ID_admin, Nom, Role, isSuspended, mdp FROM admin WHERE username = ?';
+    db.query(adminQuery, [username], async (err, adminResults) => {
+      if (err) {
+        console.error('Erreur serveur (admin):', err);
+        return res.status(500).json({ message: 'Erreur serveur' });
+      }
+
       if (adminResults.length > 0) {
         const admin = adminResults[0];
-        if (admin.isSuspended) {
-          return res.status(403).json({ message: 'Votre compte est suspendu. Contactez un superadmin.' });
+        console.log('Admin found - Stored hash:', admin.mdp); // Log du hachage stocké
+        const match = await bcrypt.compare(password, admin.mdp);
+        console.log('Password match result:', match); // Log du résultat de la comparaison
+        if (match) {
+          if (admin.isSuspended) {
+            return res.status(403).json({ message: 'Votre compte est suspendu. Contactez un superadmin.' });
+          }
+          req.session.userId = admin.ID_admin;
+          req.session.nom = admin.Nom;
+          req.session.role = admin.Role;
+          return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: admin.Role } });
         }
-        req.session.userId = admin.ID_admin;
-        req.session.nom = admin.Nom;
-        req.session.role = admin.Role;
-        return res.json({ message: 'Connexion réussie', user: { id: admin.ID_admin, nom: admin.Nom, role: admin.Role } });
       }
       return res.status(401).json({ message: 'Identifiants incorrects' });
     });
@@ -299,26 +320,33 @@ app.put('/update-vacataire', (req, res) => {
   });
 });
 
-// Route to update vacataire password
-app.put('/update-vacataire-password', (req, res) => {
+// Route to update vacataire password with hashing
+app.put('/update-vacataire-password', async (req, res) => {
   const vacataireId = req.session.userId;
   const { mdp } = req.body;
   if (!vacataireId) return res.status(401).json({ message: 'Utilisateur non connecté' });
+  if (!mdp) return res.status(400).json({ message: 'Mot de passe requis' });
+
+  // Hacher le nouveau mot de passe
+  const hashedPassword = await bcrypt.hash(mdp, 10); // 10 est le coût de hachage (salt rounds)
   const query = 'UPDATE vacataire SET mdp = ? WHERE ID_vacat = ?';
-  db.query(query, [mdp, vacataireId], (err, results) => {
+  db.query(query, [hashedPassword, vacataireId], (err, results) => {
     if (err) return res.status(500).json({ message: 'Erreur serveur' });
     res.json({ message: 'Mot de passe mis à jour avec succès' });
   });
 });
 
-// Route to update admin info
-app.put('/update-admin', (req, res) => {
+// Route to update admin info with password hashing
+app.put('/update-admin', async (req, res) => {
   const adminId = req.session.userId;
   const { nom, prenom, email, username, mdp } = req.body;
   if (!adminId) return res.status(401).json({ message: 'Utilisateur non connecté' });
 
   const updateFields = { nom, prenom, email, username };
-  if (mdp) updateFields.mdp = mdp;
+  if (mdp) {
+    // Hacher le nouveau mot de passe
+    updateFields.mdp = await bcrypt.hash(mdp, 10);
+  }
 
   const query = 'UPDATE admin SET ? WHERE ID_admin = ?';
   db.query(query, [updateFields, adminId], (err, results) => {
@@ -523,8 +551,8 @@ app.get('/administrateurs', (req, res) => {
   });
 });
 
-// Route to add a new administrator
-app.post('/add-administrateur', (req, res) => {
+// Route to add a new administrator with password hashing
+app.post('/add-administrateur', async (req, res) => {
   console.log('Session data:', req.session);
   if (!req.session.userId || req.session.role !== 'superadmin') {
     console.log('Access denied: User not authenticated or not a superadmin', { userId: req.session.userId, role: req.session.role });
@@ -548,9 +576,11 @@ app.post('/add-administrateur', (req, res) => {
     return password;
   };
   const mdp = generatePassword();
+  // Hacher le mot de passe généré
+  const hashedPassword = await bcrypt.hash(mdp, 10);
 
   const query = 'INSERT INTO admin (nom, prenom, username, email, mdp, Role) VALUES (?, ?, ?, ?, ?, ?)';
-  db.query(query, [nom, prenom, username, email, mdp, Role], async (err, results) => {
+  db.query(query, [nom, prenom, username, email, hashedPassword, Role], async (err, results) => {
     if (err) {
       console.error('Erreur lors de l\'ajout de l\'administrateur:', err);
       return res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'administrateur' });
