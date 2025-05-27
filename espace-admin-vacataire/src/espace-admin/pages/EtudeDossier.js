@@ -100,8 +100,8 @@ const EtudeDossier = () => {
         {vacataire.EtatDossier === 'Refusé' && vacataire.Refus_reason && (
           <div className="message-bar">
             <div id="textMsgBar">Dossier refusé : </div>
-            {vacataire.Refus_reason.problemType && <span>{vacataire.Refus_reason.problemType}</span>}
-            {vacataire.Refus_reason.description && <span> - {vacataire.Refus_reason.description}</span>}
+            {vacataire.Refus_reason.problemType === "Autre" ? "" : <span>{vacataire.Refus_reason.problemType} - </span>}
+            {vacataire.Refus_reason.description && <span>"{vacataire.Refus_reason.description}</span>}"
           </div>
         )}
         <div className="vacataire-details">

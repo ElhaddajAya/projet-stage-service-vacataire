@@ -38,7 +38,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Verify transporter configuration
 transporter.verify((error, success) => {
   if (error) {
     console.error('Email transporter error:', error);
@@ -79,12 +78,21 @@ app.get('/vacataire-details/:id', (req, res) => {
     }
 
     const vacataireData = vacataireResults[0];
-    if (vacataireData.EtatDossier === 'Refusé' && vacataireData.Refus_reason) {
+    // Safely parse Refus_reason, handle invalid JSON
+    if (vacataireData.Refus_reason) {
       try {
-        vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+        if (typeof vacataireData.Refus_reason === 'string') {
+          vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+        } else if (typeof vacataireData.Refus_reason === 'object' && vacataireData.Refus_reason !== null) {
+          // Already an object, no need to parse
+          console.log('Refus_reason is already an object, skipping parse:', vacataireData.Refus_reason);
+        } else {
+          console.warn('Invalid Refus_reason format, resetting to null:', vacataireData.Refus_reason);
+          vacataireData.Refus_reason = null;
+        }
       } catch (parseError) {
         console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
-        vacataireData.Refus_reason = null;
+        vacataireData.Refus_reason = null; // Fallback to null if parsing fails
       }
     }
 
@@ -253,7 +261,7 @@ app.get('/vacataires', (req, res) => {
 // Route de connexion avec vérification du mot de passe haché
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log('Login attempt - Received:', { username, password }); // Log des données reçues
+  console.log('Login attempt - Received:', { username, password });
   if (!username || !password) return res.status(400).json({ message: 'Identifiant et mot de passe requis' });
 
   const vacataireQuery = 'SELECT ID_vacat, Nom, mdp FROM vacataire WHERE username = ?';
@@ -265,9 +273,9 @@ app.post('/login', async (req, res) => {
 
     if (vacataireResults.length > 0) {
       const vacataire = vacataireResults[0];
-      console.log('Vacataire found - Stored hash:', vacataire.mdp); // Log du hachage stocké
+      console.log('Vacataire found - Stored hash:', vacataire.mdp);
       const match = await bcrypt.compare(password, vacataire.mdp);
-      console.log('Password match result:', match); // Log du résultat de la comparaison
+      console.log('Password match result:', match);
       if (match) {
         req.session.userId = vacataire.ID_vacat;
         req.session.nom = vacataire.Nom;
@@ -285,9 +293,9 @@ app.post('/login', async (req, res) => {
 
       if (adminResults.length > 0) {
         const admin = adminResults[0];
-        console.log('Admin found - Stored hash:', admin.mdp); // Log du hachage stocké
+        console.log('Admin found - Stored hash:', admin.mdp);
         const match = await bcrypt.compare(password, admin.mdp);
-        console.log('Password match result:', match); // Log du résultat de la comparaison
+        console.log('Password match result:', match);
         if (match) {
           if (admin.isSuspended) {
             return res.status(403).json({ message: 'Votre compte est suspendu. Contactez un superadmin.' });
@@ -328,8 +336,7 @@ app.put('/update-vacataire-password', async (req, res) => {
   if (!vacataireId) return res.status(401).json({ message: 'Utilisateur non connecté' });
   if (!mdp) return res.status(400).json({ message: 'Mot de passe requis' });
 
-  // Hacher le nouveau mot de passe
-  const hashedPassword = await bcrypt.hash(mdp, 10); // 10 est le coût de hachage (salt rounds)
+  const hashedPassword = await bcrypt.hash(mdp, 10);
   const query = 'UPDATE vacataire SET mdp = ? WHERE ID_vacat = ?';
   db.query(query, [hashedPassword, vacataireId], (err, results) => {
     if (err) return res.status(500).json({ message: 'Erreur serveur' });
@@ -345,7 +352,6 @@ app.put('/update-admin', async (req, res) => {
 
   const updateFields = { nom, prenom, email, username };
   if (mdp) {
-    // Hacher le nouveau mot de passe
     updateFields.mdp = await bcrypt.hash(mdp, 10);
   }
 
@@ -369,19 +375,21 @@ app.get('/vacataire-info', (req, res) => {
     if (err) return res.status(500).json({ message: 'Erreur serveur' });
     if (results.length === 0) return res.status(404).json({ message: 'Vacataire non trouvé' });
     const vacataireData = results[0];
-    if (vacataireData.Etat_dossier === 'Refusé' && vacataireData.Refus_reason) {
+    // Safely parse Refus_reason, handle invalid JSON
+    if (vacataireData.Refus_reason) {
       try {
-        if (typeof vacataireData.Refus_reason === 'object' && vacataireData.Refus_reason !== null) {
-          console.log('Refus_reason is already an object, skipping parse:', vacataireData.Refus_reason);
-        } else if (typeof vacataireData.Refus_reason === 'string') {
+        if (typeof vacataireData.Refus_reason === 'string') {
           vacataireData.Refus_reason = JSON.parse(vacataireData.Refus_reason);
+        } else if (typeof vacataireData.Refus_reason === 'object' && vacataireData.Refus_reason !== null) {
+          // Already an object, no need to parse
+          console.log('Refus_reason is already an object, skipping parse:', vacataireData.Refus_reason);
         } else {
           console.warn('Invalid Refus_reason format, resetting to null:', vacataireData.Refus_reason);
           vacataireData.Refus_reason = null;
         }
       } catch (parseError) {
         console.error('Erreur lors du parsing de Refus_reason:', parseError, 'Valeur:', vacataireData.Refus_reason);
-        vacataireData.Refus_reason = null;
+        vacataireData.Refus_reason = null; // Fallback to null if parsing fails
       }
     }
     res.json(vacataireData);
@@ -449,10 +457,8 @@ app.post('/upload-documents', upload.fields([
       }
     }
 
-    // Log the updateFields for debugging
     console.log('Update fields:', updateFields);
 
-    // Remove ID_vacat from updateFields to avoid primary key conflict
     delete updateFields.ID_vacat;
 
     const deleteOldFiles = async () => {
@@ -472,7 +478,6 @@ app.post('/upload-documents', upload.fields([
       res.json({ message: 'Documents téléchargés avec succès' });
     });
 
-    // Update Etat_dossier
     if (existingData.Etat_dossier === 'En attente' || existingData.Etat_dossier === 'Refusé') {
       const updateDossierQuery = 'UPDATE vacataire SET Etat_dossier = ? WHERE ID_vacat = ?';
       db.query(updateDossierQuery, ['En cours', vacataireId], (err) => {
@@ -513,7 +518,6 @@ app.post('/set-delai-depot', (req, res) => {
     return res.status(400).json({ message: 'Délai de dépôt requis' });
   }
 
-  // Validate the date format (ISO 8601, e.g., "2025-06-01T23:59:59")
   const deadlineDate = new Date(delai_depot);
   if (isNaN(deadlineDate.getTime())) {
     return res.status(400).json({ message: 'Format de date invalide' });
@@ -565,9 +569,7 @@ app.post('/add-administrateur', async (req, res) => {
     return res.status(400).json({ message: 'Tous les champs sont requis' });
   }
 
-  // Generate username (e.g., nom.prenom in lowercase)
   const username = `${nom.toLowerCase()}.${prenom.toLowerCase()}`;
-  // Generate random password (12 characters)
   const generatePassword = () => {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
     let password = '';
@@ -577,7 +579,6 @@ app.post('/add-administrateur', async (req, res) => {
     return password;
   };
   const mdp = generatePassword();
-  // Hacher le mot de passe généré
   const hashedPassword = await bcrypt.hash(mdp, 10);
 
   const query = 'INSERT INTO admin (nom, prenom, username, email, mdp, Role) VALUES (?, ?, ?, ?, ?, ?)';
@@ -588,7 +589,6 @@ app.post('/add-administrateur', async (req, res) => {
     }
     console.log('Administrateur ajouté:', results);
 
-    // Send email with username and password
     if (email && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       const mailOptions = {
         from: process.env.EMAIL_USER,

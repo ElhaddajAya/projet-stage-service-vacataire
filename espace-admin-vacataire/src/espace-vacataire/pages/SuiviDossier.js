@@ -118,13 +118,14 @@ const SuiviDossier = () => {
               {isPastDeadline ? (
                 <span>Le délai de dépôt des documents est dépassé.</span>
               ) : (
-                <span><strong>Délai de dépôt : </strong>{delaiDepot.toLocaleString()}</span>
+                <span><strong>Dernier délai de dépôt : </strong>{delaiDepot.toLocaleString()}</span>
               )}
             </div>
           )}
           {dossierStatus === 'Refusé' && refusReason && (
             <div className="message-bar">
-              <div id="textMsgBar">{refusReason.title === 'Autre' || !refusReason.title ? "Dossier refusé" : refusReason.title} : </div>
+            <div id="textMsgBar">Dossier refusé : </div>
+              {refusReason.problemType === "Autre" ? "" : <span>{refusReason.problemType} - </span>}
               {refusReason.description && <span>{refusReason.description}</span>}
             </div>
           )}
