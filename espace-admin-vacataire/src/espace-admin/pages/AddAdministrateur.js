@@ -84,6 +84,7 @@ const AddAdministrateur = () => {
                   <option value="admin">Admin</option>
                   <option value="superadmin">Superadmin</option>
                   <option value="comptable">Comptable</option>
+                  <option value="chef de departement">Chef de Département</option>
                 </select>
               </div>
             </div>
