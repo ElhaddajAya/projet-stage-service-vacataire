@@ -1,9 +1,9 @@
 # Gestion des Vacataires à l'École Supérieure de Technologie de Salé
 
-## Contributeurs
-EL HADDAJ Aya
-AKJIJ Salma
-AMRAOUI Hind
+### Contributeurs
+- EL HADDAJ Aya : elhaddaj.aya@gmail.com
+- AKJIJ Salma : akjij.salma@gmail.com
+- AMRAOUI Hind : hindamraoui543@gmail.com
 
 ## Description
 
@@ -129,7 +129,7 @@ Le Modèle Conceptuel de Données (MCD) illustre les relations entre les entité
 ### Structure de la Base de Données
 La structure de la base de données montre les tables et leurs colonnes, ainsi que les relations entre elles.
 
-![Structure de la Base de Données](screenshots/database_structure.png)
+![Structure de la Base de Données](screenshots/structure_bd.png)
 
 ### Interfaces de l'Application
 Voici quelques captures d'écran des principales interfaces de l'application :
@@ -139,6 +139,18 @@ Voici quelques captures d'écran des principales interfaces de l'application :
 
 #### Suivi de Dossier (Vacataire) - Phase 1
 ![Suivi de Dossier Phase 1](screenshots/suivi_dossier_phase1.png)
+
+#### Suivi de Dossier (Vacataire) - Phase 2
+![Suivi de Dossier Phase 2](screenshots/suivi_dossier_phase2.png)
+
+#### Suivi de Dossier (Vacataire) - Phase 3 (En cours)
+![Suivi de Dossier Phase 3 - En cours](screenshots/suivi_dossier_phase3_en_cours.png)
+
+#### Suivi de Dossier (Vacataire) - Phase 3 (Validé)
+![Suivi de Dossier Phase 3 - Validé](screenshots/suivi_dossier_phase3_valide.png)
+
+#### Suivi de Dossier (Vacataire) - Phase 3 (Effetué)
+![Suivi de Dossier Phase 3 - Effectué](screenshots/suivi_dossier_phase3_effectue.png)
 
 #### Liste des Vacataires (Admin)
 ![Liste des Vacataires](screenshots/vacataire_list.png)
