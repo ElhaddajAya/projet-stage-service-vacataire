@@ -124,6 +124,7 @@ cd <NOM_DU_PROJET>
 ### Modèle Conceptuel de Données (MCD)
 Le Modèle Conceptuel de Données (MCD) illustre les relations entre les entités principales de l'application.
 
+![Model Conceptuel de Données](screenshots/Model_Conceptuel_De_Donnees.png)
 ![MCD](screenshots/Model_Conceptuel_De_Donnees.png)
 
 ### Structure de la Base de Données
